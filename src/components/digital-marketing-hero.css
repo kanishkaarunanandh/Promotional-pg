@@ -1,0 +1,93 @@
+/* DIGITAL MARKETING HERO. Prefix .dmh-
+   Navy gradient, transparent PNG at the left end, content on the right. */
+.dmh {
+  --d-navy: #0e2a4e; --d-blue: #1e7fd4; --d-cyan: #06a3da;
+  --dmh-nav-h: 100px;          /* space reserved for the floating navbar */
+  --dmh-shift: 12.5%;          /* tablet/mobile: moves the person + icons to the centre */
+  position: relative; isolation: isolate; overflow: hidden; box-sizing: border-box;
+  display: flex; align-items: center;
+  min-height: clamp(640px, 90vh, 820px);
+  padding: var(--dmh-nav-h) 0 56px;
+  color: #fff;
+  background:
+    radial-gradient(55% 70% at 15% 55%, rgba(6, 163, 218, 0.14), transparent 70%),
+    linear-gradient(225deg, #0a1f3a 0%, #0e2a4e 100%);
+}
+.dmh *, .dmh *::before, .dmh *::after { box-sizing: border-box; }
+
+.dmh-glow { position: absolute; z-index: 0; left: -6%; top: 14%; width: 52%; height: 78%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(6, 163, 218, 0.26), transparent 72%); animation: dmh-breathe 8s ease-in-out infinite; }
+
+/* The picture: left end of the hero, from just under the navbar to the bottom edge.
+   The artwork is transparent, so nothing around the person is boxed. */
+.dmh-visual {
+  position: absolute; z-index: 1;
+  top: var(--dmh-nav-h); bottom: 0; left: 1vw;
+  width: min(62vw, 1250px);
+  overflow: hidden; pointer-events: none;
+}
+.dmh-visual-wrap { position: absolute; inset: 0; will-change: transform; }
+.dmh-visual-img {
+  display: block; width: 100%; height: 100%;
+  object-fit: contain;            /* whole picture visible: no cropping or stretching */
+  object-position: left bottom;
+  /* only a very soft fade at the bottom edge */
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 94%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0, #000 94%, transparent 100%);
+}
+
+.dmh-inner { position: relative; z-index: 2; width: 100%; max-width: 1650px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); }
+/* content on the right half: it never reaches the picture on the left */
+.dmh-content { width: min(46vw, 640px); max-width: 100%; margin-left: auto; margin-right: clamp(0px, 4vw, 90px); }
+.dmh-eyebrow { display: inline-flex; align-items: center; gap: 12px; margin: 0 0 20px; font-size: 13px; font-weight: 700; letter-spacing: 0.2em; color: #7fdcff; }
+.dmh-eyebrow-line { width: 34px; height: 2px; background: linear-gradient(90deg, var(--d-blue), var(--d-cyan)); box-shadow: 0 0 10px var(--d-cyan); }
+.dmh-title { margin: 0; font-size: clamp(32px, 3.6vw, 56px); line-height: 1.08; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
+.dmh-grad { background: linear-gradient(100deg, #5fd8ff 0%, var(--d-cyan) 45%, #3b9bf0 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none; }
+.dmh-rule { display: block; width: 120px; height: 3px; margin: 24px 0 22px; border-radius: 3px; transform-origin: left; background: linear-gradient(90deg, var(--d-blue), var(--d-cyan)); box-shadow: 0 0 12px rgba(6, 163, 218, 0.7); }
+.dmh-desc { max-width: 580px; margin: 0 0 34px; font-size: clamp(16px, 1.5vw, 18px); line-height: 1.7; color: #d6e4f4; }
+.dmh-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 26px; }
+.dmh-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 30px; font-size: 16px; font-weight: 700; text-decoration: none; color: #fff; border-radius: 14px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease; }
+.dmh-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.dmh-btn--primary { background: linear-gradient(120deg, var(--d-blue), var(--d-cyan)); box-shadow: 0 14px 34px -10px rgba(6, 163, 218, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.12) inset; }
+.dmh-btn--primary:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -10px rgba(6, 163, 218, 1), 0 0 0 1px rgba(255, 255, 255, 0.2) inset; }
+.dmh-arrow { transition: transform 0.3s ease; }
+.dmh-btn--primary:hover .dmh-arrow { transform: translateX(6px); }
+.dmh-btn--ghost { background: transparent; border: 1px solid rgba(255, 255, 255, 0.7); }
+.dmh-btn--ghost:hover { transform: translateY(-3px); background: rgba(255, 255, 255, 0.12); border-color: #fff; }
+.dmh-trust { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #9ecdf2; }
+
+@keyframes dmh-breathe { 0%, 100% { opacity: 0.75; } 50% { opacity: 1; } }
+
+/* Tablet and below: picture on top, content below */
+@media (max-width: 1023px) {
+  .dmh { display: block; min-height: 0; padding: 92px 0 56px; }
+  .dmh-glow { left: 50%; width: 120%; margin-left: -60%; top: 4%; height: 46%; }
+  .dmh-visual {
+    position: relative; top: auto; left: auto; bottom: auto;
+    width: min(125vw, 860px); aspect-ratio: 3 / 2;
+    /* wider than the screen: centre it from the middle, then nudge the person to the centre */
+    margin: 0 0 0 50%;
+    translate: calc(-50% + var(--dmh-shift)) 0;
+  }
+  .dmh-visual-img {
+    object-position: 50% 50%;
+    -webkit-mask-image: linear-gradient(180deg, #000 0, #000 88%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0, #000 88%, transparent 100%);
+  }
+  .dmh-inner { padding: 0 clamp(20px, 5vw, 48px); }
+  .dmh-content { width: 100%; max-width: 640px; margin: 0 auto; }
+  .dmh-title { font-size: clamp(30px, 6vw, 46px); }
+}
+@media (max-width: 767px) {
+  .dmh { padding: 84px 0 44px; }
+  .dmh-visual { width: min(130vw, 520px); }
+  .dmh-inner { padding: 0 20px; }
+  .dmh-actions { flex-direction: column; }
+  .dmh-btn { width: 100%; padding: 15px 20px; }
+  .dmh-trust { font-size: 12.5px; letter-spacing: 0.1em; }
+}
+@media (max-width: 400px) { .dmh-title { font-size: 29px; } .dmh-eyebrow { font-size: 11.5px; letter-spacing: 0.14em; } }
+@media (prefers-reduced-motion: reduce) {
+  .dmh *, .dmh *::before, .dmh *::after { animation: none !important; transition-duration: 0.01ms !important; }
+}

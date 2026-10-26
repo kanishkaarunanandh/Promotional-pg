@@ -1,0 +1,214 @@
+/* =====================================================================
+   TECHNOLOGY SHOWCASE: every class is prefixed .tw- so nothing else changes.
+   Brand: navy #0E2A4E, blue #1E7FD4, cyan #06A3DA
+   ===================================================================== */
+
+.tw {
+  --tw-navy: #0e2a4e;
+  --tw-blue: #1e7fd4;
+  --tw-cyan: #06a3da;
+  --tw-slate: #55657f;
+  --tw-slot: clamp(104px, 8.4vw, 136px);   /* width of one logo cell */
+  --tw-zoom: 1.3;
+  position: relative;
+  overflow: hidden;
+  padding: clamp(64px, 8vw, 104px) 0;
+  color: var(--tw-navy);
+}
+.tw-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(50% 60% at 50% 0%, rgba(6, 163, 218, 0.1), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #f4f8fd 100%);
+}
+.tw-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+  box-sizing: border-box;
+}
+
+/* ---------------- heading ---------------- */
+.tw-header { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.tw-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--tw-cyan);
+}
+.tw-eyebrow-line {
+  position: relative;
+  width: 44px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(6, 163, 218, 0.28);
+}
+.tw-eyebrow-line::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--tw-blue), var(--tw-cyan));
+  box-shadow: 0 0 10px var(--tw-cyan);
+  animation: tw-line 2.6s ease-in-out infinite;
+}
+@keyframes tw-line {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(240%); }
+}
+.tw-title {
+  margin: 14px 0 14px;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.tw-accent {
+  background: linear-gradient(100deg, var(--tw-blue), var(--tw-cyan), var(--tw-blue));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: tw-slide 6s linear infinite;
+}
+@keyframes tw-slide { to { background-position: -200% 0; } }
+.tw-desc {
+  max-width: 680px;
+  margin: 0;
+  font-size: 16.5px;
+  line-height: 1.7;
+  color: var(--tw-slate);
+}
+/* thin animated accent line */
+.tw-rule {
+  position: relative;
+  width: 120px;
+  height: 3px;
+  margin-top: 26px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(30, 127, 212, 0.18);
+}
+.tw-rule::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, transparent, var(--tw-cyan), var(--tw-blue), transparent);
+  animation: tw-rule 3s ease-in-out infinite;
+}
+@keyframes tw-rule {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+/* ---------------- logo row (marquee) ---------------- */
+.tw-stage { margin-top: clamp(28px, 4vw, 48px); }
+.tw-viewport {
+  position: relative;
+  overflow: hidden;
+  /* room above and below so a zoomed logo and its glow are never clipped */
+  padding: 34px 0 30px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+.tw-track {
+  display: flex;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  will-change: transform;
+}
+.tw-item {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: var(--tw-slot);
+  box-sizing: border-box;
+}
+
+.tw-logo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  transform: scale(1);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+  will-change: transform;
+}
+/* soft cyan glow behind the active logo */
+.tw-logo::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(6, 163, 218, 0.34), rgba(30, 127, 212, 0.14) 60%, transparent);
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
+}
+.tw-svg { display: block; width: 100%; height: 100%; }
+
+.tw-name {
+  margin-top: 22px;       /* clear of the logo even when it is zoomed */
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--tw-slate);
+  transition: color 0.5s ease;
+}
+
+/* ---- the one active (zoomed) logo ---- */
+.tw-item.is-active .tw-logo {
+  transform: scale(var(--tw-zoom));
+  filter: drop-shadow(0 8px 14px rgba(6, 163, 218, 0.45));
+}
+.tw-item.is-active .tw-logo::before { opacity: 1; transform: scale(1); }
+.tw-item.is-active .tw-name { color: var(--tw-navy); }
+
+/* the invisible loop reset must not animate */
+.tw-snap .tw-logo,
+.tw-snap .tw-logo::before,
+.tw-snap .tw-name { transition: none !important; }
+
+/* ---------------- tablet / mobile ---------------- */
+@media (max-width: 1024px) {
+  .tw { --tw-slot: clamp(100px, 13vw, 124px); }
+}
+@media (max-width: 640px) {
+  .tw { --tw-slot: 96px; --tw-zoom: 1.28; }
+  .tw-desc { font-size: 15px; }
+  .tw-logo { width: 52px; height: 52px; }
+  .tw-name { margin-top: 20px; font-size: 12.5px; }
+  .tw-viewport { padding: 30px 0 26px; }
+}
+
+/* ---------------- reduced motion: a calm, static, wrapped grid ---------------- */
+@media (prefers-reduced-motion: reduce) {
+  .tw *, .tw *::before, .tw *::after { animation: none !important; transition: none !important; }
+}
+.tw-stage.is-static .tw-viewport { -webkit-mask-image: none; mask-image: none; }
+.tw-stage.is-static .tw-track {
+  width: auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 24px;
+}

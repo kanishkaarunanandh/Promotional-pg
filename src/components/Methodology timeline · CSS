@@ -1,0 +1,142 @@
+/* The old .methodology-grid, .methodology-card-wrapper and
+   .methodology-connector-arrow rules are no longer used. Keep your
+   .methodology-card / image / title / desc styles. */
+
+.methodology-timeline {
+  --tl-gap: 24px;
+  --tl-node: 38px;
+  --tl-accent: #0ea5e9;      /* swap for your brand blue */
+  --tl-track: #d9e2ef;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--tl-gap);
+  margin-top: 48px;
+}
+
+.tl-step { position: relative; }
+
+/* ---- rail: node + line to the next node ---- */
+.tl-rail {
+  position: relative;
+  height: var(--tl-node);
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.tl-node {
+  position: relative;
+  z-index: 2;
+  width: var(--tl-node);
+  height: var(--tl-node);
+  border-radius: 50%;
+  border: 2px solid var(--tl-track);
+  background: #fff;
+  color: #7b8aa3;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.4s, border-color 0.4s, color 0.4s, transform 0.4s;
+}
+.tl-node:focus-visible { outline: 3px solid rgba(14, 165, 233, 0.45); outline-offset: 3px; }
+
+.tl-segment {
+  position: absolute;
+  top: 50%;
+  left: calc(50% + var(--tl-node) / 2);
+  width: calc(100% + var(--tl-gap) - var(--tl-node));
+  height: 3px;
+  transform: translateY(-50%);
+  background: var(--tl-track);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.tl-segment-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--tl-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tl-step.is-done .tl-segment-fill { transform: scaleX(1); }
+
+/* ---- node states ---- */
+.tl-step.is-done .tl-node {
+  background: var(--tl-accent);
+  border-color: var(--tl-accent);
+  color: #fff;
+}
+.tl-step.is-active .tl-node {
+  border-color: var(--tl-accent);
+  color: var(--tl-accent);
+  transform: scale(1.12);
+  box-shadow: 0 0 0 6px rgba(14, 165, 233, 0.15);
+}
+
+/* ---- card states ---- */
+.tl-step .methodology-card {
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s, box-shadow 0.4s, opacity 0.4s;
+}
+.tl-step.is-upcoming .methodology-card { opacity: 0.6; }
+.tl-step.is-active .methodology-card {
+  border-color: var(--tl-accent);
+  box-shadow: 0 14px 32px rgba(14, 165, 233, 0.18);
+}
+
+/* 5-second countdown bar along the bottom of the active card */
+.tl-countdown {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--tl-accent);
+  transform-origin: left center;
+  animation-name: tl-countdown;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes tl-countdown {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ---- tablet: 2 x 2 without the connecting line ---- */
+@media (max-width: 1000px) {
+  .methodology-timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 32px; }
+  .tl-segment { display: none; }
+  .tl-rail { justify-content: flex-start; }
+}
+
+/* ---- mobile: vertical timeline, line runs down the left ---- */
+@media (max-width: 640px) {
+  .methodology-timeline { grid-template-columns: 1fr; row-gap: var(--tl-gap); }
+  .tl-step {
+    display: grid;
+    grid-template-columns: var(--tl-node) 1fr;
+    column-gap: 16px;
+  }
+  .tl-rail { height: auto; margin: 0; justify-content: center; align-items: flex-start; }
+  .tl-segment {
+    display: block;
+    top: var(--tl-node);
+    left: 50%;
+    width: 3px;
+    height: calc(100% + var(--tl-gap) - var(--tl-node));
+    transform: translateX(-50%);
+  }
+  .tl-segment-fill { transform: scaleY(0); transform-origin: top center; }
+  .tl-step.is-done .tl-segment-fill { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl-segment-fill, .tl-node, .tl-step .methodology-card { transition: none; }
+  .tl-countdown { animation: none; transform: scaleX(1); }
+}

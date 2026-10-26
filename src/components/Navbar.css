@@ -1,0 +1,671 @@
+/* ==========================================================================
+   Responsive Floating Pill Navbar Component
+   Strictly adheres to reference image layout, proportions, and visual style.
+   Brand Color: #0E2A4E (Navy Blue)
+   ========================================================================== */
+
+/* Outer fixed positioning wrapper - ensures navbar stays stuck at top while scrolling */
+.navbar-wrapper {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 24px;
+  box-sizing: border-box;
+  pointer-events: none;
+  /* Allows click-through outside the pill */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* White Pill-Shaped Navbar Container - Only this element sticks and is visible */
+.navbar-pill {
+  pointer-events: auto;
+  /* Re-enable pointer events for the navbar */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  height: 64px;
+  padding: 7px 14px;
+  background-color: #FFFFFF;
+  border-radius: 9999px;
+  border: 1px solid rgba(14, 42, 78, 0.05);
+  box-shadow:
+    0 12px 32px -4px rgba(14, 42, 78, 0.10),
+    0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  caret-color: transparent;
+}
+
+.navbar-pill:hover {
+  box-shadow:
+    0 16px 36px -4px rgba(14, 42, 78, 0.14),
+    0 6px 16px -2px rgba(0, 0, 0, 0.04);
+}
+
+/* --------------------------------------------------------------------------
+   Far Left: Brand Logo (Atriowings Technologies)
+   -------------------------------------------------------------------------- */
+.navbar-brand-link {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 6px;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  user-select: none;
+}
+
+.navbar-brand-link:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+.navbar-brand-link:focus-visible {
+  outline: 2px solid #0E2A4E;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.navbar-brand-picture {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand-logo-img {
+  display: block;
+  height: 36px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.brand-logo-icon-img {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.navbar-logo-circle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #0E2A4E;
+  color: #FFFFFF;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+  user-select: none;
+}
+
+.navbar-logo-circle:hover {
+  background-color: #163B6B;
+  transform: scale(1.03);
+}
+
+.navbar-logo-circle:active {
+  background-color: #0A1F3B;
+  transform: scale(0.98);
+}
+
+.navbar-logo-circle:focus-visible {
+  outline: 2px solid #0E2A4E;
+  outline-offset: 3px;
+}
+
+.brand-logo-svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   Center: Horizontal Navigation Links
+   Order: Work, About, Playground, Resource
+   -------------------------------------------------------------------------- */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 3.5vw, 3rem);
+  margin: 0;
+  padding: 0 1rem;
+  list-style: none;
+  flex: 1;
+}
+
+.nav-link-item {
+  position: relative;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  /* ~15px */
+  font-weight: 500;
+  color: #1E293B;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  padding: 8px 4px;
+  transition: color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  caret-color: transparent;
+}
+
+/* Subtle Hover & Active Transitions using #0E2A4E */
+.nav-link-item:hover {
+  color: #0E2A4E;
+  transform: translateY(-1px);
+}
+
+.nav-link-item:active {
+  color: #0A1F3B;
+  transform: translateY(0);
+}
+
+.nav-link-item.active {
+  color: #0E2A4E;
+  font-weight: 600;
+}
+
+/* Understated indicator for active state */
+.nav-link-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #0E2A4E;
+}
+
+.nav-link-item:focus-visible {
+  outline: 2px solid #0E2A4E;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Far Right: Large Pill Contact CTA Button
+   -------------------------------------------------------------------------- */
+.navbar-cta-group {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-cta-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  padding: 0 32px;
+  border-radius: 9999px;
+  background-color: #06A3DA;
+  color: #FFFFFF;
+  font-size: 0.9375rem;
+  /* ~15px */
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.15s ease,
+    box-shadow 0.25s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.navbar-cta-pill:hover {
+  background-color: #163B6B;
+  /* Lighter shade of brand navy */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(14, 42, 78, 0.2);
+}
+
+.navbar-cta-pill:active {
+  background-color: #0A1F3B;
+  /* Darker pressed shade */
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.navbar-cta-pill:focus-visible {
+  outline: 2px solid #0E2A4E;
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Hamburger Toggle (Hidden on Desktop)
+   -------------------------------------------------------------------------- */
+.navbar-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: rgba(14, 42, 78, 0.05);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+}
+
+.navbar-mobile-toggle:hover {
+  background-color: rgba(14, 42, 78, 0.1);
+}
+
+.navbar-mobile-toggle:focus-visible {
+  outline: 2px solid #0E2A4E;
+  outline-offset: 2px;
+}
+
+.hamburger-line {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background-color: #0E2A4E;
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  margin: 2.5px 0;
+}
+
+/* Hamburger animation to 'X' */
+.navbar-mobile-toggle.open .line-1 {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar-mobile-toggle.open .line-2 {
+  opacity: 0;
+}
+
+.navbar-mobile-toggle.open .line-3 {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Dropdown Menu
+   -------------------------------------------------------------------------- */
+.mobile-dropdown-menu {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .navbar-links {
+    gap: 1.5rem;
+  }
+
+  .navbar-cta-pill {
+    padding: 0 22px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-wrapper {
+    top: 14px;
+    padding: 0 14px;
+    margin-bottom: -72px;
+  }
+
+  .navbar-pill {
+    height: 58px;
+    padding: 5px 6px 5px 6px;
+  }
+
+  .navbar-logo-circle {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* Hide desktop links and large email pill */
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-cta-pill {
+    display: none;
+  }
+
+  /* Show mobile toggle */
+  .navbar-mobile-toggle {
+    display: flex;
+  }
+
+  /* Show floating mobile dropdown */
+  .mobile-dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-radius: 24px;
+    padding: 20px 20px 24px;
+    border: 1px solid rgba(14, 42, 78, 0.06);
+    box-shadow:
+      0 20px 40px -8px rgba(14, 42, 78, 0.14),
+      0 6px 16px -2px rgba(0, 0, 0, 0.04);
+    animation: mobileMenuSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    box-sizing: border-box;
+  }
+
+  @keyframes mobileMenuSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.98);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .mobile-links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+  }
+
+  .mobile-link-item {
+    display: block;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1E293B;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    user-select: none;
+    caret-color: transparent;
+  }
+
+  .mobile-link-item:hover,
+  .mobile-link-item:active {
+    background-color: rgba(14, 42, 78, 0.05);
+    color: #0E2A4E;
+  }
+
+  .mobile-link-item.active {
+    background-color: rgba(14, 42, 78, 0.08);
+    color: #0E2A4E;
+    font-weight: 600;
+  }
+
+  .mobile-cta-wrapper {
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+    border-top: 1px solid rgba(14, 42, 78, 0.08);
+  }
+
+  .mobile-cta-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    border-radius: 9999px;
+    background-color: #0E2A4E;
+    color: #FFFFFF;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    text-align: center;
+  }
+
+  .mobile-cta-pill:hover,
+  .mobile-cta-pill:active {
+    background-color: #163B6B;
+  }
+}
+
+/* =====================================================================
+   SERVICES DROPDOWN: append this block to the END of your Navbar.css.
+   (Your existing Navbar.css was not attached, so nothing there is changed;
+   these rules only add the new dropdown and mobile submenu.)
+   Brand: navy #0E2A4E, blue #1E7FD4, cyan #06A3DA
+   ===================================================================== */
+
+/* ---------- desktop: trigger + chevron ---------- */
+.navbar-links .nav-has-dropdown {
+  position: relative;
+}
+
+.nav-services-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav-services-chevron {
+  flex: none;
+  transition: transform 0.3s ease;
+}
+
+.nav-has-dropdown.is-open .nav-services-chevron {
+  transform: rotate(180deg);
+}
+
+/* ---------- desktop: dropdown panel ---------- */
+.services-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 60;
+  width: 272px;
+  padding-top: 14px;
+  /* invisible bridge so the pointer can travel from Services into the panel */
+  transform: translateX(-50%);
+  animation: services-dropdown-in 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.services-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid rgba(14, 42, 78, 0.1);
+  border-radius: 16px;
+  box-shadow:
+    0 22px 44px -18px rgba(14, 42, 78, 0.35),
+    0 4px 12px -4px rgba(14, 42, 78, 0.12);
+}
+
+@keyframes services-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.services-dropdown-item,
+.mobile-submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #0e2a4e;
+  text-decoration: none;
+  border-radius: 11px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  user-select: none;
+  caret-color: transparent;
+}
+
+.services-dropdown-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: #1e7fd4;
+  background: rgba(30, 127, 212, 0.1);
+  border-radius: 9px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.services-dropdown-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.services-dropdown-arrow {
+  flex: none;
+  color: #06a3da;
+  opacity: 0.55;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.services-dropdown-item:hover,
+.services-dropdown-item:focus-visible,
+.mobile-submenu-item:hover,
+.mobile-submenu-item:focus-visible {
+  background: rgba(30, 127, 212, 0.09);
+  color: #0e2a4e;
+}
+
+.services-dropdown-item:hover .services-dropdown-icon,
+.services-dropdown-item:focus-visible .services-dropdown-icon,
+.mobile-submenu-item:hover .services-dropdown-icon,
+.mobile-submenu-item:focus-visible .services-dropdown-icon {
+  color: #fff;
+  background: linear-gradient(135deg, #1e7fd4, #06a3da);
+}
+
+.services-dropdown-item:hover .services-dropdown-arrow,
+.services-dropdown-item:focus-visible .services-dropdown-arrow,
+.mobile-submenu-item:hover .services-dropdown-arrow,
+.mobile-submenu-item:focus-visible .services-dropdown-arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+.services-dropdown-item:focus-visible,
+.mobile-submenu-item:focus-visible,
+.nav-services-trigger:focus-visible,
+.mobile-services-btn:focus-visible {
+  outline: 2px solid #06a3da;
+  outline-offset: 2px;
+}
+
+/* ---------- mobile: expandable submenu inside the existing mobile menu ---------- */
+/* :where() keeps these resets at zero specificity, so your .mobile-link-item rules still win */
+:where(.mobile-services-btn) {
+  width: 100%;
+  background: none;
+  border: 0;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mobile-services-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mobile-services-chevron {
+  flex: none;
+  transition: transform 0.3s ease;
+}
+
+.mobile-has-submenu.is-open .mobile-services-chevron {
+  transform: rotate(180deg);
+}
+
+.mobile-submenu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 4px 0 6px 10px;
+  padding: 4px 0 4px 10px;
+  list-style: none;
+  border-left: 2px solid rgba(6, 163, 218, 0.35);
+  animation: mobile-submenu-in 0.22s ease both;
+}
+
+.mobile-submenu-item {
+  min-height: 46px;
+}
+
+/* comfortable tap target */
+@keyframes mobile-submenu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* the desktop dropdown never shows in the mobile layout */
+@media (max-width: 900px) {
+  .services-dropdown {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .services-dropdown,
+  .mobile-submenu-list {
+    animation: none;
+  }
+
+  .nav-services-chevron,
+  .mobile-services-chevron,
+  .services-dropdown-arrow {
+    transition: none;
+  }
+}

@@ -1,0 +1,254 @@
+/* ==========================================================================
+   Sticky CTA bar: Atriowings Technologies
+   Navy #0E2A4E, Blue #1E7FD4, Cyan #06A3DA
+   ========================================================================== */
+
+:root {
+  --sticky-cta-h: 80px;
+  /* desktop bar height; the spacer uses the same value */
+}
+
+/* keeps the end of the page clear of the fixed bar (navy = same as the footer) */
+.sticky-cta-spacer {
+  width: 100%;
+  height: calc(var(--sticky-cta-h) + env(safe-area-inset-bottom, 0px));
+  background: #0e2a4e;
+}
+
+.sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 990;
+  /* floats above all page content, just below navbar (1000) */
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--sticky-cta-h);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  color: #fff;
+  background:
+    radial-gradient(60% 160% at 100% 50%, rgba(6, 163, 218, 0.22), transparent 70%),
+    radial-gradient(40% 140% at 0% 50%, rgba(30, 127, 212, 0.18), transparent 70%),
+    linear-gradient(180deg, #12335f 0%, #0e2a4e 100%);
+  box-shadow: 0 -14px 34px -14px rgba(14, 42, 78, 0.55);
+  transform: translateY(0);
+  opacity: 1;
+  animation: sticky-cta-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+@keyframes sticky-cta-in {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* moving blue-to-cyan light along the top edge */
+.sticky-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1e7fd4, #06a3da, #8fe3fb, #06a3da, #1e7fd4);
+  background-size: 200% 100%;
+  animation: sticky-cta-edge 6s linear infinite;
+}
+
+@keyframes sticky-cta-edge {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.sticky-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1440px;
+  min-height: var(--sticky-cta-h);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.sticky-cta-copy {
+  min-width: 0;
+}
+
+.sticky-cta-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.sticky-cta-text {
+  margin: 0;
+  font-size: 0.9688rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.sticky-cta-btn {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(120deg, #1e7fd4 0%, #06a3da 100%);
+  border-radius: 14px;
+  box-shadow:
+    0 10px 26px -8px rgba(6, 163, 218, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.14) inset;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.sticky-cta-btn:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.07);
+  box-shadow:
+    0 16px 34px -8px rgba(6, 163, 218, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+}
+
+.sticky-cta-btn:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.sticky-cta-arrow {
+  flex: none;
+  animation: sticky-cta-nudge 2.2s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+@keyframes sticky-cta-nudge {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+.sticky-cta-btn:hover .sticky-cta-arrow {
+  animation: none;
+  transform: translateX(6px);
+}
+
+/* ---------- tablet ---------- */
+@media (max-width: 1024px) {
+  :root {
+    --sticky-cta-h: 90px;
+  }
+
+  .sticky-cta-inner {
+    padding: 0 28px;
+    gap: 18px;
+  }
+
+  .sticky-cta-title {
+    font-size: 1.1875rem;
+  }
+
+  .sticky-cta-text {
+    font-size: 0.9062rem;
+  }
+
+  .sticky-cta-btn {
+    padding: 13px 22px;
+    font-size: 0.9375rem;
+  }
+}
+
+/* ---------- mobile: compact stacked layout ---------- */
+@media (max-width: 640px) {
+  :root {
+    --sticky-cta-h: 124px;
+  }
+
+  .sticky-cta-inner {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 20px;
+  }
+
+  .sticky-cta-copy {
+    text-align: center;
+  }
+
+  .sticky-cta-title {
+    margin-bottom: 2px;
+    font-size: 1rem;
+  }
+
+  .sticky-cta-text {
+    font-size: 0.8125rem;
+  }
+
+  .sticky-cta-btn {
+    justify-content: center;
+    padding: 12px 18px;
+    font-size: 0.9062rem;
+    border-radius: 12px;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 360px) {
+  .sticky-cta-inner {
+    padding: 12px 14px;
+  }
+
+  .sticky-cta-text {
+    display: none;
+  }
+
+  /* very small phones: title + button only */
+  :root {
+    --sticky-cta-h: 96px;
+  }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+
+  .sticky-cta,
+  .sticky-cta::before,
+  .sticky-cta-arrow {
+    animation: none;
+  }
+
+  .sticky-cta-btn,
+  .sticky-cta-arrow {
+    transition: none;
+  }
+
+  .sticky-cta-btn:hover {
+    transform: none;
+  }
+}

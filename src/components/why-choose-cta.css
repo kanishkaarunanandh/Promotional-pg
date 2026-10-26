@@ -1,0 +1,319 @@
+/* Add to WebDevelopmentPage.css (or a new file imported after it).
+   The old .benefits-grid / .benefit-item-card rules are no longer used. */
+
+@property --bento-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ================= WHY CHOOSE: section backdrop ================= */
+.webdev-benefits-section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.webdev-benefits-section::before,
+.webdev-benefits-section::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+.webdev-benefits-section::before {
+  top: -120px;
+  left: -100px;
+  background: #7dd3fc;
+  animation: wc-drift-a 18s ease-in-out infinite alternate;
+}
+.webdev-benefits-section::after {
+  bottom: -140px;
+  right: -100px;
+  background: #a5b4fc;
+  animation: wc-drift-b 22s ease-in-out infinite alternate;
+}
+@keyframes wc-drift-a { to { transform: translate(120px, 80px) scale(1.15); } }
+@keyframes wc-drift-b { to { transform: translate(-140px, -60px) scale(1.1); } }
+
+/* ================= WHY CHOOSE: bento grid ================= */
+.benefits-bento {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 1080px;
+  margin: 48px auto 0;
+}
+
+.bento-card {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid #e2e9f3;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s, border-color 0.4s;
+}
+.bento-card.is-wide { grid-column: span 2; }
+
+/* cursor-follow spotlight */
+.bento-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(320px circle at var(--mx) var(--my), rgba(14, 165, 233, 0.16), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+/* rotating gradient border */
+.bento-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--bento-angle), transparent 0 62%, #0ea5e9 80%, #6366f1 92%, transparent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.35s;
+  animation: bento-spin 4s linear infinite;
+  pointer-events: none;
+}
+@keyframes bento-spin { to { --bento-angle: 360deg; } }
+
+.bento-card:hover {
+  transform: translateY(-6px);
+  border-color: transparent;
+  box-shadow: 0 22px 44px rgba(15, 42, 82, 0.12);
+}
+.bento-card:hover::before,
+.bento-card:hover::after { opacity: 1; }
+
+.bento-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  box-shadow: 0 8px 18px rgba(14, 165, 233, 0.35);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bento-card:hover .bento-icon { transform: rotate(-8deg) scale(1.1); }
+
+.bento-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  line-height: 1.3;
+  color: #0f2a52;
+}
+.bento-desc {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #5b6b85;
+}
+
+/* ---------- mini visuals ---------- */
+.viz-devices {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 22px;
+}
+.viz-dev {
+  position: relative;
+  display: block;
+  border: 2px solid #b6defa;
+  border-radius: 9px;
+  background: #fff;
+  animation: viz-float 3.6s ease-in-out infinite alternate;
+}
+.viz-dev::before { /* top bar */
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 9px;
+  border-radius: 7px 7px 0 0;
+  background: linear-gradient(90deg, #0ea5e9, #6366f1);
+  opacity: 0.85;
+}
+.viz-dev::after { /* content lines */
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 20px;
+  height: 22px;
+  background:
+    linear-gradient(#dbe7f5 0 0) 0 0 / 100% 4px no-repeat,
+    linear-gradient(#dbe7f5 0 0) 0 9px / 70% 4px no-repeat,
+    linear-gradient(#dbe7f5 0 0) 0 18px / 85% 4px no-repeat;
+}
+.viz-dev-desktop { width: 120px; height: 78px; }
+.viz-dev-tablet  { width: 62px;  height: 78px; animation-delay: -1.2s; }
+.viz-dev-phone   { width: 36px;  height: 62px; animation-delay: -2.4s; }
+.viz-dev-phone::after, .viz-dev-tablet::after { right: 6px; left: 6px; }
+@keyframes viz-float { to { transform: translateY(-8px); } }
+
+.viz-meter {
+  height: 6px;
+  margin-top: auto;
+  border-radius: 999px;
+  background: #e4edf7;
+  overflow: hidden;
+}
+.viz-meter-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0ea5e9, #22d3ee);
+  animation: viz-load 3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes viz-load {
+  0%   { width: 8%; }
+  70%  { width: 100%; }
+  100% { width: 100%; }
+}
+
+.viz-pulse {
+  width: 100%;
+  height: 48px;
+  margin-top: auto;
+  padding-top: 18px;
+  box-sizing: content-box;
+  overflow: visible;
+}
+.viz-pulse path {
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.viz-pulse-track { stroke: #dbe7f5; }
+.viz-pulse-line {
+  stroke: #0ea5e9;
+  stroke-dasharray: 28 100;
+  animation: viz-pulse-move 2.8s linear infinite;
+}
+@keyframes viz-pulse-move {
+  from { stroke-dashoffset: 28; }
+  to   { stroke-dashoffset: -100; }
+}
+
+/* ================= CTA ================= */
+.webdev-cta-box {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.webdev-cta-inner { position: relative; z-index: 2; }
+
+.cta-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 36px 36px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+  animation: cta-grid-pan 14s linear infinite;
+}
+@keyframes cta-grid-pan { to { background-position: 36px 36px; } }
+
+.cta-orb {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+}
+.cta-orb-a {
+  width: 280px; height: 280px;
+  left: -60px; bottom: -90px;
+  background: rgba(14, 165, 233, 0.55);
+  animation: cta-orb-a 9s ease-in-out infinite alternate;
+}
+.cta-orb-b {
+  width: 240px; height: 240px;
+  right: -50px; top: -80px;
+  background: rgba(99, 102, 241, 0.5);
+  animation: cta-orb-b 11s ease-in-out infinite alternate;
+}
+@keyframes cta-orb-a { to { transform: translate(140px, -50px) scale(1.2); } }
+@keyframes cta-orb-b { to { transform: translate(-120px, 70px) scale(1.15); } }
+
+/* soft pulse on the pill */
+.webdev-cta-pill { animation: cta-pill-glow 2.8s ease-in-out infinite; }
+@keyframes cta-pill-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4); }
+  50%      { box-shadow: 0 0 0 8px rgba(14, 165, 233, 0); }
+}
+
+/* sheen sweep + arrow nudge on the main button */
+.webdev-cta-main-btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
+}
+.webdev-cta-main-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  animation: cta-sheen 3.6s ease-in-out infinite;
+}
+@keyframes cta-sheen {
+  0%, 55% { left: -60%; }
+  100%    { left: 130%; }
+}
+.webdev-cta-main-btn:hover { transform: translateY(-3px); }
+.webdev-cta-main-btn .cta-arrow { transition: transform 0.3s; }
+.webdev-cta-main-btn:hover .cta-arrow { transform: translateX(5px); }
+
+/* ================= responsive ================= */
+@media (max-width: 900px) {
+  .benefits-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .benefits-bento { grid-template-columns: 1fr; }
+  .bento-card.is-wide { grid-column: auto; }
+  .viz-dev-desktop { width: 96px; height: 66px; }
+}
+
+/* ================= reduced motion ================= */
+@media (prefers-reduced-motion: reduce) {
+  .webdev-benefits-section::before, .webdev-benefits-section::after,
+  .bento-card::after, .viz-dev, .viz-meter-fill, .viz-pulse-line,
+  .cta-grid, .cta-orb, .webdev-cta-pill, .webdev-cta-main-btn::after {
+    animation: none;
+  }
+  .viz-meter-fill { width: 100%; }
+  .viz-pulse-line { stroke-dasharray: none; }
+  .bento-card, .bento-icon { transition: none; }
+}

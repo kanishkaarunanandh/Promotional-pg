@@ -1,0 +1,201 @@
+/* Services We Offer: circular orbit layout with a circular team image.
+   You can delete these now-unused rules from WebDevelopmentPage.css:
+   .capabilities-central-video-wrapper, .capabilities-video-ambient-glow,
+   .capabilities-video-glass-card, .capabilities-video-chrome,
+   .capabilities-window-dots, .cap-dot*, .capabilities-window-title,
+   .capabilities-video-media-frame, .capabilities-central-video
+   Also delete the old .capabilities-interactive-composition and
+   .capabilities-flank-* rules if they are still there. */
+
+.capabilities-orbit {
+  position: relative;
+  width: 100%;
+  max-width: 1180px;
+  height: 900px;
+  margin: 40px auto 0;
+}
+
+/* dashed ellipse the cards sit on (2 x ORBIT_RX by 2 x ORBIT_RY) */
+.capabilities-orbit-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 82%;
+  height: 74%;
+  transform: translate(-50%, -50%);
+  border: 1.5px dashed rgba(120, 130, 160, 0.35);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* =====================================================================
+   Centre: circular image
+   The top and bottom cards are about 300px tall and sit ~180px from the
+   centre, so a 300px photo (150px radius) plus its 8px ring leaves room
+   for the cards to float 9px without ever touching the circle.
+   ===================================================================== */
+.capabilities-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 300px;
+  height: 300px;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+.capabilities-core-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* soft brand-colour glow behind everything */
+.capabilities-core-glow {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6, 163, 218, 0.28) 0%, rgba(30, 127, 212, 0.14) 55%, transparent 72%);
+  pointer-events: none;
+}
+
+/* thin gradient ring that rotates continuously (only the ring moves) */
+.capabilities-core-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #06a3da 0%,
+    #1e7fd4 25%,
+    rgba(30, 127, 212, 0.08) 45%,
+    rgba(6, 163, 218, 0.08) 55%,
+    #1e7fd4 75%,
+    #06a3da 100%
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  animation: capabilities-core-spin 9s linear infinite;
+  pointer-events: none;
+}
+@keyframes capabilities-core-spin {
+  to { transform: rotate(360deg); }
+}
+
+.capabilities-core-photo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #dfeaf6;
+  border: 3px solid #fff;
+  box-shadow:
+    0 0 0 1px rgba(30, 127, 212, 0.35),
+    0 22px 50px -18px rgba(30, 127, 212, 0.55),
+    0 8px 20px -10px rgba(6, 163, 218, 0.4);
+  transition: box-shadow 0.5s ease;
+}
+.capabilities-core-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* keeps both developers and the monitors in the circle */
+  object-position: 76% 40%;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.capabilities-core:hover .capabilities-core-img { transform: scale(1.06); }
+.capabilities-core:hover .capabilities-core-photo {
+  box-shadow:
+    0 0 0 1px rgba(6, 163, 218, 0.6),
+    0 28px 60px -16px rgba(30, 127, 212, 0.65),
+    0 8px 24px -8px rgba(6, 163, 218, 0.55);
+}
+
+/* ---- Small cards ---- */
+.orbit-slot {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
+  width: 210px;
+  z-index: 2;
+}
+.orbit-slot .service-offer-card {
+  width: 100%;
+  margin: 0;
+  padding: 14px;
+  border-radius: 14px;
+}
+.orbit-slot .service-offer-header { margin-bottom: 8px; }
+.orbit-slot .service-offer-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+}
+.orbit-slot .service-offer-icon-box svg { width: 17px; height: 17px; }
+.orbit-slot .service-offer-title {
+  font-size: 13.5px;
+  line-height: 1.25;
+  margin: 0 0 6px;
+}
+.orbit-slot .service-offer-desc {
+  font-size: 11.5px;
+  line-height: 1.45;
+  margin: 0 0 10px;
+}
+.orbit-slot .service-offer-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.orbit-slot .service-tag {
+  font-size: 9.5px;
+  padding: 3px 7px;
+  margin: 0;
+}
+
+/* =====================================================================
+   Tablet and mobile: no circle. The image sits centred on top and the six
+   cards flow in a tidy grid underneath.
+   ===================================================================== */
+@media (max-width: 1100px) {
+  .capabilities-orbit {
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    overflow-x: clip;
+  }
+  .capabilities-orbit-ring { display: none; }
+
+  .capabilities-core {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    grid-column: 1 / -1;
+    width: min(320px, 74vw);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin: 12px auto 22px;
+  }
+  .orbit-slot {
+    position: static;
+    transform: none;
+    width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .capabilities-core { width: min(260px, 70vw); margin: 8px auto 16px; }
+  .capabilities-core-ring { inset: -7px; }
+  .capabilities-core-glow { inset: -14px; }
+}
+
+/* Reduced motion: static ring, no hover zoom */
+@media (prefers-reduced-motion: reduce) {
+  .capabilities-core-ring { animation: none; }
+  .capabilities-core-img,
+  .capabilities-core-photo { transition: none; }
+  .capabilities-core:hover .capabilities-core-img { transform: none; }
+}

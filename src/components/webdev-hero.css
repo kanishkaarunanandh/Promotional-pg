@@ -1,0 +1,277 @@
+/* Web Development hero: navy gradient, content on the left, transparent PNG at the right end.
+   All classes are prefixed .wdh- so nothing else on the page is affected. */
+
+.wdh {
+  --wdh-nav-h: 100px;      /* space reserved for the floating navbar */
+  --wdh-shift: -16.5%;     /* tablet/mobile: moves the person to the centre (she sits right of centre in the artwork) */
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-height: clamp(620px, 90vh, 800px);
+  padding: var(--wdh-nav-h) 0 56px;
+  overflow: hidden;
+  color: #fff;
+  
+}
+
+/* The picture: right end of the hero, from just under the navbar to the bottom edge.
+   The artwork is transparent, so its empty left side sits harmlessly behind the text. */
+.wdh-visual {
+  position: absolute;
+  z-index: 1;
+  top: var(--wdh-nav-h);
+  bottom: 0;
+  right: 4vw;
+  width: min(72vw, 1300px);
+  overflow: hidden;
+  pointer-events: none;
+}
+.wdh-visual-wrap { position: absolute; inset: 0; will-change: transform; }
+.wdh-visual-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;            /* whole picture visible: no cropping or stretching */
+  object-position: right bottom;
+  /* only a very soft fade at the bottom edge */
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 94%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0, #000 94%, transparent 100%);
+}
+
+.wdh-inner {
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1650px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.wdh-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: min(46vw, 640px);
+  margin-left: 100px;
+  text-align: left;
+  min-width: 0;
+  color: #06A3DA;
+}
+
+.wdh-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #7fdcff;
+}
+.wdh-eyebrow-line {
+  flex: none;
+  width: 36px;
+  height: 2px;
+  border-radius: 2px;
+  background: #0E2A4E;
+}
+
+.wdh-title {
+  margin: 0 0 26px;
+  max-width: 900px;
+  font-size: clamp(34px, 3.7vw, 58px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  color: #06A3DA;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+.wdh-accent {
+  color: #19c0ff;
+  background: linear-gradient(95deg, #0E2A4E, #0E2A4E);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* keeps the gradient intact when the highlighted words wrap onto two lines */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.wdh-desc {
+  margin: 0 0 38px;
+  max-width: 560px;
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.7;
+  color: #06A3DA(255, 255, 255, 0.92);
+  text-wrap: pretty;
+}
+
+.wdh-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  max-width: 100%;
+  margin-bottom: 0;
+}
+
+.wdh-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+  min-height: 56px;
+  padding: 0 32px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease,
+    background 0.3s ease, border-color 0.3s ease, filter 0.3s ease;
+}
+.wdh-btn svg { flex: none; transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+.wdh-btn:hover { transform: translateY(-3px); }
+.wdh-btn:hover svg { transform: translateX(4px); }
+.wdh-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+/* Primary CTA: always-on blue/cyan gradient + glow pulse (runs without hover) */
+.wdh-btn--primary {
+  color: #fff;
+  background: linear-gradient(120deg, #1E7FD4, #06A3DA, #1E7FD4);
+  background-size: 200% 200%;
+  animation: wdh-blue-blink 2s ease-in-out infinite;
+  box-shadow: 0 0 16px rgba(6, 163, 218, 0.45);
+}
+
+@keyframes wdh-blue-blink {
+  0%, 100% {
+    background-position: 0% 50%;
+    box-shadow: 0 0 12px rgba(30, 127, 212, 0.4);
+  }
+  50% {
+    background-position: 100% 50%;
+    box-shadow: 0 0 24px rgba(6, 163, 218, 0.8);
+  }
+}
+
+/* Hover shine (single definition; the duplicate block was removed).
+   Hover brightness is used because a running animation overrides box-shadow. */
+.wdh-btn--primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wdh-btn--primary:hover { filter: brightness(1.12) saturate(1.1); }
+.wdh-btn--primary:hover::after { transform: translateX(120%); }
+
+.wdh-btn--ghost {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.wdh-btn--ghost:hover { background: rgba(255, 255, 255, 0.2); border-color: #fff; }
+
+.wdh-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.wdh-badge {
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wdh-badge:hover { background: rgba(0, 174, 239, 0.22); border-color: rgba(0, 174, 239, 0.7); transform: translateY(-2px); }
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+
+/* Small laptops: smaller left offset */
+@media (max-width: 1199px) {
+  .wdh-content { margin-left: clamp(0px, 4vw, 48px); }
+}
+
+/* Tablet and below: picture on top, content below */
+@media (max-width: 1023px) {
+  .wdh { display: block; min-height: 0; padding: 92px 0 56px; }
+  .wdh-visual {
+    position: relative;
+    top: auto; right: auto; bottom: auto;
+    display: block;
+    width: min(125vw, 900px);
+    aspect-ratio: 16 / 9;
+    margin: 0 auto;
+    translate: var(--wdh-shift) 0;
+  }
+  .wdh-visual-img {
+    object-position: 50% 50%;
+    -webkit-mask-image: linear-gradient(180deg, #000 0, #000 82%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0, #000 82%, transparent 100%);
+  }
+  .wdh-inner { padding: 0 clamp(20px, 5vw, 48px); }
+  .wdh-content { max-width: 680px; margin: 0 auto; }
+  .wdh-title { font-size: clamp(32px, 6vw, 48px); }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .wdh { padding: 84px 0 44px; }
+  .wdh-visual { width: min(150vw, 560px); }
+  .wdh-inner { padding: 0 18px; }
+
+  .wdh-eyebrow { margin-bottom: 14px; font-size: 11px; gap: 10px; letter-spacing: 0.14em; }
+  .wdh-eyebrow-line { width: 20px; }
+  .wdh-title { margin-bottom: 14px; font-size: clamp(27px, 8vw, 36px); line-height: 1.12; letter-spacing: -0.025em; }
+  .wdh-desc { margin-bottom: 24px; font-size: 15px; line-height: 1.65; }
+  .wdh-actions { width: 100%; gap: 12px; }
+  .wdh-btn { width: 100%; min-height: 50px; padding: 0 22px; font-size: 15px; }
+}
+
+@media (max-width: 480px) {
+  .wdh-eyebrow { font-size: 10px; gap: 8px; letter-spacing: 0.12em; }
+  .wdh-eyebrow-line { width: 16px; }
+  .wdh-desc { font-size: 14px; line-height: 1.6; }
+  .wdh-btn svg { width: 16px; height: 16px; }
+}
+@media (max-width: 360px) {
+  .wdh-inner { padding: 0 16px; }
+  .wdh-title { font-size: 25px; }
+  .wdh-desc { font-size: 13px; }
+}
+
+/* Reduced motion: static alternative */
+@media (prefers-reduced-motion: reduce) {
+  .wdh *, .wdh *::before, .wdh *::after { transition-duration: 0.01ms !important; }
+  .wdh-btn--primary { animation: none; }
+}

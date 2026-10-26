@@ -1,0 +1,169 @@
+/* Global Design System & Reset */
+:root {
+  --brand-navy: #0E2A4E;
+  --brand-navy-hover: #163B6B;
+  --brand-navy-active: #0A1F3B;
+  --brand-navy-subtle: rgba(14, 42, 78, 0.08);
+  --brand-navy-focus: rgba(14, 42, 78, 0.25);
+  
+  --bg-neutral-light: #F8F9FA;
+  --bg-neutral: #ECEEF2;
+  --bg-neutral-surface: #E3E6EB;
+  
+  --text-primary: #1E293B;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-white: #FFFFFF;
+
+  --navbar-bg: #FFFFFF;
+  --navbar-shadow: 0 12px 34px -8px rgba(14, 42, 78, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  --navbar-border: rgba(14, 42, 78, 0.04);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: var(--brand-navy);
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, a, span {
+  font-family: 'Poppins', 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  color: var(--text-white);
+  line-height: 1.6;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ==========================================================================
+   Global Cursor Behavior
+   - Default arrow cursor across all backgrounds, containers, text, and headings
+   - Pointer cursor for buttons, links, controls, and interactive elements
+   - Text I-beam cursor strictly for editable inputs, textareas, and contenteditable
+   - Not-allowed cursor for disabled elements
+   - Normal text selection is fully preserved
+   ========================================================================== */
+
+/* 1. Default arrow cursor for layout, containers, and non-editable text */
+html,
+body,
+#root,
+div,
+section,
+article,
+main,
+header,
+footer,
+aside,
+nav,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+label,
+li,
+ul,
+ol,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+figcaption,
+pre,
+code,
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  cursor: default;
+  caret-color: transparent;
+}
+
+/* 2. Interactive elements (pointer hand, no typing caret) */
+button,
+a,
+[role="button"],
+[role="tab"],
+[role="menuitem"],
+[role="link"],
+summary,
+select,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+input[type="file"],
+label[for],
+button *,
+a * {
+  cursor: pointer;
+  caret-color: transparent;
+}
+
+/* 3. Text inputs, textareas, and editable areas (typing cursor and visible caret) */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="reset"]):not([type="button"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="image"]),
+textarea,
+[contenteditable="true"],
+[contenteditable="true"] * {
+  cursor: text;
+  caret-color: auto;
+}
+
+/* 4. Disabled controls */
+button:disabled,
+button[disabled],
+input:disabled,
+input[disabled],
+textarea:disabled,
+textarea[disabled],
+select:disabled,
+select[disabled],
+[aria-disabled="true"],
+[aria-disabled="true"] * {
+  cursor: not-allowed;
+  caret-color: transparent;
+}
+

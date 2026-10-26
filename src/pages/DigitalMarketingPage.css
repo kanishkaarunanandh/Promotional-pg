@@ -1,0 +1,486 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+/* =========================== TOKENS (light theme) =========================== */
+.dmp-page {
+  --navy: #0E2A4E;
+  --cyan: #06A3DA;
+  --electric: #1E7FD4;
+
+  --bg: #ffffff;
+  --bg-tint: #F4FAFE;                      /* white with a faint cyan cast */
+  --text: var(--navy);
+  --text-muted: rgba(14, 42, 78, 0.76);
+  --text-soft: rgba(14, 42, 78, 0.70);
+  --line: rgba(30, 127, 212, 0.18);
+  --grad: linear-gradient(90deg, var(--cyan) 0%, var(--electric) 100%);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+.dmp-page *,
+.dmp-page *::before,
+.dmp-page *::after { box-sizing: border-box; }
+
+.dmp-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 48px);
+}
+
+/* ============================ HERO ============================ */
+.dmp-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: min(100vh, 900px);
+  display: flex;
+  align-items: center;
+  padding: clamp(110px, 11vw, 150px) 0 clamp(64px, 8vw, 104px);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(760px 520px at 22% 45%, rgba(6, 163, 218, 0.14), transparent 70%),
+    radial-gradient(640px 460px at 92% 8%, rgba(30, 127, 212, 0.10), transparent 70%),
+    radial-gradient(700px 420px at 75% 105%, rgba(6, 163, 218, 0.10), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, var(--bg-tint) 100%);
+}
+
+/* faint blueprint grid, masked so it only shows in the middle */
+.dmp-hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(30, 127, 212, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 127, 212, 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+}
+
+.dmp-hero-inner {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 48px);
+  display: grid;
+  grid-template-columns: 45fr 55fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 88px);
+}
+
+/* ---------- image column (left) ---------- */
+.dmp-hero-media {
+  position: relative;
+  min-width: 0;
+  padding: 24px 24px 24px 0;   /* room for the offset ring and dots */
+}
+
+/* soft cyan light behind the image */
+.dmp-hero-glow {
+  position: absolute;
+  inset: -6% -8% -6% -10%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 50% at 45% 50%, rgba(6, 163, 218, 0.32), transparent 72%),
+    radial-gradient(60% 55% at 60% 60%, rgba(30, 127, 212, 0.20), transparent 75%);
+  filter: blur(30px);
+}
+
+/* offset outline behind the photo, gives depth without framing the image itself */
+.dmp-hero-ring {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 48px;
+  left: 48px;
+  border-radius: 32px;
+  border: 2px solid rgba(6, 163, 218, 0.35);
+  pointer-events: none;
+}
+
+/* dot pattern peeking out at the bottom-left */
+.dmp-hero-dots {
+  position: absolute;
+  z-index: 0;
+  left: -28px;
+  bottom: -8px;
+  width: 140px;
+  height: 140px;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(30, 127, 212, 0.45) 1.6px, transparent 1.8px);
+  background-size: 16px 16px;
+}
+
+.dmp-hero-img-wrap {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 4 / 4.2;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow:
+    0 30px 60px -20px rgba(14, 42, 78, 0.40),
+    0 18px 40px -16px rgba(30, 127, 212, 0.35),
+    0 0 48px rgba(6, 163, 218, 0.22);
+}
+
+.dmp-hero-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* keeps the aspect ratio, crops instead of stretching */
+  object-position: 30% 50%;   /* keeps the interface panel and hand in view */
+}
+
+/* light cyan sheen so the dark photo sits comfortably on a light page */
+.dmp-hero-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(6, 163, 218, 0.22) 0%, rgba(30, 127, 212, 0.06) 45%, transparent 70%),
+    linear-gradient(180deg, transparent 65%, rgba(14, 42, 78, 0.35) 100%);
+}
+
+/* ---------- content column (right) ---------- */
+.dmp-hero-content {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 26px;
+}
+
+.dmp-eyebrow {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(6, 163, 218, 0.35);
+  background: rgba(6, 163, 218, 0.08);
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.dmp-eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: dmp-blink 1.8s ease-in-out infinite;
+}
+
+.dmp-title {
+  margin: 0;
+  max-width: 15ch;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: clamp(38px, 4.4vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+}
+
+.dmp-grad {
+  background-image: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.dmp-desc {
+  margin: 0;
+  max-width: 58ch;
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.dmp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding-top: 6px;
+}
+
+.dmp-trust {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--electric);
+}
+.dmp-trust p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--navy);
+}
+.dmp-trust p span { color: var(--cyan); padding: 0 6px; }
+
+/* ============================ BUTTONS ============================ */
+.dmp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 16px 30px;
+  border-radius: 14px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* always-glowing primary CTA */
+.dmp-btn--primary {
+  position: relative;
+  isolation: isolate;
+  background-image: var(--grad);
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: 0 0 18px rgba(6, 163, 218, 0.55), 0 10px 24px -8px rgba(30, 127, 212, 0.55);
+  transition: transform 0.25s var(--ease), filter 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+/* continuous glow pulse */
+.dmp-btn--primary::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 24px 6px rgba(6, 163, 218, 0.45), 0 0 48px 10px rgba(30, 127, 212, 0.22);
+  animation: dmp-pulse 2.4s ease-in-out infinite;
+}
+
+.dmp-btn--primary:hover {
+  transform: scale(1.04);
+  filter: brightness(1.1) saturate(1.1);
+  color: #ffffff;
+  box-shadow:
+    0 0 30px rgba(6, 163, 218, 0.8),
+    0 0 64px rgba(30, 127, 212, 0.45),
+    0 14px 30px -8px rgba(30, 127, 212, 0.6);
+}
+
+.dmp-btn--primary:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 4px;
+}
+
+.dmp-btn-arrow { transition: transform 0.25s var(--ease); }
+.dmp-btn--primary:hover .dmp-btn-arrow { transform: translateX(4px); }
+
+.dmp-btn--ghost {
+  padding: 16px 28px;
+  border: 1.5px solid rgba(14, 42, 78, 0.22);
+  background: #ffffff;
+  color: var(--navy);
+  transition: background-color 0.25s var(--ease), border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease), color 0.25s var(--ease);
+}
+.dmp-btn--ghost:hover {
+  border-color: var(--electric);
+  background: rgba(30, 127, 212, 0.06);
+  color: var(--electric);
+  box-shadow: 0 8px 22px -10px rgba(30, 127, 212, 0.5);
+}
+.dmp-btn--ghost:focus-visible {
+  outline: 2px solid var(--electric);
+  outline-offset: 4px;
+}
+
+/* ============================ SECTIONS ============================ */
+.dmp-section {
+  position: relative;
+  padding: clamp(64px, 8vw, 112px) 0;
+}
+
+#dmp-services { background: var(--bg-tint); }
+
+.dmp-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.dmp-kicker {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+.dmp-kicker::before {
+  content: '';
+  width: 36px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--grad);
+}
+
+.dmp-section-title {
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 2.6vw, 36px);
+  line-height: 1.2;
+  color: var(--navy);
+}
+
+.dmp-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.dmp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  box-shadow: 0 12px 30px -20px rgba(14, 42, 78, 0.35);
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.dmp-card:hover {
+  border-color: rgba(6, 163, 218, 0.55);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -18px rgba(30, 127, 212, 0.45), 0 0 24px rgba(6, 163, 218, 0.15);
+}
+
+.dmp-card-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: var(--electric);
+  background: rgba(6, 163, 218, 0.10);
+}
+
+.dmp-card-title {
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.dmp-card-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-soft);
+}
+
+/* ============================ FINAL CTA (navy band for contrast) ============================ */
+.dmp-final { background: var(--bg-tint); padding-top: 0; }
+
+.dmp-final-box {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: clamp(40px, 6vw, 72px) clamp(20px, 4vw, 56px);
+  border-radius: 28px;
+  text-align: center;
+  color: #ffffff;
+  background:
+    radial-gradient(600px 300px at 50% 0%, rgba(6, 163, 218, 0.30), transparent 70%),
+    radial-gradient(500px 280px at 100% 100%, rgba(30, 127, 212, 0.35), transparent 70%),
+    var(--navy);
+  box-shadow: 0 30px 60px -30px rgba(14, 42, 78, 0.6);
+}
+
+.dmp-final-title {
+  margin: 0;
+  max-width: 22ch;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.2;
+}
+
+.dmp-final-text {
+  margin: 0 0 8px;
+  max-width: 56ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dmp-final-box .dmp-btn--primary:focus-visible { outline-color: #ffffff; }
+
+/* ============================ ANIMATIONS ============================ */
+@keyframes dmp-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@keyframes dmp-blink {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(6, 163, 218, 0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(6, 163, 218, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dmp-btn--primary::before,
+  .dmp-eyebrow-dot { animation: none; }
+  .dmp-btn--primary:hover,
+  .dmp-card:hover { transform: none; }
+}
+
+/* ============================ RESPONSIVE ============================ */
+@media (max-width: 1023px) {
+  .dmp-hero { min-height: auto; }
+  .dmp-hero-inner { grid-template-columns: 1fr; }
+  .dmp-hero-media { max-width: 640px; width: 100%; margin: 0 auto; }
+  .dmp-hero-img-wrap { aspect-ratio: 16 / 10; }
+  .dmp-title { max-width: 18ch; }
+  .dmp-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .dmp-hero-media { padding: 16px 16px 16px 0; }
+  .dmp-hero-ring { left: 32px; bottom: 32px; border-radius: 24px; }
+  .dmp-hero-dots { width: 96px; height: 96px; left: -16px; }
+  .dmp-hero-img-wrap { border-radius: 20px; }
+  .dmp-cards { grid-template-columns: 1fr; }
+  .dmp-actions { width: 100%; }
+  .dmp-btn { width: 100%; }
+  .dmp-trust { align-items: flex-start; }
+}

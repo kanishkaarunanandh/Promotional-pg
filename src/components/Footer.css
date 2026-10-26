@@ -1,0 +1,434 @@
+/* ==========================================================================
+   Footer Component Styles — Atriowings Technologies
+   Brand Palette:
+   - Navy Background: #0E2A4E
+   - Accent Cyan: #06A3DA
+   - Primary Text: #FFFFFF
+   - Secondary / Muted Text: #94A3B8, #64748B
+   - Dividers: rgba(255, 255, 255, 0.08)
+   ========================================================================== */
+
+/* Outer full-width wrapper — single navy background, balanced top spacing */
+.footer-wrapper {
+  position: relative;
+  width: 100%;
+  background-color: #0E2A4E;
+  color: #FFFFFF;
+  padding: 44px 0 28px;
+  box-sizing: border-box;
+}
+
+/* Centered container with max-width: 1440px and consistent horizontal padding */
+.footer-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+/* Single intended top horizontal divider aligning precisely with container edges */
+.footer-top-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.08);
+  margin-bottom: 48px;
+}
+
+/* --------------------------------------------------------------------------
+   Main 4-Column Grid:
+   - CSS Grid with four balanced columns (~1.25fr 0.8fr 0.9fr 1fr)
+   - align-items: start so all columns begin at the exact same vertical baseline
+   - Column gap: 56px
+   -------------------------------------------------------------------------- */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.8fr 0.9fr 1fr;
+  column-gap: 56px;
+  row-gap: 40px;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  min-width: 0;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Column 1: Company Branding
+   - Logo, description, and social icons all left-aligned to column edge
+   -------------------------------------------------------------------------- */
+.footer-col-brand {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.footer-brand-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  margin: 0 0 20px 0;
+  padding: 0;
+  outline: none;
+}
+
+/* Logo displayed directly on navy #0E2A4E background — transparent, contain aspect ratio */
+.footer-brand-logo {
+  width: 220px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Company description at readable ~360px max width */
+.footer-brand-desc {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #94A3B8;
+  margin: 0 0 24px 0;
+  max-width: 360px;
+  text-align: left;
+}
+
+/* Social Media Buttons (Horizontal row, left-aligned) */
+.footer-social-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.footer-social-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #CBD5E1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease;
+  outline: none;
+}
+
+.footer-social-btn:hover {
+  background-color: #06A3DA;
+  border-color: #06A3DA;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(6, 163, 218, 0.35);
+}
+
+.footer-social-btn:focus-visible {
+  outline: 2px solid #06A3DA;
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Headings & Cyan Underline Accents (Left-aligned)
+   -------------------------------------------------------------------------- */
+.footer-heading {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.01em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.3;
+}
+
+.footer-heading-underline {
+  width: 28px;
+  height: 2.5px;
+  border-radius: 9999px;
+  background-color: #06A3DA;
+  display: block;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Navigation Lists: Quick Links & Our Services (Left-aligned)
+   -------------------------------------------------------------------------- */
+.footer-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.footer-nav-item {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.footer-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: #94A3B8;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+  outline: none;
+  text-align: left;
+}
+
+.footer-nav-chevron {
+  color: #06A3DA;
+  opacity: 0.7;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.footer-nav-link:hover,
+.footer-nav-link:focus-visible {
+  color: #FFFFFF;
+  transform: translateX(4px);
+}
+
+.footer-nav-link:hover .footer-nav-chevron,
+.footer-nav-link:focus-visible .footer-nav-chevron {
+  opacity: 1;
+}
+
+.footer-nav-link:focus-visible {
+  outline: 2px solid #06A3DA;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Column 4: Get in Touch (Contact List)
+   - Consistent two-column row per item: fixed-width icon + flexible text
+   - align-items: center with clear non-overlapping lines
+   -------------------------------------------------------------------------- */
+.footer-col-contact {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.footer-contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: #94A3B8;
+  width: 100%;
+  text-align: left;
+}
+
+.footer-contact-icon-box {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: rgba(6, 163, 218, 0.12);
+  color: #06A3DA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-contact-text,
+.footer-contact-link {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  color: #94A3B8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  outline: none;
+  text-align: left;
+}
+
+.footer-contact-link:hover,
+.footer-contact-link:focus-visible {
+  color: #06A3DA;
+}
+
+.footer-contact-link:focus-visible {
+  outline: 2px solid #06A3DA;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Bottom Copyright Section:
+   - Desktop: Single horizontal row
+   - Left: Copyright text
+   - Right: Privacy Policy and Terms & Conditions
+   - Vertically centered with subtle top border
+   -------------------------------------------------------------------------- */
+.footer-bottom-bar {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.footer-copyright {
+  margin: 0;
+  color: #94A3B8;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.footer-legal-link {
+  color: #94A3B8;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+  outline: none;
+}
+
+.footer-legal-link:hover,
+.footer-legal-link:focus-visible {
+  color: #06A3DA;
+}
+
+.footer-legal-link:focus-visible {
+  outline: 2px solid #06A3DA;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.footer-legal-separator {
+  color: #475569;
+  user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Adaptations
+   - Desktop (>1024px): 4 evenly aligned columns
+   - Tablet (<=1024px): 2 columns per row
+   - Mobile (<=640px): 1 column with consistent left alignment & wrapping copyright
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .footer-wrapper {
+    padding: 40px 0 24px;
+  }
+
+  .footer-container {
+    padding: 0 28px;
+  }
+
+  .footer-top-divider {
+    margin-bottom: 36px;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 40px;
+    row-gap: 36px;
+  }
+
+  .footer-bottom-bar {
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-wrapper {
+    padding: 36px 0 24px;
+  }
+
+  .footer-container {
+    padding: 0 20px;
+  }
+
+  .footer-top-divider {
+    margin-bottom: 28px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer-brand-desc {
+    max-width: 100%;
+  }
+
+  .footer-bottom-bar {
+    margin-top: 36px;
+    padding-top: 20px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .footer-copyright {
+    text-align: center;
+  }
+
+  .footer-legal-links {
+    justify-content: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility: prefers-reduced-motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+
+  .footer-social-btn,
+  .footer-nav-link,
+  .footer-nav-chevron,
+  .footer-contact-link,
+  .footer-legal-link {
+    transition: none !important;
+    transform: none !important;
+  }
+}
