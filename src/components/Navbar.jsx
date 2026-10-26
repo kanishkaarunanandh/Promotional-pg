@@ -218,8 +218,6 @@ export default function Navbar({
     }
   };
 
-  const servicesActive = currentActive === 'Services';
-
   return (
     <header className="navbar-wrapper" role="banner">
       <nav

@@ -28,3 +28,9 @@ dist-ssr
 server/.env
 server/.env.*
 !server/.env.example
+
+# Scratch & browser test artifacts
+.chrome*
+desktop_current*.png
+create_transparent*.js
+eslint_report*.txt

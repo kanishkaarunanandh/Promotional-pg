@@ -3,11 +3,10 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Mail, Plus } from 'lucide-react';
 import { ROUTES } from '../utils/sectionNav';
 import './faq-section.css';
-import introVideo from '../assets/Atriowings-intro-animation.mp4';
 
 const EASE = [0.22, 1, 0.36, 1];
 
-const VIDEO_SRC = introVideo;
+const VIDEO_SRC = '/videos/atriowings-intro-animation.mp4';
 
 
 const CATEGORIES = [

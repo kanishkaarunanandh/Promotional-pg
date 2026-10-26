@@ -1,5 +1,5 @@
-import { Fragment, useState, useMemo, useRef } from 'react';
-import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
+import { Fragment, useState, useMemo } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import {
   Share2,
   CalendarCheck,
@@ -44,7 +44,7 @@ import './dmp-services.css';
 
 const EASE = [0.22, 1, 0.36, 1];
 
-export const DIGITAL_MARKETING_SERVICES = [
+const DIGITAL_MARKETING_SERVICES = [
   {
     id: 'social-media-marketing',
     num: '01',
@@ -326,8 +326,6 @@ const HEAD = ['Comprehensive Digital Marketing', 'Services That Drive Growth'];
 
 export default function DmpServices() {
   const reduce = useReducedMotion();
-  const sectionRef = useRef(null);
-  const inView = useInView(sectionRef, { amount: 0.15, once: true });
 
   const [activeCategory, setActiveCategory] = useState('All Services');
   const [searchQuery, setSearchQuery] = useState('');
@@ -357,7 +355,6 @@ export default function DmpServices() {
       id="dmp-services"
       className="dmp-section dmps"
       aria-labelledby="dmp-services-title"
-      ref={sectionRef}
     >
       {/* Ambient background glowing orbs */}
       <div className="dmps-bg" aria-hidden="true">
@@ -507,7 +504,7 @@ export default function DmpServices() {
           viewport={{ once: true, amount: 0.05 }}
           transition={{ staggerChildren: reduce ? 0 : 0.06 }}
         >
-          {filteredServices.map((sv, idx) => {
+          {filteredServices.map((sv) => {
             const Icon = sv.icon;
             const isOpen = selectedService?.id === sv.id;
 

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { User, Phone, Mail, Send, Loader2, CheckCircle2, AlertCircle, ShieldCheck } from 'lucide-react';
 import Navbar from '../components/Navbar';
@@ -25,8 +25,12 @@ export default function ContactPage() {
   const [status, setStatus] = useState('idle'); // idle | submitting | success | error
   const [message, setMessage] = useState('');
   const [website, setWebsite] = useState(''); // honeypot - real visitors never see or fill it
-  const startedAt = useRef(Date.now());
+  const startedAt = useRef(null);
   const sending = useRef(false);
+
+  useEffect(() => {
+    startedAt.current = Date.now();
+  }, []);
 
   const check = (next) => validateContact(next).errors;
 

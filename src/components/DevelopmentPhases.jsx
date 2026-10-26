@@ -87,8 +87,6 @@ export default function DevelopmentPhases() {
   useEffect(() => {
     // Reduced motion: no travelling and no zoom, just the static timeline.
     if (reduce) {
-      setPos(0);
-      setActive(-1);
       return undefined;
     }
 
@@ -120,9 +118,6 @@ export default function DevelopmentPhases() {
     };
 
     // first run: rest on step 01, then travel to step 02
-    setActive(-1);
-    setTravelMs(TRAVEL_MS);
-    setPos(0);
     timerId = setTimeout(() => travelTo(1), START_PAUSE_MS);
 
     return () => clearTimeout(timerId);

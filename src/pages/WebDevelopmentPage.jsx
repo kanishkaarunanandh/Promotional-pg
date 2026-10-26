@@ -8,11 +8,7 @@ import {
   Sparkles,
   ShieldCheck,
   ArrowRight,
-  CheckCircle2,
   Code2,
-  Compass,
-  Layers,
-  Zap,
   MessageSquare,
   Gauge,
   Target,
@@ -27,7 +23,6 @@ import '../components/why-choose-cta.css';
 import capabilitiesTeamImg from '../assets/web-dev-capabilities-team.png';
 import ApproachSection from '../components/approach-section';
 import DevelopmentPhases from '../components/DevelopmentPhases';
-import '../components/approach-section.css';
 import StickyCTA from '../components/StickyCTA';
 import FaqSection from '../components/FaqSection';
 import TechnologyShowcase from '../components/Technologyshowcase'
@@ -244,7 +239,6 @@ export default function WebDevelopmentPage() {
   useEffect(() => {
     // Off screen: hide the cards and run nothing. Reduced motion: static, no loop.
     if (!orbitInView || shouldReduceMotion) {
-      setOrbitShown(false);
       return undefined;
     }
     let timerId;
@@ -256,20 +250,16 @@ export default function WebDevelopmentPage() {
       }, ORBIT_CYCLE_SHOW_MS);
     };
     runCycle();
-    return () => clearTimeout(timerId);
+    return () => {
+      clearTimeout(timerId);
+      setOrbitShown(false);
+    };
   }, [orbitInView, shouldReduceMotion]);
+
   // Scroll to top on page mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const handleSmoothScroll = (e, targetId) => {
-    e.preventDefault();
-    const elem = document.getElementById(targetId);
-    if (elem) {
-      elem.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   // Reusable animation variants
   const fadeIn = {

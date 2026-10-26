@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight, Building2, Receipt, Code2, Users, Server } from 'lucide-react';
+import { ArrowUpRight, Building2, Receipt, Code2, Users } from 'lucide-react';
 import { ROUTES } from '../utils/sectionNav';
 import customImg from '../assets/custom software.jpg';
 import billingImg from '../assets/billing sw.jpg';

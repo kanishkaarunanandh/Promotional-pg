@@ -27,13 +27,6 @@ import './SoftwareDevelopmentPage.css';
 const EASE = [0.22, 1, 0.36, 1];
 const CONTACT_HREF = ROUTES.contact;
 
-const HIGHLIGHTS = [
-  { icon: Code2, label: 'Custom Software Development' },
-  { icon: Building2, label: 'Enterprise Applications' },
-  { icon: Plug, label: 'API Development & Integration' },
-  { icon: Cloud, label: 'SaaS Solutions' },
-];
-
 const WHAT_WE_BUILD = [
   {
     icon: Code2,
@@ -102,11 +95,6 @@ export default function SoftwareDevelopmentPage() {
     }
   }, [reduce]);
 
-  const scrollToSection = (e, id) => {
-    e.preventDefault();
-    document.getElementById(id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-  };
-
   const stagger = {
     hidden: {},
     visible: { transition: { staggerChildren: reduce ? 0 : 0.11, delayChildren: 0.15 } },
@@ -115,15 +103,6 @@ export default function SoftwareDevelopmentPage() {
     hidden: { opacity: 0, y: reduce ? 0 : 24 },
     visible: { opacity: 1, y: 0, transition: { duration: reduce ? 0.15 : 0.7, ease: EASE } },
   };
-  const reveal = {
-    hidden: { opacity: 0, y: reduce ? 0 : 28 },
-    visible: (i = 0) => ({
-      opacity: 1,
-      y: 0,
-      transition: { duration: reduce ? 0.15 : 0.6, ease: EASE, delay: reduce ? 0 : i * 0.08 },
-    }),
-  };
-  const view = { once: true, amount: 0.25 };
 
   return (
     <div className="sdp-page">
