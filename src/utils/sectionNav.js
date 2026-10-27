@@ -10,6 +10,7 @@ export const ROUTES = {
   web: '/webdevelopment',
   software: '/softwaredevelopment',
   marketing: '/digitalmarketing',
+  photoshoot: '/photoshoot',
 };
 
 // ids of each landing page's own capabilities / services section
@@ -17,6 +18,7 @@ export const SECTION_IDS = {
   web: 'services-we-offer',
   software: 'our-services',
   marketing: 'dmp-services',
+  photoshoot: 'photoshoot-services',
 };
 
 // ids of each landing page's own why-choose section
@@ -24,15 +26,22 @@ export const WHY_CHOOSE_SECTION_IDS = {
   web: 'why-choose',
   software: 'why-choose',
   marketing: 'why-choose',
+  photoshoot: 'why-choose',
 };
 
 export const WHY_CHOOSE_ROUTES = {
   web: `${ROUTES.web}#why-choose`,
   software: `${ROUTES.software}#why-choose`,
   marketing: `${ROUTES.marketing}#why-choose`,
+  photoshoot: `${ROUTES.photoshoot}#why-choose`,
 };
 
-const SERVICE_PATHS = { web: ROUTES.web, software: ROUTES.software, marketing: ROUTES.marketing };
+const SERVICE_PATHS = {
+  web: ROUTES.web,
+  software: ROUTES.software,
+  marketing: ROUTES.marketing,
+  photoshoot: ROUTES.photoshoot,
+};
 
 export const normalizePath = (p = '/') => {
   const clean = (p.split('#')[0].split('?')[0] || '/').replace(/\/+$/, '');
@@ -67,6 +76,7 @@ export function currentServiceSection() {
  * - On /webdevelopment: /webdevelopment#why-choose
  * - On /softwaredevelopment: /softwaredevelopment#why-choose
  * - On /digitalmarketing: /digitalmarketing#why-choose
+ * - On /photoshoot: /photoshoot#why-choose
  * - On any other page (/ or /contact etc.): /webdevelopment#why-choose
  */
 export function getWhyChooseHref(pathname = '/') {
@@ -77,6 +87,9 @@ export function getWhyChooseHref(pathname = '/') {
   if (clean === normalizePath(ROUTES.marketing)) {
     return WHY_CHOOSE_ROUTES.marketing;
   }
+  if (clean === normalizePath(ROUTES.photoshoot)) {
+    return WHY_CHOOSE_ROUTES.photoshoot;
+  }
   return WHY_CHOOSE_ROUTES.web;
 }
 
@@ -85,6 +98,7 @@ export function getWhyChooseHref(pathname = '/') {
  * - On /webdevelopment: /webdevelopment
  * - On /softwaredevelopment: /softwaredevelopment
  * - On /digitalmarketing: /digitalmarketing
+ * - On /photoshoot: /photoshoot
  * - On /: /
  * - On any other page (/contact etc.): /
  */
@@ -93,12 +107,13 @@ export function getHomeHref(pathname = '/') {
   if (clean === normalizePath(ROUTES.software)) return ROUTES.software;
   if (clean === normalizePath(ROUTES.web)) return ROUTES.web;
   if (clean === normalizePath(ROUTES.marketing)) return ROUTES.marketing;
+  if (clean === normalizePath(ROUTES.photoshoot)) return ROUTES.photoshoot;
   return ROUTES.home;
 }
 
 /**
  * Shared Home click handler for Navbar and mobile menus.
- * When on a landing page (/softwaredevelopment, /webdevelopment, /digitalmarketing, /),
+ * When on a landing page (/softwaredevelopment, /webdevelopment, /digitalmarketing, /photoshoot, /),
  * scrolls smoothly to the top of the current page and keeps the current URL (clearing any hash).
  * On other pages (like /contact), navigates to the home page (/).
  */
@@ -115,6 +130,7 @@ export function handleHomeNavigation(event, { navigate } = {}) {
     normalizePath(ROUTES.web),
     normalizePath(ROUTES.software),
     normalizePath(ROUTES.marketing),
+    normalizePath(ROUTES.photoshoot),
   ].includes(currentPath);
 
   if (isLandingPage) {

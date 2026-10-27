@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import WebDevelopmentPage from './pages/WebDevelopmentPage';
 import SoftwareDevelopmentPage from './pages/SoftWareDevelopment';
 import DigitalMarketingPage from './pages/DigitalMarketingPage';
+import PhotoshootPage from './pages/photoshoot';
 import ContactPage from './pages/ContactPage';
 import { ROUTES } from './utils/sectionNav';
 
@@ -95,6 +96,9 @@ function App() {
         <Route path="/webdevelopment" element={<WebDevelopmentPage />} />
         <Route path="/softwaredevelopment" element={<SoftwareDevelopmentPage />} />
         <Route path="/digitalmarketing" element={<DigitalMarketingPage />} />
+        <Route path="/photoshoot" element={<PhotoshootPage />} />
+        <Route path="/photography" element={<Navigate to="/photoshoot" replace />} />
+        <Route path="/product-photography" element={<Navigate to="/photoshoot" replace />} />
 
         <Route path="/contact" element={<ContactPage />} />
 

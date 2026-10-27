@@ -53,12 +53,13 @@ const SERVICES_LINKS = [
   { label: 'Web Development', href: ROUTES.web, section: SECTION_IDS.web },
   { label: 'Software Development', href: ROUTES.software, section: SECTION_IDS.software },
   { label: 'Digital Marketing', href: ROUTES.marketing, section: SECTION_IDS.marketing },
+  { label: 'Product Photography & Video Ads', href: ROUTES.photoshoot, section: SECTION_IDS.photoshoot },
 ];
 
 const CONTACT_DETAILS = {
   address: 'No: 45, A Block, 3rd Avenue, Kumaran Nagar, Anna Nagar East, Chennai',
   email: 'info@atriowings.in',
-  hours: 'Mon – Fri: 9:00 AM – 6:00 PM',
+  hours: 'Mon – Fri: 9:30 AM – 6:00 PM',
 };
 
 export default function Footer() {

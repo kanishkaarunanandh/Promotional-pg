@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { ChevronDown, ArrowRight, Globe, Code2, Megaphone } from 'lucide-react';
+import { ChevronDown, ArrowRight, Globe, Code2, Megaphone, Camera } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import atriowingsLogo from '../assets/atriowings-logo.png';
 import atriowingsIcon from '../assets/atriowings-icon.png';
@@ -12,6 +12,7 @@ const SERVICES = [
   { label: 'Web Development', href: ROUTES.web, section: SECTION_IDS.web, icon: Globe },
   { label: 'Software Development', href: ROUTES.software, section: SECTION_IDS.software, icon: Code2 },
   { label: 'Digital Marketing', href: ROUTES.marketing, section: SECTION_IDS.marketing, icon: Megaphone },
+  { label: 'Photography & Video Ads', href: ROUTES.photoshoot, section: SECTION_IDS.photoshoot, icon: Camera },
 ];
 
 const HOVER_CLOSE_DELAY = 160; // ms: lets the pointer travel from "Services" into the dropdown
