@@ -10,6 +10,8 @@
     "server:dev": "npm --prefix server run dev",
     "dev:all": "concurrently -n \"frontend,backend\" -c \"cyan,magenta\" \"vite\" \"npm --prefix server run dev\"",
     "build": "vite build",
+    "start": "npm --prefix server start",
+    "render-build": "npm --prefix server install",
     "lint": "eslint .",
     "preview": "vite preview"
   },
