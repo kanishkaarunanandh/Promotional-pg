@@ -1,0 +1,748 @@
+/* ==========================================================================
+   VIDEO ADS — 3D CAROUSEL SECTION (#video-ads)
+   Prominent Vertical 9:16 Portrait Cards in Curved 3D Arc Arrangement
+   Matching Reference Specification:
+   - Center active card: Tall 9:16 vertical Reel card, prominent with cyan glow
+   - Side cards: Symmetrically positioned in a curved 3D horizontal arc with depth & scale
+   - Initial active video: Portrait video loaded first
+   - Reflection underneath cards on the light-blue canvas
+   - Subtle cyan dotted curved guide line and 3D floating decorations
+   ========================================================================== */
+
+.ps-video-carousel-section {
+  position: relative;
+  width: 100%;
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 30%, rgba(6, 163, 218, 0.08), transparent 70%),
+    radial-gradient(circle at 90% 15%, rgba(0, 163, 255, 0.07), transparent 45%),
+    radial-gradient(circle at 10% 85%, rgba(6, 163, 218, 0.06), transparent 50%);
+  padding: 100px 0 110px;
+  overflow: hidden;
+  border-top: 1px solid rgba(6, 163, 218, 0.12);
+  border-bottom: 1px solid rgba(6, 163, 218, 0.12);
+}
+
+.ps-vc-ambient-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 45%, rgba(0, 163, 255, 0.09) 0%, transparent 60%);
+}
+
+/* Floating 3D Glossy Cyan Spheres & Diamond */
+.ps-vc-floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #7ee6fd 0%, #00a3ff 45%, #0066cc 80%, #004488 100%);
+  box-shadow: 0 14px 30px rgba(0, 163, 255, 0.35), inset -4px -4px 10px rgba(0, 0, 0, 0.3), inset 2px 2px 6px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform;
+}
+
+.ps-vc-floating-orb--top-right {
+  width: 44px;
+  height: 44px;
+  top: 14%;
+  right: 26%;
+  animation: ps-vc-float-1 7s ease-in-out infinite alternate;
+}
+
+.ps-vc-floating-orb--mid-left {
+  width: 32px;
+  height: 32px;
+  top: 42%;
+  left: 7%;
+  animation: ps-vc-float-2 6.5s ease-in-out infinite alternate 1s;
+}
+
+.ps-vc-floating-orb--bottom-left {
+  width: 52px;
+  height: 52px;
+  bottom: 14%;
+  left: 10%;
+  animation: ps-vc-float-3 8s ease-in-out infinite alternate 0.5s;
+}
+
+.ps-vc-floating-diamond {
+  position: absolute;
+  bottom: 14%;
+  right: 10%;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, #00e5ff 0%, #00a3ff 50%, #0055b3 100%);
+  box-shadow: 0 14px 30px rgba(0, 163, 255, 0.4), inset 2px 2px 6px rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  z-index: 2;
+  animation: ps-vc-float-diamond 6.5s ease-in-out infinite alternate;
+}
+
+@keyframes ps-vc-float-1 {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-16px) rotate(12deg); }
+}
+@keyframes ps-vc-float-2 {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(14px) scale(1.08); }
+}
+@keyframes ps-vc-float-3 {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-18px) rotate(-10deg); }
+}
+@keyframes ps-vc-float-diamond {
+  0% { transform: translateY(0) rotate(45deg); }
+  100% { transform: translateY(-16px) rotate(55deg); }
+}
+
+.ps-vc-container {
+  position: relative;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 28px;
+  z-index: 3;
+}
+
+/* Header */
+.ps-vc-header {
+  margin-bottom: 20px;
+}
+
+.ps-vc-header-text {
+  max-width: 660px;
+}
+
+.ps-vc-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #0e2a4e;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.ps-vc-eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ff4757;
+  box-shadow: 0 0 10px rgba(255, 71, 87, 0.6);
+  animation: ps-vc-dot-pulse 2s infinite ease-in-out;
+}
+
+@keyframes ps-vc-dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.8; }
+}
+
+.ps-vc-heading {
+  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.08;
+  color: #0e2a4e;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px 0;
+}
+
+.ps-vc-heading-cyan {
+  background: linear-gradient(135deg, #00a3ff 0%, #06a3da 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ps-vc-subtitle {
+  font-size: clamp(0.95rem, 1.25vw, 1.05rem);
+  line-height: 1.6;
+  color: #64748b;
+  margin: 0;
+}
+
+/* 3D Carousel Stage Wrapper and Cards */
+.ps-vc-stage-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  margin: 30px auto 20px;
+  padding: 10px 0 30px;
+}
+
+/* Dotted Curved Guide Line matching reference */
+.ps-vc-arc-track {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1200px;
+  height: 240px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ps-vc-stage {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+/* Card Base */
+.ps-vc-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  user-select: none;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  transition: filter 0.3s ease;
+}
+
+/* Portrait 9:16 Vertical Reel Card (ONLY reel.mp4) */
+.ps-vc-card--portrait {
+  width: 270px;
+  height: 480px;
+  aspect-ratio: 9 / 16;
+  border-radius: 26px;
+}
+
+/* Landscape 16:9 Commercial Video Cards (ALL other 6 videos) */
+.ps-vc-card--landscape {
+  width: 500px;
+  height: 290px;
+  aspect-ratio: 16 / 9;
+  border-radius: 22px;
+}
+
+/* Active Center Card Highlight & Drop Shadow */
+.ps-vc-card--active {
+  filter: drop-shadow(0 26px 52px rgba(6, 163, 218, 0.42));
+  z-index: 50;
+}
+
+.ps-vc-card--active .ps-vc-card-inner {
+  border: 2px solid rgba(0, 229, 255, 0.95);
+  box-shadow: 0 0 32px rgba(0, 163, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Inner Card Structure with Floor Reflection */
+.ps-vc-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  background-color: #07192f;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 14px 28px rgba(7, 25, 47, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  -webkit-box-reflect: below 8px linear-gradient(to bottom, transparent 65%, rgba(0, 0, 0, 0.16));
+}
+
+/* Video Media inside Portrait Card */
+.ps-vc-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #07192f;
+  display: block;
+}
+
+.ps-vc-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  background: #091e3a;
+}
+.ps-vc-fallback-icon {
+  color: #00e5ff;
+  opacity: 0.8;
+}
+
+.ps-vc-card-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.ps-vc-card-top-bar {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.ps-vc-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.ps-vc-badge-rec-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ff3b30;
+  display: inline-block;
+  margin-right: 6px;
+  box-shadow: 0 0 6px rgba(255, 59, 48, 0.8);
+  animation: ps-vc-dot-pulse 1.8s infinite ease-in-out;
+}
+
+.ps-vc-badge--category {
+  background: rgba(7, 25, 47, 0.82);
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 5px 12px;
+  border: 1px solid rgba(0, 229, 255, 0.35);
+}
+
+.ps-vc-badge--duration {
+  background: rgba(7, 25, 47, 0.82);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+/* Play Button */
+.ps-vc-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 7;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ps-vc-play-button:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.ps-vc-play-pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  animation: ps-vc-pulse-glow 2.4s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes ps-vc-pulse-glow {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.22); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.ps-vc-play-circle {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 0 24px rgba(0, 163, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+}
+
+.ps-vc-play-icon {
+  margin-left: 3px;
+  color: #00a3ff;
+}
+
+/* Bottom Card Details */
+.ps-vc-card-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 40px 16px 16px;
+  background: linear-gradient(to top, rgba(7, 25, 47, 0.95) 0%, rgba(7, 25, 47, 0.6) 65%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  z-index: 5;
+  transition: opacity 0.3s ease;
+}
+
+.ps-vc-card-bottom--playing {
+  opacity: 0;
+  pointer-events: none;
+}
+.ps-vc-card:hover .ps-vc-card-bottom--playing {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ps-vc-card-meta {
+  flex: 1;
+  text-align: left;
+}
+
+.ps-vc-kicker {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #00e5ff;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.ps-vc-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  line-height: 1.25;
+}
+
+.ps-vc-card-subtitle {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.ps-vc-card-quick-play {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.ps-vc-card-quick-play:hover {
+  background: #00a3ff;
+  border-color: #00a3ff;
+  transform: scale(1.1);
+}
+
+/* Active Video Controls Bar */
+.ps-vc-controls-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px 12px;
+  background: rgba(7, 25, 47, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 229, 255, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 8;
+  border-radius: 0 0 26px 26px;
+}
+
+.ps-vc-ctrl-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  opacity: 0.9;
+}
+.ps-vc-ctrl-btn:hover {
+  color: #00e5ff;
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ps-vc-scrubber-track {
+  position: relative;
+  flex: 1;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.ps-vc-scrubber-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00e5ff, #00a3ff);
+  border-radius: 9999px;
+  transition: width 0.1s linear;
+}
+
+.ps-vc-time-display {
+  font-size: 0.70rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: monospace, sans-serif;
+  white-space: nowrap;
+}
+
+/* Controls Nav & Indicators */
+.ps-vc-controls-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 24px;
+}
+
+.ps-vc-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 1.5px solid rgba(6, 163, 218, 0.25);
+}
+
+.ps-vc-nav-btn--prev {
+  background: #ffffff;
+  color: #0e2a4e;
+}
+.ps-vc-nav-btn--prev:hover {
+  background: rgba(6, 163, 218, 0.1);
+  border-color: #06a3da;
+  color: #06a3da;
+  transform: translateX(-2px);
+}
+
+.ps-vc-nav-btn--next {
+  background: #00a3ff;
+  color: #ffffff;
+  border-color: #00a3ff;
+  box-shadow: 0 4px 14px rgba(0, 163, 255, 0.38);
+}
+.ps-vc-nav-btn--next:hover {
+  background: #06a3da;
+  border-color: #06a3da;
+  transform: translateX(2px);
+  box-shadow: 0 6px 18px rgba(0, 163, 255, 0.48);
+}
+
+.ps-vc-pagination-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ps-vc-counter {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0e2a4e;
+  letter-spacing: 0.5px;
+  font-family: monospace, sans-serif;
+}
+
+.ps-vc-counter-divider {
+  color: #00a3ff;
+}
+
+.ps-vc-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ps-vc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(6, 163, 218, 0.25);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ps-vc-dot:hover {
+  background: rgba(6, 163, 218, 0.5);
+}
+
+.ps-vc-dot--active {
+  width: 24px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #00a3ff, #06a3da);
+  box-shadow: 0 2px 8px rgba(0, 163, 255, 0.4);
+}
+
+/* Call to Action */
+.ps-vc-cta-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.ps-vc-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #07192f;
+  color: #ffffff;
+  font-size: 0.94rem;
+  font-weight: 700;
+  padding: 14px 34px;
+  border-radius: 9999px;
+  text-decoration: none;
+  box-shadow: 0 10px 24px -4px rgba(7, 25, 47, 0.32);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ps-vc-cta-button:hover {
+  background: #06a3da;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -4px rgba(6, 163, 218, 0.45);
+  color: #ffffff;
+}
+
+.ps-vc-cta-arrow {
+  transition: transform 0.25s ease;
+}
+.ps-vc-cta-button:hover .ps-vc-cta-arrow {
+  transform: translateX(4px);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+  .ps-vc-stage {
+    height: 480px;
+  }
+
+  .ps-vc-card--portrait {
+    width: 240px;
+    height: 426px;
+    border-radius: 22px;
+  }
+
+  .ps-vc-card--landscape {
+    width: 420px;
+    height: 244px;
+    border-radius: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ps-video-carousel-section {
+    padding: 75px 0 85px;
+  }
+
+  .ps-vc-header {
+    text-align: center;
+  }
+
+  .ps-vc-header-text {
+    margin: 0 auto;
+  }
+
+  .ps-vc-stage-wrapper {
+    margin: 20px auto 16px;
+  }
+
+  .ps-vc-stage {
+    height: 400px;
+  }
+
+  .ps-vc-card--portrait {
+    width: 200px;
+    height: 355px;
+    border-radius: 20px;
+  }
+
+  .ps-vc-card--landscape {
+    width: 320px;
+    height: 185px;
+    border-radius: 16px;
+  }
+
+  .ps-vc-floating-orb--top-right {
+    right: 6%;
+    top: 8%;
+    width: 32px;
+    height: 32px;
+  }
+  .ps-vc-floating-orb--mid-left {
+    display: none;
+  }
+  .ps-vc-floating-orb--bottom-left {
+    left: 4%;
+    bottom: 8%;
+    width: 36px;
+    height: 36px;
+  }
+  .ps-vc-floating-diamond {
+    right: 4%;
+    bottom: 8%;
+    width: 32px;
+    height: 32px;
+  }
+
+  .ps-vc-card-title {
+    font-size: 0.92rem;
+  }
+  .ps-vc-card-subtitle {
+    font-size: 0.72rem;
+  }
+  .ps-vc-play-button {
+    width: 58px;
+    height: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-vc-floating-orb,
+  .ps-vc-floating-diamond,
+  .ps-vc-eyebrow-dot,
+  .ps-vc-badge-rec-dot,
+  .ps-vc-play-pulse,
+  .ps-vc-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}

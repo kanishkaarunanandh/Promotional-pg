@@ -31,13 +31,20 @@ import {
   Image as ImageIcon,
   Star,
   TrendingUp,
-  Scale
+  Scale,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  RotateCcw,
+  ArrowLeft
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import StickyCTA from '../components/StickyCTA';
 import { ROUTES } from '../utils/sectionNav';
 import './photoshoot.css';
+import './video-carousel.css';
 
 // Visual Assets
 import modelImg from '../assets/model.jpg';
@@ -77,6 +84,95 @@ import advantageComplianceImg from '../assets/advantage_compliance.png';
 import advantageCamerasImg from '../assets/advantage_cameras.png';
 import advantageTetheredImg from '../assets/advantage_tethered.png';
 import advantageCommercialImg from '../assets/advantage_commercial.png';
+
+// 7 Actual Video Files for the Video Ads — 3D Carousel Section
+import video1 from '../assets/video1.mp4';
+import video2 from '../assets/video2.mp4';
+import reel from '../assets/reel.mp4';
+import video4 from '../assets/video4.mp4';
+import video5 from '../assets/video5.mp4';
+import video6 from '../assets/video6.mp4';
+import video7 from '../assets/video7.mp4';
+
+const VIDEO_CAROUSEL_ITEMS = [
+  {
+    id: 'reel-1',
+    src: reel,
+    publicSrc: '/videos/reel.mp4',
+    title: 'Trending Social Reels & Shorts',
+    subtitle: 'Instagram • Reel • 9:16',
+    category: 'Reels',
+    badge: 'MODEL',
+    duration: '0:15',
+    orientation: 'portrait',
+  },
+  {
+    id: 'video-1',
+    src: video1,
+    publicSrc: '/videos/video1.mp4',
+    title: 'High-Converting E-Commerce Ad',
+    subtitle: 'Product launch • Commercial Ad • 16:9',
+    category: 'Ads',
+    badge: 'PRODUCT',
+    duration: '0:20',
+    orientation: 'landscape',
+  },
+  {
+    id: 'video-2',
+    src: video2,
+    publicSrc: '/videos/video2.mp4',
+    title: 'Commercial Brand Story',
+    subtitle: 'Brand awareness • Commercial • 16:9',
+    category: 'Commercial',
+    badge: 'COMMERCIAL',
+    duration: '0:15',
+    orientation: 'landscape',
+  },
+  {
+    id: 'video-4',
+    src: video4,
+    publicSrc: '/videos/video4.mp4',
+    title: 'Fashion Lookbook & Model Edit',
+    subtitle: 'Apparel collection • Studio Shoot • 16:9',
+    category: 'Model',
+    badge: 'MODEL',
+    duration: '0:25',
+    orientation: 'landscape',
+  },
+  {
+    id: 'video-5',
+    src: video5,
+    publicSrc: '/videos/video5.mp4',
+    title: 'Luxury Product Cinematography',
+    subtitle: 'Macro studio finish • 4K Promo • 16:9',
+    category: 'Product',
+    badge: 'PRODUCT',
+    duration: '0:30',
+    orientation: 'landscape',
+  },
+  {
+    id: 'video-6',
+    src: video6,
+    publicSrc: '/videos/video6.mp4',
+    title: 'Performance Marketplace Ad',
+    subtitle: 'Paid campaigns • ROAS Boost • 16:9',
+    category: 'Ads',
+    badge: 'ADS',
+    duration: '0:18',
+    orientation: 'landscape',
+  },
+  {
+    id: 'video-7',
+    src: video7,
+    publicSrc: '/videos/video7.mp4',
+    title: 'Cinematic Commercial Campaign',
+    subtitle: 'Studio production • 4K Film • 16:9',
+    category: 'Commercial',
+    badge: 'COMMERCIAL',
+    duration: '0:35',
+    orientation: 'landscape',
+  },
+];
 
 const EASE = [0.22, 1, 0.36, 1];
 const CONTACT_HREF = ROUTES.contact;
@@ -494,6 +590,359 @@ export default function PhotoshootPage() {
   const marqueeRef = useRef(null);
   const statsRef = useRef(null);
   const statsInView = useInView(statsRef, { once: true, amount: 0.25 });
+
+  // --------------------------------------------------------------------------
+  // Video Ads — 3D Carousel State & Handlers
+  // --------------------------------------------------------------------------
+  // Speed & Timing Settings (Adjust these values to change carousel speed):
+  const CAROUSEL_SLIDE_SPEED = 1000; // Slide transition duration in ms (lower = faster slide, higher = slower glide)
+  const CAROUSEL_DWELL_TIME = 3200; // Pause time on each card in ms before auto-sliding (e.g. 3200 = 3.2s)
+
+  const [activeVideoIdx, setActiveVideoIdx] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const [videoCurrentTime, setVideoCurrentTime] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(0);
+  const [videoErrorMap, setVideoErrorMap] = useState({});
+  const [isCarouselHovered, setIsCarouselHovered] = useState(false);
+
+  const videoRefs = useRef([]);
+  const carouselCardRefs = useRef([]);
+  const progressRef = useRef(0);
+  const activeVideoIdxRef = useRef(0);
+  const animFrameRef = useRef(null);
+  const touchStartX = useRef(null);
+  const dwellTimerStartRef = useRef(performance.now());
+  const animStateRef = useRef({
+    isAnimating: false,
+    startP: 0,
+    targetP: 0,
+    startTime: 0,
+    duration: 800,
+  });
+
+  // Helper for circular looping offset in 3D carousel
+  const getCircularDistance = (index, current, total) => {
+    let diff = (index - current + total) % total;
+    if (diff > total / 2) diff -= total;
+    return diff;
+  };
+
+  const formatVideoTime = (secs) => {
+    if (!secs || isNaN(secs)) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
+
+  // Helper to directly apply 3D transforms to cards for 60fps hardware-accelerated motion
+  const applyCardTransforms = (currentP, stageScale) => {
+    const N = VIDEO_CAROUSEL_ITEMS.length;
+    carouselCardRefs.current.forEach((cardEl, i) => {
+      if (!cardEl) return;
+
+      let diff = (i - currentP) % N;
+      if (diff < -N / 2) diff += N;
+      if (diff > N / 2) diff -= N;
+
+      const u = Math.abs(diff);
+
+      // Smooth horizontal curve matching reference video exactly
+      const xMag = (300 * u - 22 * u * u) * stageScale;
+      const x = (diff >= 0 ? 1 : -1) * xMag;
+      const z = 120 - 130 * u + 10 * u * u;
+      const rotY = -diff * 14;
+      const scale = Math.max(0.55, 1 - 0.15 * u);
+
+      let opacity = 1;
+      if (u > 1.8 && u <= 2.8) {
+        opacity = 1 - (u - 1.8) * 0.65;
+      } else if (u > 2.8) {
+        opacity = Math.max(0, 0.35 * (3.4 - u) / 0.6);
+      }
+
+      const zIndex = Math.round(100 - u * 25);
+      const isCardActive = u < 0.4;
+
+      cardEl.style.transform = `translate3d(calc(-50% + ${x.toFixed(1)}px), -50%, ${z.toFixed(1)}px) rotateY(${rotY.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
+      cardEl.style.opacity = opacity.toFixed(3);
+      cardEl.style.zIndex = zIndex;
+      cardEl.style.pointerEvents = opacity < 0.15 ? 'none' : 'auto';
+
+      if (isCardActive) {
+        cardEl.classList.add('ps-vc-card--active');
+      } else {
+        cardEl.classList.remove('ps-vc-card--active');
+      }
+    });
+  };
+
+  const goTo = (targetIdx, duration = CAROUSEL_SLIDE_SPEED) => {
+    const N = VIDEO_CAROUSEL_ITEMS.length;
+    const current = progressRef.current;
+    let diff = (targetIdx - (current % N) + N) % N;
+    if (diff > N / 2) diff -= N;
+
+    animStateRef.current = {
+      isAnimating: true,
+      startP: current,
+      targetP: current + diff,
+      startTime: performance.now(),
+      duration: duration,
+    };
+  };
+
+  // Eased automatic stepped carousel motion matching reference recording
+  // Showcases each active card in the center spotlight for CAROUSEL_DWELL_TIME ms,
+  // then executes a smooth 3D curved slide transition (CAROUSEL_SLIDE_SPEED ms) to the next card.
+  // Pauses while user hovers or is actively playing a video.
+  useEffect(() => {
+    const N = VIDEO_CAROUSEL_ITEMS.length;
+
+    const getStageScale = () => {
+      if (typeof window === 'undefined') return 1;
+      const w = window.innerWidth;
+      if (w < 768) return 0.48;
+      if (w < 1024) return 0.68;
+      if (w < 1280) return 0.85;
+      return 1.0;
+    };
+
+    let stageScale = getStageScale();
+    const handleResize = () => {
+      stageScale = getStageScale();
+      applyCardTransforms(progressRef.current, stageScale);
+    };
+    window.addEventListener('resize', handleResize);
+
+    // Initial positioning setup
+    applyCardTransforms(progressRef.current, stageScale);
+    dwellTimerStartRef.current = performance.now();
+
+    if (reduce) {
+      return () => window.removeEventListener('resize', handleResize);
+    }
+
+    const tick = (now) => {
+      const anim = animStateRef.current;
+      if (anim.isAnimating) {
+        const elapsed = now - anim.startTime;
+        const t = Math.min(1, elapsed / anim.duration);
+        // Silky smooth quintic ease-out
+        const ease = 1 - Math.pow(1 - t, 4);
+        progressRef.current = anim.startP + (anim.targetP - anim.startP) * ease;
+
+        if (t >= 1) {
+          anim.isAnimating = false;
+          progressRef.current = ((anim.targetP % N) + N) % N;
+          dwellTimerStartRef.current = now;
+        }
+      } else {
+        // Dwell state (resting on active card spotlight)
+        if (!isVideoPlaying && !isCarouselHovered) {
+          if (now - dwellTimerStartRef.current >= CAROUSEL_DWELL_TIME) {
+            const nextIdx = ((Math.round(progressRef.current) + 1) % N + N) % N;
+            goTo(nextIdx, CAROUSEL_SLIDE_SPEED);
+          }
+        } else {
+          // Pause dwell timer while video is playing or user is hovering
+          dwellTimerStartRef.current = now;
+        }
+      }
+
+      const currentP = ((progressRef.current % N) + N) % N;
+      const nearestIdx = Math.round(currentP) % N;
+
+      if (nearestIdx !== activeVideoIdxRef.current) {
+        activeVideoIdxRef.current = nearestIdx;
+        setActiveVideoIdx(nearestIdx);
+      }
+
+      applyCardTransforms(progressRef.current, stageScale);
+      animFrameRef.current = requestAnimationFrame(tick);
+    };
+
+    animFrameRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isVideoPlaying, isCarouselHovered, reduce]);
+
+  // Sync video playing / pause when active video changes
+  useEffect(() => {
+    setIsVideoPlaying(false);
+    setVideoProgress(0);
+    setVideoCurrentTime(0);
+
+    videoRefs.current.forEach((videoEl, i) => {
+      if (videoEl) {
+        videoEl.pause();
+        if (i !== activeVideoIdx) {
+          videoEl.currentTime = 0;
+        }
+      }
+    });
+  }, [activeVideoIdx]);
+
+  // Track timeupdate & duration on active video
+  useEffect(() => {
+    const video = videoRefs.current[activeVideoIdx];
+    if (!video) return;
+
+    const onTimeUpdate = () => {
+      setVideoCurrentTime(video.currentTime);
+      if (video.duration) {
+        setVideoDuration(video.duration);
+        setVideoProgress((video.currentTime / video.duration) * 100);
+      }
+    };
+
+    const onEnded = () => {
+      setIsVideoPlaying(false);
+    };
+
+    video.addEventListener('timeupdate', onTimeUpdate);
+    video.addEventListener('ended', onEnded);
+    return () => {
+      video.removeEventListener('timeupdate', onTimeUpdate);
+      video.removeEventListener('ended', onEnded);
+    };
+  }, [activeVideoIdx]);
+
+  const handleCardSelect = (idx) => {
+    const N = VIDEO_CAROUSEL_ITEMS.length;
+    const current = ((progressRef.current % N) + N) % N;
+    let diff = (idx - current) % N;
+    if (diff < -N / 2) diff += N;
+    if (diff > N / 2) diff -= N;
+
+    if (Math.abs(diff) < 0.35) {
+      toggleVideoPlay(null, idx);
+    } else {
+      goTo(idx, CAROUSEL_SLIDE_SPEED);
+    }
+  };
+
+  const handleDotClick = (dotIdx) => {
+    goTo(dotIdx, CAROUSEL_SLIDE_SPEED);
+  };
+
+  const toggleVideoPlay = (e, index) => {
+    if (e) e.stopPropagation();
+
+    // If clicked card is not the active center card, bring it to center first
+    if (index !== activeVideoIdx) {
+      handleCardSelect(index);
+      return;
+    }
+
+    const video = videoRefs.current[index];
+    if (!video) return;
+
+    if (isVideoPlaying) {
+      video.pause();
+      setIsVideoPlaying(false);
+    } else {
+      // Pause all other videos
+      videoRefs.current.forEach((v, idx) => {
+        if (idx !== index && v) {
+          v.pause();
+        }
+      });
+
+      video.muted = isVideoMuted;
+      video
+        .play()
+        .then(() => {
+          setIsVideoPlaying(true);
+        })
+        .catch(() => {
+          // If browser blocked unmuted playback, fallback to muted
+          video.muted = true;
+          setIsVideoMuted(true);
+          video.play().then(() => setIsVideoPlaying(true)).catch(() => {});
+        });
+    }
+  };
+
+  const handleVideoReplay = (e) => {
+    if (e) e.stopPropagation();
+    const video = videoRefs.current[activeVideoIdx];
+    if (video) {
+      video.currentTime = 0;
+      video.play().then(() => setIsVideoPlaying(true)).catch(() => {});
+    }
+  };
+
+  const handleVideoSeek = (e) => {
+    if (e) e.stopPropagation();
+    const video = videoRefs.current[activeVideoIdx];
+    if (!video || !video.duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const pct = Math.max(0, Math.min(1, clickX / rect.width));
+    video.currentTime = pct * video.duration;
+    setVideoProgress(pct * 100);
+  };
+
+  const toggleVideoMute = (e) => {
+    if (e) e.stopPropagation();
+    const video = videoRefs.current[activeVideoIdx];
+    if (video) {
+      const nextMuted = !isVideoMuted;
+      video.muted = nextMuted;
+      setIsVideoMuted(nextMuted);
+    }
+  };
+
+  const toggleVideoFullscreen = (e) => {
+    if (e) e.stopPropagation();
+    const video = videoRefs.current[activeVideoIdx];
+    if (!video) return;
+    if (video.requestFullscreen) {
+      video.requestFullscreen();
+    } else if (video.webkitRequestFullscreen) {
+      video.webkitRequestFullscreen();
+    }
+  };
+
+  const handleVideoNext = () => {
+    const N = VIDEO_CAROUSEL_ITEMS.length;
+    const nextIdx = ((Math.round(progressRef.current) + 1) % N + N) % N;
+    goTo(nextIdx, CAROUSEL_SLIDE_SPEED);
+  };
+
+  const handleVideoPrev = () => {
+    const N = VIDEO_CAROUSEL_ITEMS.length;
+    const prevIdx = ((Math.round(progressRef.current) - 1) % N + N) % N;
+    goTo(prevIdx, CAROUSEL_SLIDE_SPEED);
+  };
+
+  const handleVideoTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleVideoTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) handleVideoNext();
+      else handleVideoPrev();
+    }
+    touchStartX.current = null;
+  };
+
+  const handleVideoError = (idx) => {
+    setVideoErrorMap((prev) => ({ ...prev, [idx]: true }));
+  };
+
+  const handleVideoEnded = () => {
+    setIsVideoPlaying(false);
+  };
 
   useEffect(() => {
     document.title = 'Product Photography & Video Ads Studio | Atriowings';
@@ -1484,6 +1933,277 @@ export default function PhotoshootPage() {
                   })}
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            6. VIDEO ADS — 3D CAROUSEL SECTION (#video-ads)
+            Asymmetric 3D Perspective Arc Carousel with User's 6 Actual Videos
+            ========================================================================= */}
+        <section className="ps-video-carousel-section" id="video-ads" aria-labelledby="ps-video-ads-title">
+          {/* Subtle Ambient Radial Lighting Glow */}
+          <div className="ps-vc-ambient-glow" aria-hidden="true" />
+
+          {/* Floating 3D Glossy Cyan Spheres & Diamond (matching user reference) */}
+          <div className="ps-vc-floating-orb ps-vc-floating-orb--top-right" aria-hidden="true" />
+          <div className="ps-vc-floating-orb ps-vc-floating-orb--mid-left" aria-hidden="true" />
+          <div className="ps-vc-floating-orb ps-vc-floating-orb--bottom-left" aria-hidden="true" />
+          <div className="ps-vc-floating-diamond" aria-hidden="true" />
+
+          <div className="ps-vc-container">
+            {/* Section Header */}
+            <div className="ps-vc-header">
+              <div className="ps-vc-header-text">
+                <div className="ps-vc-eyebrow">
+                  <span className="ps-vc-eyebrow-dot" aria-hidden="true" />
+                  <span>OUR WORK IN MOTION</span>
+                </div>
+                <h2 className="ps-vc-heading" id="ps-video-ads-title">
+                  ADS THAT<br />
+                  <span className="ps-vc-heading-cyan">STOP THE SCROLL.</span><br />
+                  REELS THAT SELL.
+                </h2>
+                <p className="ps-vc-subtitle">
+                  Product films, model reels and marketplace videos &mdash; swipe through our latest shoots.
+                </p>
+              </div>
+            </div>
+
+            {/* 3D Perspective Stage Container */}
+            <div
+              className="ps-vc-stage-wrapper"
+              onMouseEnter={() => setIsCarouselHovered(true)}
+              onMouseLeave={() => setIsCarouselHovered(false)}
+              onTouchStart={handleVideoTouchStart}
+              onTouchEnd={handleVideoTouchEnd}
+            >
+              {/* Dotted Curved Guide Line matching reference */}
+              <svg className="ps-vc-arc-track" viewBox="0 0 1200 240" fill="none" aria-hidden="true">
+                <path
+                  d="M 40,170 Q 600,60 1160,170"
+                  stroke="rgba(0, 163, 255, 0.32)"
+                  strokeWidth="2"
+                  strokeDasharray="6 6"
+                />
+              </svg>
+
+              {/* 3D Cards Stage */}
+              <div className="ps-vc-stage" style={{ perspective: '1200px' }}>
+                {VIDEO_CAROUSEL_ITEMS.map((item, idx) => {
+                  const isActive = idx === activeVideoIdx;
+                  const isPortrait = item.orientation === 'portrait';
+
+                  return (
+                    <div
+                      key={item.id}
+                      ref={(el) => (carouselCardRefs.current[idx] = el)}
+                      className={`ps-vc-card ${isPortrait ? 'ps-vc-card--portrait' : 'ps-vc-card--landscape'} ${isActive ? 'ps-vc-card--active' : ''}`}
+                      data-orientation={item.orientation}
+                      onClick={() => handleCardSelect(idx)}
+                      role="group"
+                      aria-label={`${item.title} (${item.category})`}
+                    >
+                      {/* Card Inner Screen */}
+                      <div className="ps-vc-card-inner">
+                        {/* Video Element or Graceful Fallback */}
+                        {videoErrorMap[idx] ? (
+                          <div className="ps-vc-fallback">
+                            <Video size={40} className="ps-vc-fallback-icon" />
+                            <p>Video Preview Unavailable</p>
+                          </div>
+                        ) : (
+                          <video
+                            ref={(el) => (videoRefs.current[idx] = el)}
+                            className="ps-vc-video"
+                            src={item.src || item.publicSrc}
+                            playsInline
+                            preload="metadata"
+                            muted={!isActive || !isVideoPlaying || isVideoMuted}
+                            loop={false}
+                            onEnded={handleVideoEnded}
+                            onError={() => handleVideoError(idx)}
+                          >
+                            <source src={item.src} type="video/mp4" />
+                            <source src={item.publicSrc} type="video/mp4" />
+                          </video>
+                        )}
+
+                        {/* Glass Light Reflection Sheen */}
+                        <div className="ps-vc-card-sheen" aria-hidden="true" />
+
+                        {/* Top Overlay Badges */}
+                        <div className="ps-vc-card-top-bar">
+                          <span className="ps-vc-badge ps-vc-badge--category">
+                            <span className="ps-vc-badge-rec-dot" aria-hidden="true" />
+                            {item.badge}
+                          </span>
+                          <span className="ps-vc-badge ps-vc-badge--duration">
+                            {item.duration}
+                          </span>
+                        </div>
+
+                        {/* Center Play Button on Active Card */}
+                        {isActive && !isVideoPlaying && (
+                          <button
+                            type="button"
+                            className="ps-vc-play-button"
+                            onClick={(e) => toggleVideoPlay(e, idx)}
+                            aria-label={`Play ${item.title}`}
+                          >
+                            <div className="ps-vc-play-pulse" aria-hidden="true" />
+                            <div className="ps-vc-play-circle">
+                              <Play size={28} className="ps-vc-play-icon" fill="#00A3FF" strokeWidth={0} />
+                            </div>
+                          </button>
+                        )}
+
+                        {/* Bottom Meta & Info Overlay */}
+                        <div className={`ps-vc-card-bottom ${isActive && isVideoPlaying ? 'ps-vc-card-bottom--playing' : ''}`}>
+                          <div className="ps-vc-card-meta">
+                            <span className="ps-vc-kicker">OUT NOW</span>
+                            <h3 className="ps-vc-card-title">{item.title}</h3>
+                            <p className="ps-vc-card-subtitle">{item.subtitle}</p>
+                          </div>
+
+                          {isActive && !isVideoPlaying && (
+                            <button
+                              type="button"
+                              className="ps-vc-card-quick-play"
+                              onClick={(e) => toggleVideoPlay(e, idx)}
+                              aria-label="Play video"
+                            >
+                              <ArrowRight size={18} />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Active Video Controls Bar when playing */}
+                        {isActive && isVideoPlaying && (
+                          <div
+                            className="ps-vc-controls-bar"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {/* Play/Pause Button */}
+                            <button
+                              type="button"
+                              className="ps-vc-ctrl-btn"
+                              onClick={(e) => toggleVideoPlay(e, idx)}
+                              aria-label={isVideoPlaying ? 'Pause video' : 'Play video'}
+                            >
+                              {isVideoPlaying ? <Pause size={18} /> : <Play size={18} fill="currentColor" />}
+                            </button>
+
+                            {/* Progress Scrubber */}
+                            <div
+                              className="ps-vc-scrubber-track"
+                              onClick={handleVideoSeek}
+                              role="slider"
+                              aria-valuenow={Math.round(videoProgress)}
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                className="ps-vc-scrubber-fill"
+                                style={{ width: `${videoProgress}%` }}
+                              />
+                            </div>
+
+                            {/* Time Display */}
+                            <span className="ps-vc-time-display">
+                              {formatVideoTime(videoCurrentTime)} / {item.duration}
+                            </span>
+
+                            {/* Mute/Unmute */}
+                            <button
+                              type="button"
+                              className="ps-vc-ctrl-btn"
+                              onClick={toggleVideoMute}
+                              aria-label={isVideoMuted ? 'Unmute' : 'Mute'}
+                            >
+                              {isVideoMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                            </button>
+
+                            {/* Replay */}
+                            <button
+                              type="button"
+                              className="ps-vc-ctrl-btn"
+                              onClick={handleVideoReplay}
+                              aria-label="Replay from start"
+                            >
+                              <RotateCcw size={16} />
+                            </button>
+
+                            {/* Fullscreen */}
+                            <button
+                              type="button"
+                              className="ps-vc-ctrl-btn"
+                              onClick={toggleVideoFullscreen}
+                              aria-label="Fullscreen"
+                            >
+                              <Maximize2 size={16} />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Navigation & Pagination Controls Bar */}
+            <div className="ps-vc-controls-nav">
+              {/* Previous Arrow */}
+              <button
+                type="button"
+                className="ps-vc-nav-btn ps-vc-nav-btn--prev"
+                onClick={handleVideoPrev}
+                aria-label="Previous video"
+              >
+                <ArrowLeft size={20} />
+              </button>
+
+              {/* Pagination Counter & Dots */}
+              <div className="ps-vc-pagination-container">
+                <span className="ps-vc-counter">
+                  0{activeVideoIdx + 1} <span className="ps-vc-counter-divider">/</span> 07
+                </span>
+                <div className="ps-vc-dots" role="tablist" aria-label="Video cards pagination">
+                  {VIDEO_CAROUSEL_ITEMS.map((_, dotIdx) => {
+                    const isDotActive = dotIdx === activeVideoIdx;
+                    return (
+                      <button
+                        key={dotIdx}
+                        type="button"
+                        className={`ps-vc-dot ${isDotActive ? 'ps-vc-dot--active' : ''}`}
+                        onClick={() => handleDotClick(dotIdx)}
+                        aria-label={`Go to video ${dotIdx + 1}`}
+                        role="tab"
+                        aria-selected={isDotActive}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Next Arrow */}
+              <button
+                type="button"
+                className="ps-vc-nav-btn ps-vc-nav-btn--next"
+                onClick={handleVideoNext}
+                aria-label="Next video"
+              >
+                <ArrowRight size={20} />
+              </button>
+            </div>
+
+            {/* Centered Primary CTA Button */}
+            <div className="ps-vc-cta-wrapper">
+              <a href={CONTACT_HREF} className="ps-vc-cta-button">
+                <span>Book a video shoot</span>
+                <ArrowRight size={18} className="ps-vc-cta-arrow" />
+              </a>
             </div>
           </div>
         </section>
