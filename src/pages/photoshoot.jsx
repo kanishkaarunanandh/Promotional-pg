@@ -6,7 +6,6 @@ import {
   Sparkles,
   Camera,
   Video,
-  Play,
   Layers,
   ShieldCheck,
   Clock,
@@ -1257,15 +1256,6 @@ export default function PhotoshootPage() {
                           <span>{project.tag}</span>
                         </div>
 
-                        {/* Center Play Button for Video Works (Visual Accent - Just for Show) */}
-                        {project.isVideo && (
-                          <div
-                            className="ps-pf-play-btn"
-                            aria-hidden="true"
-                          >
-                            <Play size={20} fill="#ffffff" strokeWidth={0} />
-                          </div>
-                        )}
 
                         {/* Bottom Left Title/Category Info (Present on Featured Cards) */}
                         {(project.id === 'fashion' || project.id === 'bts' || project.id === 'juice') && (
@@ -1312,7 +1302,7 @@ export default function PhotoshootPage() {
             5. THE ATRIOWINGS STUDIO ADVANTAGE (#why-choose)
             Polished Two-Column Composition & Seamless Timeline Architecture
             ========================================================================= */}
-        <section className="ps-adv-section" id="why-choose" aria-labelledby="ps-adv-heading">
+        <section className="ps-adv-section" id="why-choose" aria-labelledby="ps-adv-heading" style={{ scrollMarginTop: '110px' }}>
           {/* Subtle Ambient Background Lighting */}
           <div className="ps-adv-ambient-glow" aria-hidden="true" />
           <div className="ps-adv-ambient-orb ps-adv-ambient-orb--top" aria-hidden="true" />

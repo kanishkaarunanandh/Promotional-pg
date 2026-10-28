@@ -2809,8 +2809,6 @@
    - Connecting cyan wave line with travelling glowing dot and circular arrow nodes
    ========================================================================== */
 
-/* Load Caveat font for natural handwritten annotation */
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');
 
 .ps-workflow-section {
   position: relative;

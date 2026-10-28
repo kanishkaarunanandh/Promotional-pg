@@ -297,7 +297,7 @@ export default function WebDevelopmentPage() {
   return (
     <div className="webdev-page">
       {/* Sticky Rounded White Navbar */}
-      <Navbar email="info@Atriowings.in" />
+      <Navbar email="info@Atriowings.in" activeLink="Home" />
 
       <main className="webdev-main">
         {/*  1. HERO SECTION */}

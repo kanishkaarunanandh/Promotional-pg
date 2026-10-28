@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import atriowingsLogo from '../assets/logo2.png';
-import { ROUTES, SECTION_IDS, navigateToSection, getWhyChooseHref, getHomeHref, handleHomeNavigation } from '../utils/sectionNav';
+import { ROUTES, SECTION_IDS, navigateToSection, getWhyChooseHref, getHomeHref, handleHomeNavigation, handleWhyChooseNavigation } from '../utils/sectionNav';
 import './Footer.css';
 
 // Crisp, standard SVG icons for brand socials

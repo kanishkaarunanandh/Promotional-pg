@@ -3,7 +3,7 @@ import { ChevronDown, ArrowRight, Globe, Code2, Megaphone, Camera } from 'lucide
 import { useNavigate, useLocation } from 'react-router-dom';
 import atriowingsLogo from '../assets/atriowings-logo.png';
 import atriowingsIcon from '../assets/atriowings-icon.png';
-import { ROUTES, SECTION_IDS, navigateToSection, getWhyChooseHref, getHomeHref, handleHomeNavigation } from '../utils/sectionNav';
+import { ROUTES, SECTION_IDS, navigateToSection, getWhyChooseHref, getHomeHref, handleHomeNavigation, handleWhyChooseNavigation, normalizePath } from '../utils/sectionNav';
 import './Navbar.css';
 
 // Dropdown items. Each service has its own URL; `section` is the page's capabilities section,
@@ -31,7 +31,7 @@ export default function Navbar({
 
   const navLinks = [
     { label: 'Home', href: homeHref, auto: 'home' },
-    { label: 'Services', href: '/#services', hasMenu: true, auto: true },
+    { label: 'Services', href: `${ROUTES.web}#services-we-offer`, hasMenu: true, auto: true },
     { label: 'Why Choose Us', href: whyChooseHref, auto: 'why-choose' },
     { label: 'Contact', href: ROUTES.contact },
   ];
@@ -40,6 +40,29 @@ export default function Navbar({
   const [servicesOpen, setServicesOpen] = useState(false); // desktop dropdown
   const [copied, setCopied] = useState(false);
   const [currentActive, setCurrentActive] = useState(activeLink);
+
+  // Sync active link with current route, hash, or prop changes
+  useEffect(() => {
+    const cleanPath = normalizePath(location.pathname);
+    if (cleanPath === normalizePath(ROUTES.contact)) {
+      setCurrentActive('Contact');
+    } else if (location.hash === '#why-choose') {
+      setCurrentActive('Why Choose Us');
+    } else if (cleanPath === normalizePath(ROUTES.web) || cleanPath === '/') {
+      setCurrentActive('Home');
+    } else {
+      const isOtherService = [
+        normalizePath(ROUTES.software),
+        normalizePath(ROUTES.marketing),
+        normalizePath(ROUTES.photoshoot),
+      ].includes(cleanPath);
+      if (isOtherService) {
+        setCurrentActive('Services');
+      } else if (activeLink) {
+        setCurrentActive(activeLink);
+      }
+    }
+  }, [location.pathname, location.hash, activeLink]);
   const navRef = useRef(null);
   const mobileToggleRef = useRef(null);
   const servicesItemRef = useRef(null);
@@ -136,6 +159,18 @@ export default function Navbar({
     closeServices();
     if (link.auto === 'home' || link.label === 'Home') {
       handleHomeNavigation(event, { navigate });
+    } else if (link.auto === 'why-choose' || link.label === 'Why Choose Us') {
+      handleWhyChooseNavigation(event, { navigate });
+    } else if (link.label === 'Contact' || link.href === ROUTES.contact) {
+      if (event && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0)) {
+        return;
+      }
+      event?.preventDefault();
+      if (normalizePath(location.pathname) === normalizePath(ROUTES.contact)) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate(ROUTES.contact);
+      }
     } else if (event) {
       navigateToSection(event, link.href, { navigate, auto: link.auto }); // same page: smooth scroll; other page: normal navigation
     }

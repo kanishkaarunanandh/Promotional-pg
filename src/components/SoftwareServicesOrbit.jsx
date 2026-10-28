@@ -7,6 +7,7 @@ import billingImg from '../assets/billing sw.jpg';
 import hrmsImg from '../assets/hrms.webp';
 import hms from '../assets/hms.jpg';
 import crmImg from '../assets/crm.jpg';
+import tuition from '../assets/tuition.png';
 import './software-services-orbit.css';
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -59,6 +60,17 @@ const SERVICES = [
     'Custom CRM solutions that help businesses manage customer relationships, track leads, automate sales workflows, and improve customer engagement through a centralized platform.',
   tags: ['Lead Management', 'Sales Automation'],
   image: crmImg,
+  imageKind: 'photo'
+},
+{
+  id: 'Tuition',
+  icon: Users,
+  title: 'Tuition Software Development',
+  short: 'Tuition Software',
+  description:
+    'Custom tuition management software that helps coaching centres and educational institutions manage student admissions, attendance, fee collection, class schedules, exams, and academic performance through a centralized platform.',
+  tags: ['Student Management', 'Fee Automation'],
+  image: tuition,
   imageKind: 'photo'
 },
 ];

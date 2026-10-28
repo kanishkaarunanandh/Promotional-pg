@@ -1,17 +1,20 @@
 import { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import HomePage from './pages/HomePage';
 import WebDevelopmentPage from './pages/WebDevelopmentPage';
 import SoftwareDevelopmentPage from './pages/SoftWareDevelopment';
 import DigitalMarketingPage from './pages/DigitalMarketingPage';
 import PhotoshootPage from './pages/photoshoot';
 import ContactPage from './pages/ContactPage';
-import { ROUTES } from './utils/sectionNav';
+import { ROUTES, saveLastServiceRoute } from './utils/sectionNav';
 
 // Opens the #hash section if present, otherwise the top of the page.
 // Honours prefers-reduced-motion.
 function ScrollHandler() {
   const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    saveLastServiceRoute(pathname);
+  }, [pathname]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
@@ -90,7 +93,8 @@ function App() {
       <ScrollHandler />
       <ContactLinkHandler />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        {/* Entry page redirects to the Web Development landing page */}
+        <Route path="/" element={<LegacyRedirect to="/webdevelopment" />} />
 
         {/* Dedicated service landing pages */}
         <Route path="/webdevelopment" element={<WebDevelopmentPage />} />
