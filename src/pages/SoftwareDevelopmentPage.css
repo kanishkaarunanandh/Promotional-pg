@@ -352,30 +352,11 @@
 .sdp-final-text { max-width: 560px; margin: 0 auto 28px; font-size: 16px; line-height: 1.7; color: var(--sdp-muted); }
 
 /* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ */
 /* tablet: 768px to 1023px                                              */
 /* ------------------------------------------------------------------ */
 @media (max-width: 1023px) {
   .sdp-page { --sdp-nav-h: 92px; }
-
-  /* stack: illustration above, content below */
-  .sdp-hero { --sdp-hero-extra: 0px; grid-template-columns: minmax(0, 1fr); min-height: 0; align-items: start; }
-  .sdp-hero-bg {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: center;
-    width: min(125vw, 900px);        /* larger than the screen so the woman is big, clipped by the hero */
-    translate: -16.5% 0;             /* centres her (she sits right of centre in the artwork) */
-  }
-  .sdp-hero-img {
-    object-position: 50% 50%;
-    -webkit-mask-image: linear-gradient(180deg, #000 0, #000 82%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 0, #000 82%, transparent 100%);
-  }
-  .sdp-hero-content-col { grid-column: 1; grid-row: 2; padding: 8px clamp(20px, 5vw, 48px) 52px; }
-  .sdp-hero-content { max-width: 680px; margin: 0 auto; }
 
   .sdp-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 36px; }
   .sdp-steps-line { display: none; }
@@ -388,13 +369,11 @@
   .sdp-page { --sdp-nav-h: 76px; }
 
   .sdp-hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    grid-template-columns: minmax(0, 1fr);
     min-height: auto;
     padding-top: var(--sdp-nav-h);
     padding-bottom: 0;
+    align-items: start;
     overflow: hidden;
   }
 
