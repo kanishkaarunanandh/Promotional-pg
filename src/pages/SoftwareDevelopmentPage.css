@@ -367,7 +367,7 @@
     grid-row: 1;
     justify-self: center;
     width: min(125vw, 900px);        /* larger than the screen so the woman is big, clipped by the hero */
-    translate: 0 0;
+    translate: -16.5% 0;             /* centres her (she sits right of centre in the artwork) */
   }
   .sdp-hero-img {
     object-position: 50% 50%;
@@ -409,14 +409,14 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 380px;
+    max-width: 430px;
     height: auto;
     aspect-ratio: 16 / 10;
-    max-height: 220px;
+    max-height: 250px;
     margin-inline: auto;
     margin-top: 0;
     margin-bottom: 0;
-    padding-inline: 16px;
+    padding-inline: 12px;
     box-sizing: border-box;
     translate: 0 0;
     transform: none;
@@ -552,7 +552,7 @@
 /* Extra small devices (320px - 360px) */
 @media (max-width: 360px) {
   .sdp-page { --sdp-nav-h: 72px; }
-  .sdp-hero-bg { max-width: 300px; max-height: 180px; }
+  .sdp-hero-bg { max-width: 330px; max-height: 195px; padding-inline: 6px; }
   .sdp-hero-content-col { padding: 0 14px calc(var(--sticky-cta-h, 76px) + 20px + env(safe-area-inset-bottom, 0px)); }
   .sdp-title { font-size: 1.35rem; }
   .sdp-desc { font-size: 12.5px; }
