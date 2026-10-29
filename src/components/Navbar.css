@@ -448,9 +448,26 @@
     text-align: center;
   }
 
-  .mobile-cta-pill:hover,
+    .mobile-cta-pill:hover,
   .mobile-cta-pill:active {
     background-color: #163B6B;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar-wrapper {
+    top: 10px;
+    padding: 0 10px;
+  }
+
+  .navbar-pill {
+    height: 52px;
+    padding: 4px 6px;
+  }
+
+  .navbar-mobile-toggle {
+    width: 40px;
+    height: 40px;
   }
 }
 

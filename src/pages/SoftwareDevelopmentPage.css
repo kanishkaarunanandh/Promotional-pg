@@ -385,14 +385,125 @@
 /* mobile: below 768px                                                  */
 /* ------------------------------------------------------------------ */
 @media (max-width: 767px) {
-  .sdp-page { --sdp-nav-h: 84px; }
-  .sdp-hero-bg { width: min(150vw, 560px); }  /* big enough to read, clipped by the hero, no page overflow */
-  .sdp-hero-content-col { padding: 4px 20px 44px; }
-  .sdp-title { font-size: clamp(1.9rem, 8.6vw, 2.4rem); margin: 14px 0; }
-  .sdp-desc { font-size: 15px; margin-bottom: 20px; }
+  .sdp-page { --sdp-nav-h: 76px; }
+
+  .sdp-hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: auto;
+    padding-top: var(--sdp-nav-h);
+    padding-bottom: 0;
+    align-items: start;
+    overflow: hidden;
+  }
+
+  /* Team image: uncropped, horizontally centered, and compact vertical height */
+  .sdp-hero-bg {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: center;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 16 / 10;
+    max-height: 215px;
+    margin: 0 auto;
+    translate: none;
+    transform: none;
+    overflow: hidden;
+  }
+
+  .sdp-hero-img-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sdp-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 78%, transparent 100%);
+  }
+
+  /* Content column: left-aligned, balanced spacing, clear of bottom sticky CTA */
+  .sdp-hero-content-col {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 2px 20px calc(var(--sticky-cta-h, 88px) + 24px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .sdp-hero-content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  /* Compact eyebrow label with cyan glowing line */
+  .sdp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 6px;
+    font-size: clamp(10.5px, 2.8vw, 11.5px);
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  .sdp-eyebrow-line {
+    width: 24px;
+    height: 2px;
+    flex-shrink: 0;
+  }
+
+  /* Compact heading: wraps into ~3 balanced lines instead of 5-6 lines */
+  .sdp-title {
+    font-size: clamp(1.4rem, 5.2vw, 1.7rem);
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+    margin: 6px 0 10px;
+    text-wrap: balance;
+  }
+
+  /* Compact description */
+  .sdp-desc {
+    font-size: clamp(13px, 3.4vw, 14.5px);
+    line-height: 1.5;
+    margin: 0 0 16px;
+    max-width: 100%;
+  }
+
   .sdp-highlights { grid-template-columns: 1fr; gap: 10px; margin-bottom: 26px; }
-  .sdp-actions { flex-direction: column; align-items: stretch; }
-  .sdp-btn { width: 100%; padding: 14px 20px; }
+
+  /* Compact CTA button: inline pill, touch-friendly, brand gradient */
+  .sdp-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    margin: 0;
+  }
+
+  .sdp-btn {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 700;
+    min-height: 42px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px -6px rgba(6, 163, 218, 0.65);
+  }
 
   /* approach: vertical list with a line on the left */
   .sdp-steps { grid-template-columns: 1fr; gap: 0; row-gap: 0; padding-left: 4px; }
@@ -418,6 +529,17 @@
   .sdp-step-node { grid-row: 1 / span 3; margin: 0; }
   .sdp-step-num { margin: 2px 0 0; }
   .sdp-step-title { font-size: 17px; margin-bottom: 4px; }
+}
+
+/* Extra small devices (320px - 360px) */
+@media (max-width: 360px) {
+  .sdp-page { --sdp-nav-h: 72px; }
+  .sdp-hero-bg { max-width: 300px; max-height: 180px; }
+  .sdp-hero-content-col { padding: 0 14px calc(var(--sticky-cta-h, 76px) + 20px + env(safe-area-inset-bottom, 0px)); }
+  .sdp-title { font-size: 1.35rem; }
+  .sdp-desc { font-size: 12.5px; }
+  .sdp-eyebrow { font-size: 10px; gap: 6px; }
+  .sdp-eyebrow-line { width: 18px; }
 }
 
 /* ------------------------------------------------------------------ */
