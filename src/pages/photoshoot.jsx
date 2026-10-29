@@ -85,14 +85,13 @@ import advantageCamerasImg from '../assets/advantage_cameras.png';
 import advantageTetheredImg from '../assets/advantage_tethered.png';
 import advantageCommercialImg from '../assets/advantage_commercial.png';
 
-// 7 Actual Video Files for the Video Ads — 3D Carousel Section
+// 6 Actual Video Files for the Video Ads — 3D Carousel Section
 import video1 from '../assets/video1.mp4';
 import video2 from '../assets/video2.mp4';
 import reel from '../assets/reel.mp4';
 import video4 from '../assets/video4.mp4';
 import video5 from '../assets/video5.mp4';
 import video6 from '../assets/video6.mp4';
-import video7 from '../assets/video7.mp4';
 
 const VIDEO_CAROUSEL_ITEMS = [
   {
@@ -159,17 +158,6 @@ const VIDEO_CAROUSEL_ITEMS = [
     category: 'Ads',
     badge: 'ADS',
     duration: '0:18',
-    orientation: 'landscape',
-  },
-  {
-    id: 'video-7',
-    src: video7,
-    publicSrc: '/videos/video7.mp4',
-    title: 'Cinematic Commercial Campaign',
-    subtitle: 'Studio production • 4K Film • 16:9',
-    category: 'Commercial',
-    badge: 'COMMERCIAL',
-    duration: '0:35',
     orientation: 'landscape',
   },
 ];
@@ -2167,7 +2155,7 @@ export default function PhotoshootPage() {
               {/* Pagination Counter & Dots */}
               <div className="ps-vc-pagination-container">
                 <span className="ps-vc-counter">
-                  0{activeVideoIdx + 1} <span className="ps-vc-counter-divider">/</span> 07
+                  0{activeVideoIdx + 1} <span className="ps-vc-counter-divider">/</span> 0{VIDEO_CAROUSEL_ITEMS.length}
                 </span>
                 <div className="ps-vc-dots" role="tablist" aria-label="Video cards pagination">
                   {VIDEO_CAROUSEL_ITEMS.map((_, dotIdx) => {
