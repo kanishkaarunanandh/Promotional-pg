@@ -11,7 +11,7 @@ import {
   Server,
   MessageSquare,
 } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import atriowingsLogoWhite from '../assets/logo2.png';
 import Footer from '../components/Footer';
 import StickyCTA from '../components/StickyCTA';
 import DevelopmentApproach from '../components/DevelopmentApproach';
@@ -106,11 +106,37 @@ export default function SoftwareDevelopmentPage() {
 
   return (
     <div className="sdp-page">
-      <Navbar email="info@Atriowings.in" activeLink="Services" />
 
       <main className="sdp-main">
         {/* ============================ HERO ============================ */}
         <section className="sdp-hero" ref={heroRef} aria-labelledby="sdp-hero-title">
+          {/* Top Header Row: Logo on Top-Left, Contact Button on Top-Right */}
+          <div className="sdp-top-bar flex items-center justify-between w-full">
+            <a
+              href={ROUTES.web}
+              className="sdp-logo-link flex items-center"
+              aria-label="AtrioWings Technologies"
+              title="AtrioWings Technologies"
+            >
+              <img
+                src={atriowingsLogoWhite}
+                alt="AtrioWings Technologies India Private Limited"
+                className="sdp-logo-img h-9 sm:h-10 w-auto object-contain"
+              />
+            </a>
+
+            <motion.a
+              href={ROUTES.contact}
+              className="sdp-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
+              aria-label="Contact Us"
+              title="Contact Us"
+              whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
+              whileTap={reduce ? {} : { scale: 0.97 }}
+              transition={{ duration: 0.2, ease: EASE }}
+            >
+              <span>Contact Us</span>
+            </motion.a>
+          </div>
           {/* illustration in its own right-hand container (about 55% of the width) */}
           <motion.div
             className="sdp-hero-bg"

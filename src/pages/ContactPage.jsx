@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { User, Phone, Mail, Send, Loader2, CheckCircle2, AlertCircle, ShieldCheck } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import atriowingsLogo from '../assets/atriowings-logo.png';
+import { ROUTES } from '../utils/sectionNav';
 import Footer from '../components/Footer';
 import { validateContact } from '../utils/contactValidation';
 import './contact-page.css';
@@ -112,8 +113,34 @@ export default function ContactPage() {
 
   return (
     <>
-      <Navbar email={EMAIL} activeLink="Contact" />
-      <main className="ctp-page" id="main-content">
+            <main className="ctp-page" id="main-content">
+        {/* Top Header Row: Logo on Top-Left, Contact Button on Top-Right */}
+        <div className="ctp-top-bar flex items-center justify-between w-full">
+          <a
+            href={ROUTES.web}
+            className="ctp-logo-link flex items-center"
+            aria-label="AtrioWings Technologies"
+            title="AtrioWings Technologies"
+          >
+            <img
+              src={atriowingsLogo}
+              alt="AtrioWings Technologies India Private Limited"
+              className="ctp-logo-img h-9 sm:h-10 w-auto object-contain"
+            />
+          </a>
+
+          <motion.a
+            href="mailto:info@atriowings.in"
+            className="ctp-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
+            aria-label="Email info@atriowings.in"
+            title="Email info@atriowings.in"
+            whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
+            whileTap={reduce ? {} : { scale: 0.97 }}
+            transition={{ duration: 0.2, ease: EASE }}
+          >
+            <span>Contact Us</span>
+          </motion.a>
+        </div>
         <div className="ctp-glow ctp-glow--a" aria-hidden="true" />
         <div className="ctp-glow ctp-glow--b" aria-hidden="true" />
 

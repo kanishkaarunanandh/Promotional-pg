@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import heroImg from '../assets/web-dev-hero.png'; 
+import heroImg from '../assets/web-dev-hero.png';
+import atriowingsLogo from '../assets/atriowings-logo.png';
 import { ROUTES } from '../utils/sectionNav';
 import './webdev-hero.css';
 
@@ -20,10 +21,27 @@ function useMediaQuery(query) {
   return matches;
 }
 
-export default function WebDevHero() {
+export default function WebDevHero({ contactLabel = 'Contact Us' }) {
   const reduce = useReducedMotion();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const heroRef = useRef(null);
+
+  useEffect(() => {
+    const bar = document.querySelector('.wdh-top-bar');
+    const btn = document.querySelector('.wdh-contact-btn');
+    const logo = document.querySelector('.wdh-logo-img');
+    const hero = document.querySelector('.wdh');
+    document.title = 'METRICS:' + JSON.stringify({
+      wInner: window.innerWidth,
+      docScroll: document.documentElement.scrollWidth,
+      bodyScroll: document.body.scrollWidth,
+      heroW: hero?.offsetWidth,
+      barW: bar?.offsetWidth,
+      btnRight: btn?.getBoundingClientRect().right,
+      btnW: btn?.getBoundingClientRect().width,
+      logoW: logo?.getBoundingClientRect().width
+    });
+  }, []);
 
   // restrained parallax on the picture (large screens only, never with reduced motion)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
@@ -49,7 +67,35 @@ export default function WebDevHero() {
 
   return (
     <section className="wdh" id="hero" ref={heroRef} aria-labelledby="wdh-title">
-      {/* Picture at the right end of the hero (not a background). Transparent PNG on the navy gradient. */}
+      {/* Top Header Row inside Hero Section: Logo on Top-Left, Contact Button on Top-Right */}
+      <div className="wdh-top-bar flex items-center justify-between w-full">
+        <a
+          href={ROUTES.web}
+          className="wdh-logo-link flex items-center"
+          aria-label="AtrioWings Technologies"
+          title="AtrioWings Technologies"
+        >
+          <img
+            src={atriowingsLogo}
+            alt="AtrioWings Technologies India Private Limited"
+            className="wdh-logo-img h-9 sm:h-10 w-auto object-contain "
+          />
+        </a>
+
+        <motion.a
+          href={ROUTES.contact}
+          className="wdh-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
+          aria-label="Contact Us"
+          title="Contact Us"
+          whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
+          whileTap={reduce ? {} : { scale: 0.97 }}
+          transition={{ duration: 0.2, ease: EASE }}
+        >
+          <span>{contactLabel}</span>
+        </motion.a>
+      </div>
+
+      {/* Picture at the right end of the hero (not a background). Transparent PNG on the hero. */}
       <motion.div
         className="wdh-visual"
         initial={{ opacity: 0, scale: reduce ? 1 : 1.05 }}

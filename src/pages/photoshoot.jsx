@@ -39,7 +39,7 @@ import {
   RotateCcw,
   ArrowLeft
 } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import atriowingsLogo from '../assets/atriowings-logo.png';
 import Footer from '../components/Footer';
 import StickyCTA from '../components/StickyCTA';
 import { ROUTES } from '../utils/sectionNav';
@@ -981,14 +981,39 @@ export default function PhotoshootPage() {
 
   return (
     <div className="ps-page">
-      {/* Universal Atriowings Navbar */}
-      <Navbar activeLink="Services" email="info@atriowings.in" />
-
+      
       <main className="ps-main">
         {/* =========================================================================
             1. HERO SECTION (1:1 match with user's reference image)
             ========================================================================= */}
         <section className="ps-hero" aria-labelledby="ps-hero-title">
+        {/* Top Header Row: Logo on Top-Left, Contact Button on Top-Right */}
+        <div className="ps-top-bar flex items-center justify-between w-full">
+          <a
+            href={ROUTES.web}
+            className="ps-logo-link flex items-center"
+            aria-label="AtrioWings Technologies"
+            title="AtrioWings Technologies"
+          >
+            <img
+              src={atriowingsLogo}
+              alt="AtrioWings Technologies India Private Limited"
+              className="ps-logo-img h-9 sm:h-10 w-auto object-contain"
+            />
+          </a>
+
+          <motion.a
+            href={ROUTES.contact}
+            className="ps-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
+            aria-label="Contact Us"
+            title="Contact Us"
+            whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
+            whileTap={reduce ? {} : { scale: 0.97 }}
+            transition={{ duration: 0.2, ease: EASE }}
+          >
+            <span>Contact Us</span>
+          </motion.a>
+        </div>
           <div className="ps-hero-container">
             <div className="ps-hero-grid">
               {/* Left Column: Typography, Copy, CTA & Trust Points */}

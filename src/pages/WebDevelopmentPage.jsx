@@ -14,7 +14,6 @@ import {
   Target,
   LifeBuoy
 } from 'lucide-react';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { ROUTES } from '../utils/sectionNav';
 import './WebDevelopmentPage.css';
@@ -296,9 +295,7 @@ export default function WebDevelopmentPage() {
 
   return (
     <div className="webdev-page">
-      {/* Sticky Rounded White Navbar */}
-      <Navbar email="info@Atriowings.in" activeLink="Home" />
-
+      
       <main className="webdev-main">
         {/*  1. HERO SECTION */}
         <WebDevHero />
@@ -310,7 +307,7 @@ export default function WebDevelopmentPage() {
         <section
           className="webdev-services-section"
           id="services-we-offer"
-          style={{ scrollMarginTop: '110px' }} /* keeps the heading clear of the sticky navbar */
+          style={{ scrollMarginTop: '32px' }} /* keeps the heading clear of the sticky navbar */
         >
           <div className="webdev-container">
             <div className="section-header-centered">
@@ -395,7 +392,7 @@ export default function WebDevelopmentPage() {
         <section
           className="webdev-benefits-section"
           id="why-choose"
-          style={{ scrollMarginTop: '110px' }} /* keeps the heading clear of the sticky navbar */
+          style={{ scrollMarginTop: '32px' }} /* keeps the heading clear of the sticky navbar */
         >
           <div className="webdev-container">
             <div className="section-header-centered">

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import StickyCTA from '../components/StickyCTA';
 import DigitalMarketinghero from '../components/Digitalmarketinghero.jsx';
@@ -34,8 +33,7 @@ export default function DigitalMarketingPage() {
 
   return (
     <div className="dmp-page">
-      <Navbar email="info@Atriowings.in" activeLink="Services" />
-
+      
       <main className="dmp-main">
         {/* ============================ HERO ============================ */}
         <DigitalMarketinghero />

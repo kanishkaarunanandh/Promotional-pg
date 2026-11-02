@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import heroImg from '../assets/digital-marketing-hero.png'; // transparent PNG, copy into src/assets
+import heroImg from '../assets/digital-marketing-hero.png';
+import atriowingsLogoWhite from '../assets/logo2.png';
 import { ROUTES } from '../utils/sectionNav';
 import './digital-marketing-hero.css';
 
@@ -56,6 +57,33 @@ export default function DigitalMarketingHero({ servicesId = 'dmp-services' }) {
 
   return (
     <section className="dmh" ref={heroRef} aria-labelledby="dmh-title">
+      {/* Top Header Row: Logo on Top-Left, Contact Button on Top-Right */}
+      <div className="dmh-top-bar flex items-center justify-between w-full">
+        <a
+          href={ROUTES.web}
+          className="dmh-logo-link flex items-center"
+          aria-label="AtrioWings Technologies"
+          title="AtrioWings Technologies"
+        >
+          <img
+            src={atriowingsLogoWhite}
+            alt="AtrioWings Technologies India Private Limited"
+            className="dmh-logo-img h-9 sm:h-10 w-auto object-contain"
+          />
+        </a>
+
+        <motion.a
+          href={CONTACT_HREF}
+          className="dmh-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
+          aria-label="Contact Us"
+          title="Contact Us"
+          whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
+          whileTap={reduce ? {} : { scale: 0.97 }}
+          transition={{ duration: 0.2, ease: EASE }}
+        >
+          <span>Contact Us</span>
+        </motion.a>
+      </div>
       <div className="dmh-glow" aria-hidden="true" />
 
       {/* Picture at the left end of the hero (not a background), transparent PNG on the navy gradient */}
