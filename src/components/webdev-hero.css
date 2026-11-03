@@ -411,6 +411,7 @@
   .wdh-logo-img {
     height: 30px;
     max-width: 160px;
+    margin-left: 0;
   }
 
   .wdh-contact-btn {
@@ -475,12 +476,17 @@
   .wdh-logo-img {
     height: 27px;
     max-width: 140px;
+    margin-left: 0;
   }
 
   .wdh-contact-btn {
     min-height: 36px;
     padding: 0 15px;
     font-size: 12.5px;
+  }
+
+  .wdh-inner {
+    padding: 8px 14px 0;
   }
 
   .wdh-eyebrow {
