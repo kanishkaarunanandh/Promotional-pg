@@ -11,6 +11,7 @@ import { isSmtpConfigured, formatSmtpError } from './mailer.js';
 
 const config = getSmtpConfig();
 const validation = validateSmtpConfig(config);
+const resendApiKey = process.env.RESEND_API_KEY?.trim();
 
 const PORT = process.env.PORT || 5000;
 const { app, transporter } = createApp();
@@ -20,8 +21,12 @@ const clientOrigins = config.clientOrigin
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-// Verify SMTP connection on startup if configured
-if (validation.isValid) {
+// Verify email delivery setup on startup
+if (resendApiKey) {
+  console.log(
+    `✅ [Email] Configured using Resend HTTPS API (Port 443 - Render compatible). Enquiries routed to: ${config.contactToEmail}`
+  );
+} else if (validation.isValid) {
   transporter.verify((error) => {
     if (error) {
       console.error(`❌ [SMTP] Verification error: ${formatSmtpError(error, config)}`);

@@ -56,9 +56,13 @@ function escapeHtml(str) {
 }
 
 /**
- * Checks whether SMTP credentials in environment have real (non-placeholder) values.
+ * Checks whether email credentials in environment have real (non-placeholder) values.
  */
 export function isSmtpConfigured() {
+  const resendApiKey = process.env.RESEND_API_KEY?.trim();
+  if (resendApiKey && resendApiKey.startsWith('re_')) {
+    return true;
+  }
   const config = getSmtpConfig();
   return validateSmtpConfig(config).isConfigured;
 }
@@ -133,13 +137,17 @@ export function formatSmtpError(error, config = null) {
     return `DNS resolution for ${host} timed out or failed. Please verify SMTP_HOST and ensure outgoing network access is available.`;
   }
 
-  if (code === 'ECONNREFUSED') {
-    return `Could not reach ${host}:${activeConfig.port}. Please verify SMTP_HOST and ensure your network/firewall permits outgoing SMTP traffic.`;
+  // Connection timeout / Port blocking
+  if (code === 'ETIMEDOUT' || /connection.*timeout/i.test(msg)) {
+    return (
+      `Connection to ${host}:${activeConfig.port} timed out. ` +
+      'Note: Cloud platforms like Render Free tier block outbound SMTP ports (25, 465, 587). ' +
+      'To bypass this, configure RESEND_API_KEY in server/.env or upgrade your hosting instance.'
+    );
   }
 
-  // Connection timeout
-  if (code === 'ETIMEDOUT') {
-    return `Connection to ${host}:${activeConfig.port} timed out. Verify your port and firewall configuration.`;
+  if (code === 'ECONNREFUSED') {
+    return `Could not reach ${host}:${activeConfig.port}. Please verify SMTP_HOST and ensure your network/firewall permits outgoing SMTP traffic.`;
   }
 
   // TLS / Certificate negotiation errors
@@ -152,13 +160,13 @@ export function formatSmtpError(error, config = null) {
 
 /**
  * Sends the contact form email.
- * Ensures the 'From' header is strictly the authenticated SMTP account,
+ * Supports standard Nodemailer SMTP and Resend HTTPS REST API.
  */
 export async function sendContactEmail(transporter, { name, phone, email, submittedAt }) {
   const config = getSmtpConfig();
   const toAddress = config.contactToEmail || 'info@atriowings.in';
   const smtpUser = config.user;
-  const fromAddress = process.env.SMTP_FROM || `"Atriowings Website" <${smtpUser}>`;
+  const resendApiKey = process.env.RESEND_API_KEY?.trim();
 
   // Sanitize name for header to ensure no quotes break the RFC 2822 mailbox format
   const sanitizedName = name.replace(/["\r\n]/g, '').trim();
@@ -322,6 +330,35 @@ Submitted at: ${submittedAt}
 </body>
 </html>`;
 
+  // HTTP API Delivery (Resend - uses HTTPS Port 443, never blocked on Render free tier)
+  if (resendApiKey) {
+    const fromAddress = process.env.RESEND_FROM || process.env.SMTP_FROM || 'Atriowings Website <onboarding@resend.dev>';
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: fromAddress,
+        to: [toAddress],
+        reply_to: `"${sanitizedName}" <${email}>`,
+        subject,
+        text: textBody,
+        html: htmlBody,
+      }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(`Resend API error (${res.status}): ${data.message || res.statusText || 'Delivery failed'}`);
+    }
+
+    return { messageId: data.id || 'resend-delivered' };
+  }
+
+  // SMTP Delivery via Nodemailer
+  const fromAddress = process.env.SMTP_FROM || `"Atriowings Website" <${smtpUser}>`;
   return transporter.sendMail({
     from: fromAddress,
     to: toAddress,
