@@ -1,5 +1,47 @@
+import dns from 'node:dns';
 import nodemailer from 'nodemailer';
 import { getSmtpConfig, validateSmtpConfig } from './config.js';
+
+// Default to IPv4-first resolution to prevent IPv6 routing deadlocks in container environments
+if (typeof dns.setDefaultResultOrder === 'function') {
+  dns.setDefaultResultOrder('ipv4first');
+}
+
+/**
+ * In cloud container environments (e.g. Render, Docker, Heroku), Nodemailer 10's internal
+ * use of `new dns.Resolver()` (c-ares) can time out because container DNS forwarders (127.0.0.11)
+ * or cloud network firewalls drop/block direct UDP DNS queries.
+ * We augment dns.Resolver so it resolves via the operating system's native getaddrinfo (dns.lookup),
+ * ensuring fast and reliable DNS resolution both locally and in live production containers.
+ */
+let resolverPatched = false;
+function patchDnsResolverForCloud() {
+  if (resolverPatched || !dns.Resolver?.prototype) return;
+  resolverPatched = true;
+
+  const origResolve4 = dns.Resolver.prototype.resolve4;
+  const origResolve6 = dns.Resolver.prototype.resolve6;
+
+  dns.Resolver.prototype.resolve4 = function (hostname, cb) {
+    dns.lookup(hostname, { family: 4, all: true }, (err, addresses) => {
+      if (!err && addresses && addresses.length > 0) {
+        return cb(null, addresses.map((a) => a.address));
+      }
+      return origResolve4.call(this, hostname, cb);
+    });
+  };
+
+  dns.Resolver.prototype.resolve6 = function (hostname, cb) {
+    dns.lookup(hostname, { family: 6, all: true }, (err, addresses) => {
+      if (!err && addresses && addresses.length > 0) {
+        return cb(null, addresses.map((a) => a.address));
+      }
+      return cb(null, []);
+    });
+  };
+}
+
+patchDnsResolverForCloud();
 
 /**
  * Escapes characters for safe inclusion in HTML templates.
@@ -32,6 +74,10 @@ export function createTransporter() {
     host: config.host || 'smtp.gmail.com',
     port: config.port,
     secure: config.secure,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
+    dnsTimeout: 5000,
     auth: {
       user: config.user,
       pass: config.pass,
@@ -83,7 +129,11 @@ export function formatSmtpError(error, config = null) {
   }
 
   // Network connection / DNS errors
-  if (code === 'ECONNREFUSED' || code === 'ENOTFOUND') {
+  if (code === 'EDNS' || code === 'ENOTFOUND' || /dns.*time|getaddrinfo/i.test(msg)) {
+    return `DNS resolution for ${host} timed out or failed. Please verify SMTP_HOST and ensure outgoing network access is available.`;
+  }
+
+  if (code === 'ECONNREFUSED') {
     return `Could not reach ${host}:${activeConfig.port}. Please verify SMTP_HOST and ensure your network/firewall permits outgoing SMTP traffic.`;
   }
 
