@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import {
@@ -74,6 +75,7 @@ function useMediaQuery(query) {
 }
 
 export default function SoftwareDevelopmentPage() {
+  useEnquiryPopup();
   const reduce = useReducedMotion();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const heroRef = useRef(null);
@@ -84,6 +86,7 @@ export default function SoftwareDevelopmentPage() {
   const useParallax = isDesktop && !reduce;
 
   useEffect(() => {
+    document.title = 'Software Development Services | Atriowings Technologies';
     if (!window.location.hash) {
       window.scrollTo(0, 0);
     } else {

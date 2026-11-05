@@ -1,6 +1,16 @@
+/* Contact page & Enquiry Form tokens */
+:root,
+.ctp-page,
+.eqp-card {
+  --ctp-navy: #0e2a4e;
+  --ctp-blue: #1e7fd4;
+  --ctp-cyan: #06a3da;
+  --ctp-slate: #64748b;
+  --ctp-red: #d92d20;
+}
+
 /* Contact page — ctp- prefix */
 .ctp-page {
-  --ctp-navy: #0e2a4e; --ctp-blue: #1e7fd4; --ctp-cyan: #06a3da; --ctp-slate: #64748b; --ctp-red: #d92d20;
   position: relative; overflow: hidden; isolation: isolate;
   min-height: min(820px, 100vh); display: grid; place-items: center;
   padding: 0 16px clamp(56px, 8vw, 90px); display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
@@ -27,20 +37,20 @@
 .ctp-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
 .ctp-field { display: grid; gap: 7px; }
-.ctp-label { color: var(--ctp-navy); font-weight: 700; font-size: .9rem; }
-.ctp-label span { color: var(--ctp-red); }
+.ctp-label { color: var(--ctp-navy, #0e2a4e); font-weight: 700; font-size: .9rem; }
+.ctp-label span { color: var(--ctp-red, #d92d20); }
 .ctp-control { position: relative; }
 .ctp-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #8aa0b8; pointer-events: none; transition: color .2s; }
 .ctp-control input { width: 100%; box-sizing: border-box; height: 52px; padding: 0 16px 0 44px; border-radius: 14px; border: 1.5px solid #d5e2ef; background: #f8fbfe;
-  color: var(--ctp-navy); font: inherit; font-size: 1rem; transition: border-color .2s, box-shadow .2s, background .2s; }
+  color: var(--ctp-navy, #0e2a4e); font: inherit; font-size: 1rem; transition: border-color .2s, box-shadow .2s, background .2s; }
 .ctp-control input::placeholder { color: #9fb0c3; }
 .ctp-control input:hover { border-color: #b7cde2; }
-.ctp-control input:focus { outline: none; background: #fff; border-color: var(--ctp-blue); box-shadow: 0 0 0 4px rgba(30,127,212,.18); }
-.ctp-control:focus-within .ctp-icon { color: var(--ctp-blue); }
+.ctp-control input:focus { outline: none; background: #fff; border-color: var(--ctp-blue, #1e7fd4); box-shadow: 0 0 0 4px rgba(30,127,212,.18); }
+.ctp-control:focus-within .ctp-icon { color: var(--ctp-blue, #1e7fd4); }
 .ctp-control input:disabled { opacity: .7; cursor: not-allowed; }
-.ctp-field.is-invalid .ctp-control input { border-color: var(--ctp-red); background: #fff8f7; }
+.ctp-field.is-invalid .ctp-control input { border-color: var(--ctp-red, #d92d20); background: #fff8f7; }
 .ctp-field.is-invalid .ctp-control input:focus { box-shadow: 0 0 0 4px rgba(217,45,32,.16); }
-.ctp-error { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--ctp-red); font-size: .85rem; font-weight: 600; }
+.ctp-error { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--ctp-red, #d92d20); font-size: .85rem; font-weight: 600; }
 
 .ctp-banner { display: flex; align-items: flex-start; gap: 10px; margin: 0; padding: 13px 15px; border-radius: 14px; font-size: .93rem; font-weight: 600; line-height: 1.5; }
 .ctp-banner svg { flex: none; margin-top: 2px; }
@@ -48,7 +58,7 @@
 .ctp-banner--err { color: #b42318; background: #fef3f2; border: 1px solid #fecdca; }
 
 .ctp-submit { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 54px; border: 0; border-radius: 999px; cursor: pointer;
-  color: #fff; font: inherit; font-size: 1.02rem; font-weight: 700; background: linear-gradient(135deg, var(--ctp-blue), var(--ctp-cyan));
+  color: #fff; font: inherit; font-size: 1.02rem; font-weight: 700; background: linear-gradient(135deg, var(--ctp-blue, #1e7fd4), var(--ctp-cyan, #06a3da));
   box-shadow: 0 12px 28px rgba(30,127,212,.34); transition: transform .25s, box-shadow .25s, filter .25s; }
 .ctp-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(30,127,212,.44); }
 .ctp-submit:hover:not(:disabled) svg:last-child { transform: translateX(3px); }
@@ -58,7 +68,7 @@
 .ctp-spin { animation: ctp-spin 0.9s linear infinite; }
 @keyframes ctp-spin { to { transform: rotate(360deg); } }
 
-.ctp-privacy { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 0; color: var(--ctp-slate); font-size: .83rem; }
+.ctp-privacy { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 0; color: var(--ctp-slate, #64748b); font-size: .83rem; }
 
 @media (max-width: 480px) {
   .ctp-eyebrow { letter-spacing: .12em; font-size: .72rem; }

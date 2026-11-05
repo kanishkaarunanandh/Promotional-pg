@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -27,6 +28,7 @@ function useMediaQuery(query) {
  *  servicesId: the id of the services section on the Digital Marketing page (default "dmp-services")
  */
 export default function DigitalMarketingHero({ servicesId = 'dmp-services' }) {
+  useEnquiryPopup();
   const reduce = useReducedMotion();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const heroRef = useRef(null);

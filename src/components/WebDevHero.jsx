@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -22,26 +23,10 @@ function useMediaQuery(query) {
 }
 
 export default function WebDevHero({ contactLabel = 'Contact Us' }) {
+  useEnquiryPopup();
   const reduce = useReducedMotion();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const heroRef = useRef(null);
-
-  useEffect(() => {
-    const bar = document.querySelector('.wdh-top-bar');
-    const btn = document.querySelector('.wdh-contact-btn');
-    const logo = document.querySelector('.wdh-logo-img');
-    const hero = document.querySelector('.wdh');
-    document.title = 'METRICS:' + JSON.stringify({
-      wInner: window.innerWidth,
-      docScroll: document.documentElement.scrollWidth,
-      bodyScroll: document.body.scrollWidth,
-      heroW: hero?.offsetWidth,
-      barW: bar?.offsetWidth,
-      btnRight: btn?.getBoundingClientRect().right,
-      btnW: btn?.getBoundingClientRect().width,
-      logoW: logo?.getBoundingClientRect().width
-    });
-  }, []);
 
   // restrained parallax on the picture (large screens only, never with reduced motion)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });

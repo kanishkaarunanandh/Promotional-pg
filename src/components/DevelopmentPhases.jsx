@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { Search, Compass, PenTool, Code2, ShieldCheck, Rocket, TrendingUp } from 'lucide-react';
@@ -77,6 +78,7 @@ const RETURN_MS = 2200;      // light travels from step 07 back to step 01
 const START_PAUSE_MS = 1000; // light rests on step 01 before each run
 
 export default function DevelopmentPhases() {
+  useEnquiryPopup();
   const reduce = useReducedMotion();
 
   // pos: where the light is (0..6). active: which card is zoomed (-1 = none).

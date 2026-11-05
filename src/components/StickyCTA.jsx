@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { ArrowRight } from 'lucide-react';
 import { ROUTES } from '../utils/sectionNav';
 import './StickyCTA.css';
@@ -9,11 +10,13 @@ import './StickyCTA.css';
  * covers the last section or the footer.
  */
 export default function StickyCTA({
+  enabled = true,
   href = ROUTES.contact,
   title = 'Ready to Build Something Great?',
   text = "Let's turn your idea into a powerful digital solution.",
   buttonLabel = "Let's Discuss Your Project",
 }) {
+  useEnquiryPopup({ enabled });
   return (
     <>
       {/* reserves the bar's height at the very end of the page */}

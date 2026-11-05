@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, Building2, Receipt, Code2, Users } from 'lucide-react';
@@ -154,6 +155,7 @@ function useMatch(query) {
 }
 
 export default function SoftwareServicesShowcase() {
+  useEnquiryPopup();
   const reduce = useReducedMotion();
   const isMobile = useMatch('(max-width: 1023px)');
   const rootRef = useRef(null);

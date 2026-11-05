@@ -6,6 +6,21 @@ import DigitalMarketingPage from './pages/DigitalMarketingPage';
 import PhotoshootPage from './pages/photoshoot';
 import ContactPage from './pages/ContactPage';
 import { ROUTES, saveLastServiceRoute } from './utils/sectionNav';
+import { EnquiryPopupProvider } from './context/EnquiryPopupContext';
+
+const PAGE_TITLES = {
+  '/': 'Web Development Services | Atriowings Technologies',
+  '/webdevelopment': 'Web Development Services | Atriowings Technologies',
+  '/softwaredevelopment': 'Software Development Services | Atriowings Technologies',
+  '/digitalmarketing': 'Digital Marketing Services | Atriowings Technologies',
+  '/photoshoot': 'Product Photography & Video Ads | Atriowings Technologies',
+  '/photography': 'Product Photography & Video Ads | Atriowings Technologies',
+  '/product-photography': 'Product Photography & Video Ads | Atriowings Technologies',
+  '/contact': 'Contact Us | Atriowings Technologies',
+  '/services/web-development': 'Web Development Services | Atriowings Technologies',
+  '/services/software-development': 'Software Development Services | Atriowings Technologies',
+  '/services/digital-marketing': 'Digital Marketing Services | Atriowings Technologies',
+};
 
 // Opens the #hash section if present, otherwise the top of the page.
 // Honours prefers-reduced-motion.
@@ -14,6 +29,8 @@ function ScrollHandler() {
 
   useEffect(() => {
     saveLastServiceRoute(pathname);
+    const cleanPath = pathname.replace(/\/+$/, '') || '/';
+    document.title = PAGE_TITLES[cleanPath] || 'Web Development Services | Atriowings Technologies';
   }, [pathname]);
 
   useEffect(() => {
@@ -89,7 +106,7 @@ function LegacyRedirect({ to }) {
 
 function App() {
   return (
-    <>
+    <EnquiryPopupProvider>
       <ScrollHandler />
       <ContactLinkHandler />
       <Routes>
@@ -111,7 +128,7 @@ function App() {
         <Route path="/services/software-development" element={<LegacyRedirect to="/softwaredevelopment" />} />
         <Route path="/services/digital-marketing" element={<LegacyRedirect to="/digitalmarketing" />} />
       </Routes>
-    </>
+    </EnquiryPopupProvider>
   );
 }
 

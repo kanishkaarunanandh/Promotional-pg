@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -15,9 +16,11 @@ const EASE = [0.22, 1, 0.36, 1];
 const CONTACT_HREF = ROUTES.contact;
 
 export default function DigitalMarketingPage() {
+  useEnquiryPopup();
   const reduce = useReducedMotion();
 
   useEffect(() => {
+    document.title = 'Digital Marketing Services | Atriowings Technologies';
     window.scrollTo(0, 0);
   }, []);
 

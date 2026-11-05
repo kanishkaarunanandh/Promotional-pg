@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useState, useEffect, useRef } from 'react';
 import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-motion';
 import {
@@ -570,6 +571,7 @@ function AnimatedCounter({ end, duration = 2.2, suffix = '', decimals = 0, isVis
 }
 
 export default function PhotoshootPage() {
+  useEnquiryPopup();
   const reduce = useReducedMotion();
   const [activeCategory, setActiveCategory] = useState('all');
   const [openFaq, setOpenFaq] = useState(null);
@@ -933,7 +935,7 @@ export default function PhotoshootPage() {
   };
 
   useEffect(() => {
-    document.title = 'Product Photography & Video Ads Studio | Atriowings';
+    document.title = 'Product Photography & Video Ads | Atriowings Technologies';
     window.scrollTo(0, 0);
   }, []);
 

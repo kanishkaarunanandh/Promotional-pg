@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion, useScroll } from 'framer-motion';
 import { ArrowRight, BadgeCheck, MessagesSquare, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
@@ -136,6 +137,7 @@ function InMiddle({ flag, onHit }) {
 }
 
 export default function WhyChooseAtriowings() {
+  useEnquiryPopup();
   const reduce = useReducedMotion();
   const listRef = useRef(null);
   const [active, setActive] = useState(0);

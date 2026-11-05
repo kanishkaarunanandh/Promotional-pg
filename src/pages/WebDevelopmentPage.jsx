@@ -1,3 +1,4 @@
+import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useInView } from 'framer-motion';
 import WebDevHero from '../components/WebDevHero';
@@ -201,7 +202,12 @@ function BenefitCard({ item, variants }) {
 }
 
 export default function WebDevelopmentPage() {
+  useEnquiryPopup();
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    document.title = 'Web Development Services | Atriowings Technologies';
+  }, []);
 
   // Deep links such as /services/web-development#services-we-offer: when the page is opened
   // from another page the section does not exist yet at load time, so wait for it, then scroll.
