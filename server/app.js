@@ -55,6 +55,19 @@ export function createApp(customTransporter = null) {
 
   const transporter = customTransporter || createTransporter();
 
+  // Root welcome / status endpoint
+  app.get('/', (req, res) => {
+    res.json({
+      ok: true,
+      service: 'Atriowings Backend API',
+      status: 'online',
+      endpoints: {
+        health: '/api/health',
+        contact: '/api/contact [POST]',
+      },
+    });
+  });
+
   // Health check endpoint
   app.get('/api/health', (req, res) => {
     res.json({
