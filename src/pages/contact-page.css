@@ -65,6 +65,14 @@
 .ctp-submit svg { transition: transform .25s; }
 .ctp-submit:focus-visible { outline: 3px solid rgba(6,163,218,.6); outline-offset: 3px; }
 .ctp-submit:disabled { cursor: progress; filter: saturate(.8); opacity: .88; }
+.ctp-submit.is-success {
+  background: linear-gradient(135deg, #059669, #10b981);
+  box-shadow: 0 12px 28px rgba(16, 185, 129, 0.34);
+}
+.ctp-submit.is-error {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  box-shadow: 0 12px 28px rgba(239, 68, 68, 0.34);
+}
 .ctp-spin { animation: ctp-spin 0.9s linear infinite; }
 @keyframes ctp-spin { to { transform: rotate(360deg); } }
 

@@ -162,28 +162,31 @@ export function formatSmtpError(error, config = null) {
  * Sends the contact form email.
  * Supports standard Nodemailer SMTP and Resend HTTPS REST API.
  */
-export async function sendContactEmail(transporter, { name, phone, email, submittedAt }) {
+export async function sendContactEmail(transporter, { name, phone, email, source = 'Software Development Consultation', submittedAt }) {
   const config = getSmtpConfig();
   const toAddress = config.contactToEmail || 'info@atriowings.in';
   const smtpUser = config.user;
   const resendApiKey = process.env.RESEND_API_KEY?.trim();
+  const enquirySource = source || 'Software Development Consultation';
 
   // Sanitize name for header to ensure no quotes break the RFC 2822 mailbox format
   const sanitizedName = name.replace(/["\r\n]/g, '').trim();
   const replyToAddress = `"${sanitizedName}" <${email}>`;
-  const subject = `New website enquiry from ${sanitizedName}`;
+  const subject = `New enquiry (${enquirySource}) from ${sanitizedName}`;
 
   const textBody = `New enquiry received from the Atriowings website.
 
-Name: ${name}
-Phone: ${phone}
-Email: ${email}
-Submitted at: ${submittedAt}
+Enquiry Source: ${enquirySource}
+Customer Full Name: ${name}
+Phone Number: ${phone}
+Email Address: ${email}
+Submitted At: ${submittedAt}
 `;
 
   const safeName = escapeHtml(name);
   const safePhone = escapeHtml(phone);
   const safeEmail = escapeHtml(email);
+  const safeSource = escapeHtml(enquirySource);
   const safeSubmittedAt = escapeHtml(submittedAt);
 
   const htmlBody = `<!DOCTYPE html>
@@ -305,7 +308,11 @@ Submitted at: ${submittedAt}
       <p class="intro">Here are the details submitted by the visitor:</p>
       <table class="field-table">
         <tr>
-          <td class="label">Full Name</td>
+          <td class="label">Enquiry Source</td>
+          <td class="value">${safeSource}</td>
+        </tr>
+        <tr>
+          <td class="label">Customer Full Name</td>
           <td class="value">${safeName}</td>
         </tr>
         <tr>

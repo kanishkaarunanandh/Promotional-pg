@@ -42,10 +42,10 @@ const YouTubeIcon = ({ size = 18 }) => (
 
 // Centralized configuration for easy updates
 const SOCIAL_LINKS = [
-  { name: 'LinkedIn', icon: LinkedInIcon, href: 'https://www.linkedin.com/company/atriowings' },
-  { name: 'Instagram', icon: InstagramIcon, href: 'https://www.instagram.com/atriowings' },
-  { name: 'Facebook', icon: FacebookIcon, href: 'https://www.facebook.com/atriowings' },
-  { name: 'YouTube', icon: YouTubeIcon, href: 'https://www.youtube.com/@atriowings' },
+  { name: 'LinkedIn', icon: LinkedInIcon, href: '' },
+  { name: 'Instagram', icon: InstagramIcon, href: '' },
+  { name: 'Facebook', icon: FacebookIcon, href: '' },
+  { name: 'YouTube', icon: YouTubeIcon, href: '' },
 ];
 
 // Each service opens its own page; on that page the link scrolls to its capabilities section.
@@ -59,6 +59,7 @@ const SERVICES_LINKS = [
 const CONTACT_DETAILS = {
   address: 'No: 45, A Block, 3rd Avenue, Kumaran Nagar, Anna Nagar East, Chennai',
   email: 'info@atriowings.in',
+  phone: '+91 8825948859',
   hours: 'Mon – Fri: 9:30 AM – 6:00 PM',
 };
 

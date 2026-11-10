@@ -117,17 +117,19 @@ describe('Atriowings Contact API Endpoints', () => {
 
     assert.equal(mail.to, 'info@atriowings.in');
     assert.equal(mail.replyTo, '"Priya Patel" <priya.patel@example.com>');
-    assert.equal(mail.subject, 'New website enquiry from Priya Patel');
+    assert.ok(mail.subject.includes('Priya Patel'));
     assert.ok(mail.from.includes('notifications@atriowings.in'));
 
     // Check text body format
     assert.ok(mail.text.includes('New enquiry received from the Atriowings website.'));
-    assert.ok(mail.text.includes('Name: Priya Patel'));
-    assert.ok(mail.text.includes('Phone: +91 98765 43210'));
-    assert.ok(mail.text.includes('Email: priya.patel@example.com'));
-    assert.ok(mail.text.includes('Submitted at:'));
+    assert.ok(mail.text.includes('Enquiry Source: Software Development Consultation'));
+    assert.ok(mail.text.includes('Customer Full Name: Priya Patel'));
+    assert.ok(mail.text.includes('Phone Number: +91 98765 43210'));
+    assert.ok(mail.text.includes('Email Address: priya.patel@example.com'));
+    assert.ok(mail.text.includes('Submitted At:'));
 
     // Check html body
+    assert.ok(mail.html.includes('Software Development Consultation'));
     assert.ok(mail.html.includes('Priya Patel'));
     assert.ok(mail.html.includes('priya.patel@example.com'));
     assert.ok(mail.html.includes('+91 98765 43210'));

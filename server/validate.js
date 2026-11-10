@@ -33,7 +33,8 @@ export function validateContactPayload(payload = {}) {
   if (
     hasHeaderInjection(payload.name) ||
     hasHeaderInjection(payload.email) ||
-    hasHeaderInjection(payload.phone)
+    hasHeaderInjection(payload.phone) ||
+    hasHeaderInjection(payload.source)
   ) {
     return {
       isValid: false,
@@ -47,6 +48,7 @@ export function validateContactPayload(payload = {}) {
   const name = cleanText(payload.name);
   const email = cleanText(payload.email).toLowerCase();
   const phone = cleanText(payload.phone);
+  const source = cleanText(payload.source) || 'Software Development Consultation';
 
   // Validate Name
   if (!name) {
@@ -85,6 +87,6 @@ export function validateContactPayload(payload = {}) {
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
-    values: { name, email, phone },
+    values: { name, email, phone, source },
   };
 }

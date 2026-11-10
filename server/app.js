@@ -25,6 +25,7 @@ export function createApp(customTransporter = null) {
         if (
           clientOrigins.includes(origin) ||
           clientOrigins.includes('*') ||
+          /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ||
           process.env.NODE_ENV !== 'production'
         ) {
           return callback(null, true);
@@ -81,7 +82,7 @@ export function createApp(customTransporter = null) {
   // Contact form submission endpoint
   app.post('/api/contact', contactRateLimiter, async (req, res) => {
     try {
-      const { name, phone, email, website } = req.body || {};
+      const { name, phone, email, website, source } = req.body || {};
 
       // Honeypot check: automated spam bots often populate hidden inputs
       if (website && String(website).trim() !== '') {
@@ -94,7 +95,7 @@ export function createApp(customTransporter = null) {
       }
 
       // Server-side validation and sanitization
-      const validation = validateContactPayload({ name, phone, email });
+      const validation = validateContactPayload({ name, phone, email, source });
       if (!validation.isValid) {
         return res.status(400).json({
           ok: false,
@@ -126,11 +127,12 @@ export function createApp(customTransporter = null) {
         name: cleanValues.name,
         phone: cleanValues.phone,
         email: cleanValues.email,
+        source: cleanValues.source || 'Software Development Consultation',
         submittedAt,
       });
 
       console.log(
-        `[Contact] Email dispatched for "${cleanValues.name}" (${cleanValues.email}), messageId: ${info.messageId || 'sent'}`
+        `[Contact] Email dispatched for "${cleanValues.name}" (${cleanValues.email}), source: "${cleanValues.source}", messageId: ${info.messageId || 'sent'}`
       );
 
       return res.status(200).json({

@@ -14,6 +14,7 @@ const FIELDS = [
 
 export default function EnquiryForm({
   idPrefix = 'ctp',
+  source = 'Software Development Consultation',
   onSuccess,
   className = 'ctp-card',
 }) {
@@ -39,7 +40,7 @@ export default function EnquiryForm({
     if (touched[name] || errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: check(next)[name] }));
     }
-    if (status === 'success') setStatus('idle');
+    if (status === 'success' || status === 'error') setStatus('idle');
   };
 
   const onBlur = (e) => {
@@ -73,7 +74,12 @@ export default function EnquiryForm({
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...clean, website, elapsedMs: Date.now() - (startedAt.current || Date.now()) }),
+        body: JSON.stringify({
+          ...clean,
+          source,
+          website,
+          elapsedMs: Date.now() - (startedAt.current || Date.now()),
+        }),
         signal: controller.signal,
       });
       let data = {};
@@ -89,7 +95,7 @@ export default function EnquiryForm({
         setTouched({});
         startedAt.current = Date.now();
         setStatus('success');
-        setMessage('Thank you! Your enquiry has been sent. Our team will contact you soon.');
+        setMessage(data.message || 'Thank you! Your enquiry has been sent. Our team will contact you soon.');
         onSuccess?.();
       } else {
         if (data.errors) setErrors(data.errors);
@@ -101,7 +107,7 @@ export default function EnquiryForm({
       setMessage(
         err.name === 'AbortError'
           ? 'The request took too long. Please check your connection and try again.'
-          : 'We could not reach the server. Please check your connection and try again.'
+          : `We could not reach the server at ${API_BASE_URL}. Please ensure the backend server is running and try again.`
       );
     } finally {
       clearTimeout(timer);
@@ -180,11 +186,25 @@ export default function EnquiryForm({
         )}
       </div>
 
-      <button type="submit" className="ctp-submit" disabled={submitting}>
-        {submitting ? (
+      <button
+        type="submit"
+        className={`ctp-submit${status === 'success' ? ' is-success' : status === 'error' ? ' is-error' : ''}`}
+        disabled={submitting || status === 'success'}
+      >
+        {status === 'submitting' ? (
           <>
             <Loader2 className="ctp-spin" size={18} aria-hidden="true" />
-            <span>Sending…</span>
+            <span>Sending Enquiry…</span>
+          </>
+        ) : status === 'success' ? (
+          <>
+            <CheckCircle2 size={18} aria-hidden="true" />
+            <span>Enquiry Sent!</span>
+          </>
+        ) : status === 'error' ? (
+          <>
+            <AlertCircle size={18} aria-hidden="true" />
+            <span>Retry Submission</span>
           </>
         ) : (
           <>
