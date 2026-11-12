@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useRef, useCallback, useLayoutEffect, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { TrendingUp } from 'lucide-react';
 import './dmp-tools.css'; // import AFTER the page stylesheet
@@ -44,15 +44,46 @@ const CATEGORIES = [
     { id: 'ga4', name: 'Google Analytics 4', purpose: 'Measure conversions and campaign results.' } ] },
 ];
 
-// hub (500,350) -> inner edge of each cluster (viewBox 1000x700; rows sit at 1/6, 3/6, 5/6)
-const LINES = [
-  'M500 350 C 420 350, 390 117, 296 117',
-  'M500 350 C 420 350, 390 350, 296 350',
-  'M500 350 C 420 350, 390 583, 296 583',
-  'M500 350 C 580 350, 610 117, 704 117',
-  'M500 350 C 580 350, 610 350, 704 350',
-  'M500 350 C 580 350, 610 583, 704 583',
-];
+// Fallback initial paths for 1000x700 viewBox before DOM measurement
+const DEFAULT_PATHS = {
+  seo: {
+    d: 'M 340.0 150.0 C 410.0 150.0, 440.0 270.0, 455.0 290.0',
+    start: { x: 340, y: 150 },
+    end: { x: 455, y: 290 },
+    isLeft: true,
+  },
+  ads: {
+    d: 'M 340.0 350.0 C 390.0 350.0, 405.0 350.0, 416.0 350.0',
+    start: { x: 340, y: 350 },
+    end: { x: 416, y: 350 },
+    isLeft: true,
+  },
+  social: {
+    d: 'M 340.0 550.0 C 410.0 550.0, 440.0 430.0, 455.0 410.0',
+    start: { x: 340, y: 550 },
+    end: { x: 455, y: 410 },
+    isLeft: true,
+  },
+  creative: {
+    d: 'M 660.0 150.0 C 590.0 150.0, 560.0 270.0, 545.0 290.0',
+    start: { x: 660, y: 150 },
+    end: { x: 545, y: 290 },
+    isLeft: false,
+  },
+  auto: {
+    d: 'M 660.0 350.0 C 610.0 350.0, 595.0 350.0, 584.0 350.0',
+    start: { x: 660, y: 350 },
+    end: { x: 584, y: 350 },
+    isLeft: false,
+  },
+  analytics: {
+    d: 'M 660.0 550.0 C 590.0 550.0, 560.0 430.0, 545.0 410.0',
+    start: { x: 660, y: 550 },
+    end: { x: 545, y: 410 },
+    isLeft: false,
+  },
+};
+
 const SLOT = [
   { gridColumn: 1, gridRow: 1 }, { gridColumn: 1, gridRow: 2 }, { gridColumn: 1, gridRow: 3 },
   { gridColumn: 3, gridRow: 1 }, { gridColumn: 3, gridRow: 2 }, { gridColumn: 3, gridRow: 3 },
@@ -76,15 +107,140 @@ const FLOAT = [5.8, 6.6, 7.4, 6.2, 7, 5.5];
 
 export default function DmpTools() {
   const reduce = useReducedMotion();
+  const [activeCategory, setActiveCategory] = useState('seo');
+  const [paths, setPaths] = useState(DEFAULT_PATHS);
+  const [stageSize, setStageSize] = useState({ width: 1000, height: 700 });
   const [filter, setFilter] = useState('all');
   const [hover, setHover] = useState(null);   // { cat, tool }
   const [pinned, setPinned] = useState(null);
+
+  const stageRef = useRef(null);
+  const hubRef = useRef(null);
+  const clusterRefs = useRef({});
+
   const info = hover || pinned;
   const infoTool = info ? CATEGORIES.find((c) => c.id === info.cat)?.tools.find((t) => t.id === info.tool) : null;
   const infoCat = info ? CATEGORIES.find((c) => c.id === info.cat) : null;
 
   const dim = (cid) => filter !== 'all' && filter !== cid;
-  const lit = (cid) => (info && info.cat === cid) || filter === cid;
+  const lit = (cid) => activeCategory === cid || (info && info.cat === cid) || filter === cid;
+
+  const updatePaths = useCallback(() => {
+    if (!stageRef.current || !hubRef.current) return;
+    const stageRect = stageRef.current.getBoundingClientRect();
+    if (stageRect.width === 0 || stageRect.height === 0) return;
+
+    const currentWidth = Math.round(stageRect.width);
+    const currentHeight = Math.round(stageRect.height);
+    setStageSize({ width: currentWidth, height: currentHeight });
+
+    const hubRect = hubRef.current.getBoundingClientRect();
+    const hubCenterX = (hubRect.left + hubRect.right) / 2 - stageRect.left;
+    const hubCenterY = (hubRect.top + hubRect.bottom) / 2 - stageRect.top;
+    const hubRadius = hubRect.width / 2;
+
+    const nextPaths = {};
+
+    CATEGORIES.forEach((cat, index) => {
+      const el = clusterRefs.current[cat.id];
+      if (!el) return;
+      const catRect = el.getBoundingClientRect();
+      const isLeft = index < 3;
+
+      // Anchor at the edge of the cluster facing the center hub
+      // 4px offset outward ensures the line never overlaps the card or border
+      const startX = isLeft
+        ? (catRect.right - stageRect.left + 4)
+        : (catRect.left - stageRect.left - 4);
+      const startY = (catRect.top + catRect.bottom) / 2 - stageRect.top;
+
+      const vx = startX - hubCenterX;
+      const vy = startY - hubCenterY;
+      const angle = Math.atan2(vy, vx);
+
+      // End point at hub perimeter
+      const endX = hubCenterX + hubRadius * Math.cos(angle);
+      const endY = hubCenterY + hubRadius * Math.sin(angle);
+
+      const dx = endX - startX;
+      const dy = endY - startY;
+
+      // Smooth bezier curve control points:
+      // CP1: Leaves cluster horizontally toward center
+      const cp1X = isLeft
+        ? startX + Math.abs(dx) * 0.44
+        : startX - Math.abs(dx) * 0.44;
+      const cp1Y = startY;
+
+      // CP2: Approaches hub along radial normal
+      const radialDist = Math.min(Math.hypot(dx, dy) * 0.32, 70);
+      const cp2X = endX + Math.cos(angle) * radialDist;
+      const cp2Y = endY + Math.sin(angle) * radialDist;
+
+      const pathData = `M ${startX.toFixed(1)} ${startY.toFixed(1)} C ${cp1X.toFixed(1)} ${cp1Y.toFixed(1)}, ${cp2X.toFixed(1)} ${cp2Y.toFixed(1)}, ${endX.toFixed(1)} ${endY.toFixed(1)}`;
+
+      nextPaths[cat.id] = {
+        d: pathData,
+        start: { x: Number(startX.toFixed(1)), y: Number(startY.toFixed(1)) },
+        end: { x: Number(endX.toFixed(1)), y: Number(endY.toFixed(1)) },
+        isLeft,
+      };
+    });
+
+    setPaths((prev) => ({ ...prev, ...nextPaths }));
+  }, []);
+
+  const useSafeLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+  useSafeLayoutEffect(() => {
+    updatePaths();
+
+    // Re-measure after initial layout renders and fonts settle
+    const t1 = setTimeout(updatePaths, 60);
+    const t2 = setTimeout(updatePaths, 300);
+    const t3 = setTimeout(updatePaths, 800);
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(updatePaths);
+    }
+
+    let ro;
+    if (typeof ResizeObserver !== 'undefined' && stageRef.current) {
+      ro = new ResizeObserver(() => {
+        updatePaths();
+      });
+      ro.observe(stageRef.current);
+    }
+
+    window.addEventListener('resize', updatePaths);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      if (ro) ro.disconnect();
+      window.removeEventListener('resize', updatePaths);
+    };
+  }, [updatePaths]);
+
+  const handleSelectCategory = (catId, toolId = null) => {
+    setActiveCategory(catId);
+    if (toolId) {
+      setPinned((p) => (p && p.cat === catId && p.tool === toolId ? null : { cat: catId, tool: toolId }));
+    }
+    if (filter !== 'all' && filter !== catId) {
+      setFilter('all');
+    }
+  };
+
+  const handleFilterClick = (filterId) => {
+    setFilter(filterId);
+    if (filterId !== 'all') {
+      setActiveCategory(filterId);
+    }
+  };
+
+  const activePath = paths[activeCategory];
 
   return (
     <section id="dmp-tools" className="dmpt" aria-labelledby="dmp-tools-title">
@@ -110,41 +266,150 @@ export default function DmpTools() {
 
         <div className="dmpt-filters" role="group" aria-label="Filter tools by category">
           {FILTERS.map((f) => (
-            <button key={f.id} type="button" className={`dmpt-filter${filter === f.id ? ' is-on' : ''}`} aria-pressed={filter === f.id} onClick={() => setFilter(f.id)}>
+            <button
+              key={f.id}
+              type="button"
+              className={`dmpt-filter${filter === f.id ? ' is-on' : ''}`}
+              aria-pressed={filter === f.id}
+              onClick={() => handleFilterClick(f.id)}
+            >
               {f.label}
             </button>
           ))}
         </div>
 
-        <div className="dmpt-stage">
-          {/* connection lines (desktop only) */}
-          <svg className="dmpt-lines" viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <div className="dmpt-stage" ref={stageRef}>
+          {/* dynamic connection lines (desktop only) */}
+          <svg
+            className="dmpt-lines"
+            viewBox={`0 0 ${stageSize.width} ${stageSize.height}`}
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            focusable="false"
+          >
             <defs>
-              <linearGradient id="dmpt-lg" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stopColor="#1E7FD4" /><stop offset="1" stopColor="#06A3DA" />
+              <linearGradient id="dmpt-active-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#1E7FD4" />
+                <stop offset="50%" stopColor="#06A3DA" />
+                <stop offset="100%" stopColor="#00D2FF" />
               </linearGradient>
+              <filter id="dmpt-glow-blur" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
+              </filter>
             </defs>
-            {LINES.map((d, i) => {
-              const on = lit(CATEGORIES[i].id);
+
+            {/* Inactive connector lines for all six categories */}
+            {CATEGORIES.map((c) => {
+              const p = paths[c.id];
+              if (!p) return null;
+              const isAct = activeCategory === c.id;
+              const isDim = dim(c.id);
+
               return (
-                <g key={d} className={`dmpt-line-g${on ? ' is-lit' : ''}${dim(CATEGORIES[i].id) ? ' is-dim' : ''}`}>
-                  <motion.path d={d} fill="none" stroke={on ? 'url(#dmpt-lg)' : '#BFD6EC'} strokeWidth={on ? 2.2 : 1.3} vectorEffect="non-scaling-stroke"
-                    initial={reduce ? false : { pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 1.1, ease: EASE, delay: 0.3 + i * 0.1 }} />
-                  {!reduce && (
-                    <circle cx="0" cy="0" r="3.4" fill="#06A3DA" opacity="0" className="dmpt-travel">
-                      <animateMotion dur={`${6 + i * 0.7}s`} repeatCount="indefinite" path={d} begin={`${i * 0.8}s`} />
-                      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.08;0.92;1" dur={`${6 + i * 0.7}s`} repeatCount="indefinite" begin={`${i * 0.8}s`} />
-                    </circle>
+                <g key={c.id} className={`dmpt-line-g${isAct ? ' is-lit' : ''}${isDim ? ' is-dim' : ''}`}>
+                  <path
+                    d={p.d}
+                    fill="none"
+                    stroke={isAct ? 'rgba(6, 163, 218, 0.25)' : 'rgba(30, 127, 212, 0.22)'}
+                    strokeWidth={isAct ? 2 : 1.3}
+                    strokeLinecap="round"
+                    className="dmpt-base-path"
+                  />
+                  {!isAct && !isDim && (
+                    <circle cx={p.start.x} cy={p.start.y} r="2.5" fill="#BFD6EC" />
                   )}
                 </g>
               );
             })}
+
+            {/* Active highlighted connector line: animates drawing when activeCategory changes */}
+            {activePath && (
+              <g key={`active-${activeCategory}`} className="dmpt-active-group">
+                {/* Outer ambient glow */}
+                <motion.path
+                  d={activePath.d}
+                  fill="none"
+                  stroke="#06A3DA"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  opacity="0.32"
+                  filter="url(#dmpt-glow-blur)"
+                  initial={reduce ? false : { pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.55, ease: EASE }}
+                />
+                {/* Core bright blue stroke */}
+                <motion.path
+                  d={activePath.d}
+                  fill="none"
+                  stroke="url(#dmpt-active-grad)"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                  initial={reduce ? false : { pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.55, ease: EASE }}
+                />
+                {/* Category anchor dot */}
+                <motion.circle
+                  cx={activePath.start.x}
+                  cy={activePath.start.y}
+                  r="4"
+                  fill="#06A3DA"
+                  initial={reduce ? false : { scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.25, ease: EASE }}
+                />
+                <circle
+                  cx={activePath.start.x}
+                  cy={activePath.start.y}
+                  r="7.5"
+                  fill="none"
+                  stroke="#06A3DA"
+                  strokeWidth="1.5"
+                  opacity="0.45"
+                />
+                {/* Central hub perimeter contact dot */}
+                <motion.circle
+                  cx={activePath.end.x}
+                  cy={activePath.end.y}
+                  r="4.5"
+                  fill="#00D2FF"
+                  initial={reduce ? false : { scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.25, delay: 0.45, ease: EASE }}
+                />
+                {/* Traveling light particle along the active path */}
+                {!reduce && (
+                  <circle cx="0" cy="0" r="3.4" fill="#00D2FF" className="dmpt-travel-active">
+                    <animateMotion
+                      dur="3.4s"
+                      repeatCount="indefinite"
+                      path={activePath.d}
+                    />
+                    <animate
+                      attributeName="opacity"
+                      values="0;1;1;0"
+                      keyTimes="0;0.1;0.9;1"
+                      dur="3.4s"
+                      repeatCount="indefinite"
+                    />
+                  </circle>
+                )}
+              </g>
+            )}
           </svg>
 
           <div className="dmpt-hub-wrap">
             <span className="dmpt-orbit dmpt-orbit--1" aria-hidden="true"><i /></span>
             <span className="dmpt-orbit dmpt-orbit--2" aria-hidden="true"><i /></span>
-            <motion.div className="dmpt-hub" initial={reduce ? false : { opacity: 0, scale: 0.85 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: EASE }}>
+            <motion.div
+              ref={hubRef}
+              className="dmpt-hub"
+              initial={reduce ? false : { opacity: 0, scale: 0.85 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: EASE }}
+            >
               <span className="dmpt-hub-pulse" aria-hidden="true" />
               <TrendingUp size={26} strokeWidth={2.2} aria-hidden="true" />
               <span className="dmpt-hub-text">DIGITAL<br />GROWTH</span>
@@ -154,14 +419,36 @@ export default function DmpTools() {
           {CATEGORIES.map((c, i) => (
             <motion.div
               key={c.id}
-              className={`dmpt-cluster${dim(c.id) ? ' is-dim' : ''}${lit(c.id) ? ' is-lit' : ''} dmpt-cluster--${i < 3 ? 'l' : 'r'}`}
+              ref={(el) => {
+                if (el) clusterRefs.current[c.id] = el;
+              }}
+              className={`dmpt-cluster${dim(c.id) ? ' is-dim' : ''}${lit(c.id) ? ' is-lit' : ''}${activeCategory === c.id ? ' is-active' : ''} dmpt-cluster--${i < 3 ? 'l' : 'r'}`}
               style={{ '--col': SLOT[i].gridColumn, '--row': SLOT[i].gridRow }}
               initial={reduce ? false : { opacity: 0, x: i < 3 ? -26 : 26 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.65, ease: EASE, delay: 0.1 + (i % 3) * 0.1 }}
+              onAnimationComplete={updatePaths}
+              onClick={() => handleSelectCategory(c.id)}
             >
-              <h3 className="dmpt-cat">{c.label}</h3>
+              <h3
+                className="dmpt-cat"
+                role="button"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSelectCategory(c.id);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSelectCategory(c.id);
+                  }
+                }}
+                title={`Select ${c.label}`}
+              >
+                {c.label}
+              </h3>
               <ul className="dmpt-tools">
                 {c.tools.map((t, k) => {
                   const isOn = info && info.cat === c.id && info.tool === t.id;
@@ -177,9 +464,15 @@ export default function DmpTools() {
                         aria-pressed={pinned && pinned.cat === c.id && pinned.tool === t.id ? true : false}
                         onMouseEnter={() => setHover({ cat: c.id, tool: t.id })}
                         onMouseLeave={() => setHover(null)}
-                        onFocus={() => setHover({ cat: c.id, tool: t.id })}
+                        onFocus={() => {
+                          setHover({ cat: c.id, tool: t.id });
+                          setActiveCategory(c.id);
+                        }}
                         onBlur={() => setHover(null)}
-                        onClick={() => setPinned((p) => (p && p.cat === c.id && p.tool === t.id ? null : { cat: c.id, tool: t.id }))}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectCategory(c.id, t.id);
+                        }}
                       >
                         <Logo id={t.id} />
                         <span className="dmpt-chip-text">
@@ -205,8 +498,6 @@ export default function DmpTools() {
             <span className="dmpt-info-hint">Hover over, focus, or tap a tool to see how we use it.</span>
           )}
         </div>
-
-       
       </div>
     </section>
   );
