@@ -1,4 +1,3 @@
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -10,13 +9,12 @@ import DmpServices from '../components/DmpServices.jsx';
 import Dmptools from '../components/Dmptools.jsx';
 import Dmpfaq from '../components/Dmpfaq.jsx';
 import Dmpwhy from '../components/Dmpwhy.jsx';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('marketing');
 
 export default function DigitalMarketingPage() {
-  useEnquiryPopup();
   const reduce = useReducedMotion();
 
   useEffect(() => {
@@ -57,7 +55,13 @@ export default function DigitalMarketingPage() {
               <p className="dmp-final-text">
                 Tell us about your business and goals, and we will map out the right digital marketing plan for you.
               </p>
-              <a href={CONTACT_HREF} className="dmp-btn dmp-btn--primary">
+              <a
+                href={CONTACT_HREF}
+                onClick={(e) => openWhatsApp('marketing', null, e)}
+                className="dmp-btn dmp-btn--primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span>Get a Free Consultation</span>
                 <ArrowRight className="dmp-btn-arrow" size={19} strokeWidth={2.5} aria-hidden="true" />
               </a>

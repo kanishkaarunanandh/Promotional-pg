@@ -1,19 +1,15 @@
 import { useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import atriowingsLogo from '../assets/atriowings-logo.png';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, openWhatsApp } from '../utils/sectionNav';
 import Footer from '../components/Footer';
 import EnquiryForm from '../components/EnquiryForm';
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import './contact-page.css';
 
 const EASE = [0.22, 1, 0.36, 1];
 
 export default function ContactPage() {
   const reduce = useReducedMotion();
-
-  // Disabled on the dedicated contact page where the form is already prominently displayed
-  useEnquiryPopup({ enabled: false });
 
   useEffect(() => {
     document.title = 'Contact Us | Atriowings Technologies';
@@ -43,10 +39,13 @@ export default function ContactPage() {
           </a>
 
           <motion.a
-            href="mailto:info@atriowings.in"
+            href={ROUTES.contact}
+            onClick={(e) => openWhatsApp('general', null, e)}
+            target="_blank"
+            rel="noopener noreferrer"
             className="ctp-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
-            aria-label="Email info@atriowings.in"
-            title="Email info@atriowings.in"
+            aria-label="Contact Us on WhatsApp"
+            title="Contact Us on WhatsApp"
             whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
             whileTap={reduce ? {} : { scale: 0.97 }}
             transition={{ duration: 0.2, ease: EASE }}

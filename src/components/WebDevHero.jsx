@@ -1,13 +1,13 @@
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import heroImg from '../assets/web-dev-hero.png';
 import atriowingsLogo from '../assets/atriowings-logo.png';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './webdev-hero.css';
 
 const EASE = [0.22, 1, 0.36, 1];
+const CONTACT_HREF = getWhatsAppUrl('web');
 
 // true only when the viewport matches (keeps the parallax to large screens)
 function useMediaQuery(query) {
@@ -23,7 +23,6 @@ function useMediaQuery(query) {
 }
 
 export default function WebDevHero({ contactLabel = 'Contact Us' }) {
-  useEnquiryPopup();
   const reduce = useReducedMotion();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const heroRef = useRef(null);
@@ -68,10 +67,13 @@ export default function WebDevHero({ contactLabel = 'Contact Us' }) {
         </a>
 
         <motion.a
-          href={ROUTES.contact}
+          href={CONTACT_HREF}
+          onClick={(e) => openWhatsApp('web', null, e)}
           className="wdh-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
           aria-label="Contact Us"
           title="Contact Us"
+          target="_blank"
+          rel="noopener noreferrer"
           whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
           whileTap={reduce ? {} : { scale: 0.97 }}
           transition={{ duration: 0.2, ease: EASE }}
@@ -116,7 +118,14 @@ export default function WebDevHero({ contactLabel = 'Contact Us' }) {
           </motion.p>
 
           <motion.div className="wdh-actions" variants={group}>
-            <motion.a href={ROUTES.contact} className="wdh-btn wdh-btn--primary" variants={pop}>
+            <motion.a
+              href={CONTACT_HREF}
+              onClick={(e) => openWhatsApp('web', null, e)}
+              className="wdh-btn wdh-btn--primary"
+              variants={pop}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span>Contact Us</span>
               <ArrowRight size={18} strokeWidth={2.4} aria-hidden="true" />
             </motion.a>

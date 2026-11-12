@@ -1,6 +1,6 @@
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { ArrowRight } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { useLocation } from 'react-router-dom';
+import { getWhatsAppUrl, openWhatsApp } from '../utils/whatsapp';
 import './StickyCTA.css';
 
 /**
@@ -10,13 +10,16 @@ import './StickyCTA.css';
  * covers the last section or the footer.
  */
 export default function StickyCTA({
-  enabled = true,
-  href = ROUTES.contact,
+  service = null,
+  href = null,
   title = 'Ready to Build Something Great?',
   text = "Let's turn your idea into a powerful digital solution.",
   buttonLabel = "Let's Discuss Your Project",
 }) {
-  useEnquiryPopup({ enabled });
+  const location = useLocation();
+  const targetService = service || location.pathname;
+  const targetHref = href || getWhatsAppUrl(targetService);
+
   return (
     <>
       {/* reserves the bar's height at the very end of the page */}
@@ -29,7 +32,13 @@ export default function StickyCTA({
             <p className="sticky-cta-text">{text}</p>
           </div>
 
-          <a href={href} className="sticky-cta-btn">
+          <a
+            href={targetHref}
+            className="sticky-cta-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => openWhatsApp(targetService, null, e)}
+          >
             <span>{buttonLabel}</span>
             <ArrowRight className="sticky-cta-arrow" size={18} strokeWidth={2.6} aria-hidden="true" />
           </a>

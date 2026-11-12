@@ -1,11 +1,11 @@
 import { Fragment, useId, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './dmp-faq.css';
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('marketing');
 
 const FAQS = [
   { id: 'services', q: 'What digital marketing services do you offer?', a: 'We offer SEO, social media marketing, paid advertising, content marketing, email marketing, and performance analytics tailored to business goals.' },
@@ -118,7 +118,13 @@ export default function DmpFaq() {
           <div className="dmpf-contact">
             <QMark />
             <p className="dmpf-contact-line"><strong>Still have questions?</strong> Let&rsquo;s talk.</p>
-            <a href={CONTACT_HREF} className="dmpf-cta">
+            <a
+              href={CONTACT_HREF}
+              onClick={(e) => openWhatsApp('marketing', null, e)}
+              className="dmpf-cta"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Contact Us <ArrowRight size={18} aria-hidden="true" />
             </a>
           </div>

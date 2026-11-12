@@ -1,14 +1,13 @@
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import heroImg from '../assets/digital-marketing-hero.png';
 import atriowingsLogoWhite from '../assets/logo2.png';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './digital-marketing-hero.css';
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('marketing');
 
 // true only when the viewport matches (keeps the parallax to large screens)
 function useMediaQuery(query) {
@@ -28,7 +27,6 @@ function useMediaQuery(query) {
  *  servicesId: the id of the services section on the Digital Marketing page (default "dmp-services")
  */
 export default function DigitalMarketingHero({ servicesId = 'dmp-services' }) {
-  useEnquiryPopup();
   const reduce = useReducedMotion();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const heroRef = useRef(null);
@@ -76,9 +74,12 @@ export default function DigitalMarketingHero({ servicesId = 'dmp-services' }) {
 
         <motion.a
           href={CONTACT_HREF}
+          onClick={(e) => openWhatsApp('marketing', null, e)}
           className="dmh-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
           aria-label="Contact Us"
           title="Contact Us"
+          target="_blank"
+          rel="noopener noreferrer"
           whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
           whileTap={reduce ? {} : { scale: 0.97 }}
           transition={{ duration: 0.2, ease: EASE }}
@@ -125,7 +126,13 @@ export default function DigitalMarketingHero({ servicesId = 'dmp-services' }) {
           </motion.p>
 
           <motion.div className="dmh-actions" variants={rise}>
-            <a href={CONTACT_HREF} className="dmh-btn dmh-btn--primary">
+            <a
+              href={CONTACT_HREF}
+              onClick={(e) => openWhatsApp('marketing', null, e)}
+              className="dmh-btn dmh-btn--primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span>Let&rsquo;s Grow Your Business</span>
               <ArrowRight className="dmh-arrow" size={19} strokeWidth={2.5} aria-hidden="true" />
             </a>

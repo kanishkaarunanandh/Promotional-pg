@@ -33,19 +33,26 @@ const FacebookIcon = ({ size = 18 }) => (
   </svg>
 );
 
-const YouTubeIcon = ({ size = 18 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
-    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor" />
+
+const XTwitterIcon = ({ size = 18 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M18.901 1.153h3.308l-7.227 8.26L23.5 22.5h-6.77l-5.3-8.002L4.5 22.5H1.19l7.73-8.835L.5 1.153h6.94l4.79 7.515 6.671-7.515Zm-1.16 19.31h1.833L6.327 3.06H4.36l13.38 17.403Z" />
   </svg>
 );
+
 
 // Centralized configuration for easy updates
 const SOCIAL_LINKS = [
   { name: 'LinkedIn', icon: LinkedInIcon, href: '' },
-  { name: 'Instagram', icon: InstagramIcon, href: '' },
-  { name: 'Facebook', icon: FacebookIcon, href: '' },
-  { name: 'YouTube', icon: YouTubeIcon, href: '' },
+  { name: 'Instagram', icon: InstagramIcon, href: 'https://www.instagram.com/atriowings.technologies/' },
+  { name: 'Facebook', icon: FacebookIcon, href: 'https://www.facebook.com/atriowingstechnologies?rdid=FGaIaenouKXzIJO9&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1EFt4L3q4p%2F#' },
+  { name: 'YouTube', icon: XTwitterIcon, href: 'https://x.com/atriowings' },
 ];
 
 // Each service opens its own page; on that page the link scrolls to its capabilities section.
@@ -56,8 +63,12 @@ const SERVICES_LINKS = [
   { label: 'Product Photography & Video Ads', href: ROUTES.photoshoot, section: SECTION_IDS.photoshoot },
 ];
 
+const GOOGLE_MAPS_URL =
+  'https://www.google.com/maps/search/?api=1&query=No%3A%2045%2C%20A%20Block%2C%203rd%20Avenue%2C%20Kumaran%20Nagar%2C%20Anna%20Nagar%20East%2C%20Chennai%2C%20Tamil%20Nadu%2C%20India';
+
 const CONTACT_DETAILS = {
   address: 'No: 45, A Block, 3rd Avenue, Kumaran Nagar, Anna Nagar East, Chennai',
+  mapsUrl: GOOGLE_MAPS_URL,
   email: 'info@atriowings.in',
   phone: '+91 8825948859',
   hours: 'Mon – Fri: 9:30 AM – 6:00 PM',
@@ -128,18 +139,30 @@ export default function Footer() {
               <span className="footer-heading-underline" aria-hidden="true" />
             </h3>
             <ul className="footer-nav-list" role="list">
-              {quickLinks.map((link) => (
-                <li key={link.label} className="footer-nav-item">
-                  <a
-                    href={link.href}
-                    className="footer-nav-link"
-                    onClick={(e) => navigateToSection(e, link.href, { navigate, auto: link.auto })}
-                  >
-                    <ChevronRight className="footer-nav-chevron" size={14} strokeWidth={2.5} aria-hidden="true" />
-                    <span>{link.label}</span>
-                  </a>
-                </li>
-              ))}
+              {quickLinks.map((link) => {
+                const isContact = link.label === 'Contact Us' || link.href === ROUTES.contact;
+                return (
+                  <li key={link.label} className="footer-nav-item">
+                    <a
+                      href={link.href}
+                      className="footer-nav-link"
+                      onClick={(e) => {
+                        if (isContact) {
+                          e.preventDefault();
+                          window.open(ROUTES.contact, '_blank', 'noopener,noreferrer');
+                        } else {
+                          navigateToSection(e, link.href, { navigate, auto: link.auto });
+                        }
+                      }}
+                      target={isContact ? '_blank' : undefined}
+                      rel={isContact ? 'noopener noreferrer' : undefined}
+                    >
+                      <ChevronRight className="footer-nav-chevron" size={14} strokeWidth={2.5} aria-hidden="true" />
+                      <span>{link.label}</span>
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
@@ -174,10 +197,19 @@ export default function Footer() {
 
             <ul className="footer-contact-list" role="list">
               <li className="footer-contact-item">
-                <span className="footer-contact-icon-box" aria-hidden="true">
-                  <MapPin size={17} strokeWidth={2.2} />
-                </span>
-                <span className="footer-contact-text">{CONTACT_DETAILS.address}</span>
+                <a
+                  href={CONTACT_DETAILS.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-contact-address-link"
+                  aria-label="View office location on Google Maps: No: 45, A Block, 3rd Avenue, Kumaran Nagar, Anna Nagar East, Chennai"
+                  title="Open location in Google Maps"
+                >
+                  <span className="footer-contact-icon-box" aria-hidden="true">
+                    <MapPin size={17} strokeWidth={2.2} />
+                  </span>
+                  <span className="footer-contact-text">{CONTACT_DETAILS.address}</span>
+                </a>
               </li>
 
               <li className="footer-contact-item">

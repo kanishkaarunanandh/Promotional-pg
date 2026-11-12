@@ -44,7 +44,7 @@ export default function Navbar({
   // Sync active link with current route, hash, or prop changes
   useEffect(() => {
     const cleanPath = normalizePath(location.pathname);
-    if (cleanPath === normalizePath(ROUTES.contact)) {
+    if (cleanPath === normalizePath('/contact')) {
       setCurrentActive('Contact');
     } else if (location.hash === '#why-choose') {
       setCurrentActive('Why Choose Us');
@@ -161,16 +161,13 @@ export default function Navbar({
       handleHomeNavigation(event, { navigate });
     } else if (link.auto === 'why-choose' || link.label === 'Why Choose Us') {
       handleWhyChooseNavigation(event, { navigate });
-    } else if (link.label === 'Contact' || link.href === ROUTES.contact) {
+    } else if (link.label === 'Contact' || link.href === ROUTES.contact || link.href === '/contact') {
       if (event && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0)) {
         return;
       }
       event?.preventDefault();
-      if (normalizePath(location.pathname) === normalizePath(ROUTES.contact)) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        navigate(ROUTES.contact);
-      }
+      setMobileMenuOpen(false);
+      window.open(ROUTES.contact, '_blank', 'noopener,noreferrer');
     } else if (event) {
       navigateToSection(event, link.href, { navigate, auto: link.auto }); // same page: smooth scroll; other page: normal navigation
     }
@@ -363,6 +360,7 @@ export default function Navbar({
               );
             }
 
+            const isContact = link.label === 'Contact' || link.href === ROUTES.contact;
             return (
               <li key={link.label} role="none">
                 <a
@@ -370,6 +368,8 @@ export default function Navbar({
                   role="menuitem"
                   className={`nav-link-item ${isActive ? 'active' : ''}`}
                   onClick={(e) => handleNavClick(link, e)}
+                  target={isContact ? '_blank' : undefined}
+                  rel={isContact ? 'noopener noreferrer' : undefined}
                 >
                   {link.label}
                 </a>
@@ -462,12 +462,15 @@ export default function Navbar({
                   );
                 }
 
+                const isContact = link.label === 'Contact' || link.href === ROUTES.contact;
                 return (
                   <li key={link.label}>
                     <a
                       href={link.href}
                       className={`mobile-link-item ${isActive ? 'active' : ''}`}
                       onClick={(e) => handleNavClick(link, e)}
+                      target={isContact ? '_blank' : undefined}
+                      rel={isContact ? 'noopener noreferrer' : undefined}
                     >
                       {link.label}
                     </a>

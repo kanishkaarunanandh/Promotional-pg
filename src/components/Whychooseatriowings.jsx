@@ -1,12 +1,11 @@
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion, useScroll } from 'framer-motion';
 import { ArrowRight, BadgeCheck, MessagesSquare, ShieldCheck, Target, TrendingUp, Users } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './why-choose-atriowings.css';
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('software');
 
 const POINTS = [
   { id: 'business', icon: Target, title: 'Business-First Engineering', text: 'We begin with your business goals and workflows to build solutions that solve real problems.' },
@@ -137,7 +136,6 @@ function InMiddle({ flag, onHit }) {
 }
 
 export default function WhyChooseAtriowings() {
-  useEnquiryPopup();
   const reduce = useReducedMotion();
   const listRef = useRef(null);
   const [active, setActive] = useState(0);
@@ -165,7 +163,13 @@ export default function WhyChooseAtriowings() {
           </motion.p>
           <div className="sdp-why-visual"><SystemDiagram /></div>
           <motion.div className="sdp-why-cta-wrap" initial={reduce ? false : { opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}>
-            <a href={CONTACT_HREF} className="sdp-why-cta">
+            <a
+              href={CONTACT_HREF}
+              onClick={(e) => openWhatsApp('software', null, e)}
+              className="sdp-why-cta"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span className="sdp-why-cta-label">Discuss Your Project</span>
               <ArrowRight size={18} aria-hidden="true" />
             </a>

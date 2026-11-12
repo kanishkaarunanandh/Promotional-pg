@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { ArrowRight, BarChart3, Lightbulb, MessageSquare, Settings, Target, TrendingUp } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './dmp-why.css'; // import AFTER the page stylesheet
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('marketing');
 const CYCLE_MS = 3600;
 
 const REASONS = [
@@ -101,7 +101,13 @@ export default function DmpWhy() {
         </div>
 
         <motion.div className="dmpw-cta-wrap" initial={reduce ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.6 }} transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}>
-          <a href={CONTACT_HREF} className="dmpw-cta">
+          <a
+            href={CONTACT_HREF}
+            onClick={(e) => openWhatsApp('marketing', null, e)}
+            className="dmpw-cta"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <span className="dmpw-cta-label">Let&rsquo;s Grow Your Business</span>
             <ArrowRight className="dmpw-cta-arrow" size={19} strokeWidth={2.5} aria-hidden="true" />
           </a>

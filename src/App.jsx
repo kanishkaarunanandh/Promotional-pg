@@ -5,8 +5,7 @@ import SoftwareDevelopmentPage from './pages/SoftWareDevelopment';
 import DigitalMarketingPage from './pages/DigitalMarketingPage';
 import PhotoshootPage from './pages/photoshoot';
 import ContactPage from './pages/ContactPage';
-import { ROUTES, saveLastServiceRoute } from './utils/sectionNav';
-import { EnquiryPopupProvider } from './context/EnquiryPopupContext';
+import { ROUTES, WHATSAPP_URL, openWhatsApp, saveLastServiceRoute } from './utils/sectionNav';
 
 const PAGE_TITLES = {
   '/': 'Web Development Services | Atriowings Technologies',
@@ -77,24 +76,29 @@ function ScrollHandler() {
   return null;
 }
 
-// Any plain <a href="/contact"> in the site opens the Contact page without a full reload
-// (a reload would replay the intro animation). mailto: and external links are untouched.
+// Any click on a Contact button / link redirects directly to WhatsApp in a new tab instead of /contact
 function ContactLinkHandler() {
-  const navigate = useNavigate();
   useEffect(() => {
     const onClick = (e) => {
       if (e.defaultPrevented || e.button > 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const a = e.target.closest?.('a[href]');
-      if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
-      const url = new URL(a.href, window.location.href);
-      if (url.origin === window.location.origin && url.pathname.replace(/\/+$/, '') === ROUTES.contact) {
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      const isContactPath =
+        href === '/contact' ||
+        href.startsWith('/contact?') ||
+        href.startsWith('/contact#') ||
+        (a.pathname && a.pathname.toLowerCase() === '/contact');
+
+      if (isContactPath) {
         e.preventDefault();
-        navigate(ROUTES.contact);
+        const service = a.dataset.service || window.location.pathname;
+        openWhatsApp(service);
       }
     };
-    document.addEventListener('click', onClick);
-    return () => document.removeEventListener('click', onClick);
-  }, [navigate]);
+    document.addEventListener('click', onClick, true);
+    return () => document.removeEventListener('click', onClick, true);
+  }, []);
   return null;
 }
 
@@ -106,7 +110,7 @@ function LegacyRedirect({ to }) {
 
 function App() {
   return (
-    <EnquiryPopupProvider>
+    <>
       <ScrollHandler />
       <ContactLinkHandler />
       <Routes>
@@ -128,7 +132,7 @@ function App() {
         <Route path="/services/software-development" element={<LegacyRedirect to="/softwaredevelopment" />} />
         <Route path="/services/digital-marketing" element={<LegacyRedirect to="/digitalmarketing" />} />
       </Routes>
-    </EnquiryPopupProvider>
+    </>
   );
 }
 

@@ -1,11 +1,11 @@
 import { Fragment, useId, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Clock, Cloud, Code2, Headphones, Link2, Settings, ShieldCheck, Users } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './software-faq.css';
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('software');
 
 const FAQS = [
   { id: 'types', icon: Code2, q: 'What types of software do you develop?', a: 'We develop custom business applications, enterprise systems, SaaS products, backend services, and API integrations based on your business requirements.' },
@@ -120,7 +120,13 @@ export default function SoftwareFAQ() {
           <div className="sdp-faq-contact">
             <QMark />
             <p className="sdp-faq-contact-line"><strong>Still have questions?</strong> Let&rsquo;s talk.</p>
-            <a href={CONTACT_HREF} className="sdp-faq-cta">
+            <a
+              href={CONTACT_HREF}
+              onClick={(e) => openWhatsApp('software', null, e)}
+              className="sdp-faq-cta"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Contact Us <ArrowRight size={18} aria-hidden="true" />
             </a>
           </div>

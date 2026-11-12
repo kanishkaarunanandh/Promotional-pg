@@ -4,9 +4,28 @@
  * falls through to normal browser navigation, which opens the destination at the top.
  */
 
+import {
+  WHATSAPP_PHONE,
+  WHATSAPP_MESSAGES,
+  getWhatsAppMessage,
+  getWhatsAppUrl,
+  openWhatsApp,
+} from './whatsapp';
+
+export {
+  WHATSAPP_PHONE,
+  WHATSAPP_MESSAGES,
+  getWhatsAppMessage,
+  getWhatsAppUrl,
+  openWhatsApp,
+};
+
+export const WHATSAPP_MESSAGE = WHATSAPP_MESSAGES.general;
+export const WHATSAPP_URL = getWhatsAppUrl('general');
+
 export const ROUTES = {
   home: '/webdevelopment',
-  contact: '/contact',
+  contact: WHATSAPP_URL,
   whyChoose: '/webdevelopment#why-choose',
   web: '/webdevelopment',
   software: '/softwaredevelopment',
@@ -274,6 +293,12 @@ export function navigateToSection(event, href, { section, navigate, auto } = {})
   }
 
   if (event && (event.defaultPrevented || event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return false;
+
+  if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+    event?.preventDefault();
+    window.open(href, '_blank', 'noopener,noreferrer');
+    return true;
+  }
 
   const [pathPart, hash = ''] = href.split('#');
   const destPath = normalizePath(pathPart || window.location.pathname);

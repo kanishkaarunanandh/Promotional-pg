@@ -1,4 +1,3 @@
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useState, useEffect, useRef } from 'react';
 import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-motion';
 import {
@@ -43,7 +42,7 @@ import {
 import atriowingsLogo from '../assets/atriowings-logo.png';
 import Footer from '../components/Footer';
 import StickyCTA from '../components/StickyCTA';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './photoshoot.css';
 import './video-carousel.css';
 
@@ -164,7 +163,7 @@ const VIDEO_CAROUSEL_ITEMS = [
 ];
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('multimedia');
 
 // Selected Work Category Filters
 const WORK_FILTERS = [
@@ -571,7 +570,6 @@ function AnimatedCounter({ end, duration = 2.2, suffix = '', decimals = 0, isVis
 }
 
 export default function PhotoshootPage() {
-  useEnquiryPopup();
   const reduce = useReducedMotion();
   const [activeCategory, setActiveCategory] = useState('all');
   const [openFaq, setOpenFaq] = useState(null);
@@ -1005,10 +1003,13 @@ export default function PhotoshootPage() {
           </a>
 
           <motion.a
-            href={ROUTES.contact}
+            href={CONTACT_HREF}
+            onClick={(e) => openWhatsApp('multimedia', null, e)}
             className="ps-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
             aria-label="Contact Us"
             title="Contact Us"
+            target="_blank"
+            rel="noopener noreferrer"
             whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
             whileTap={reduce ? {} : { scale: 0.97 }}
             transition={{ duration: 0.2, ease: EASE }}
@@ -1047,7 +1048,13 @@ export default function PhotoshootPage() {
 
                 {/* CTA Action Buttons */}
                 <div className="ps-hero-actions">
-                  <a href={CONTACT_HREF} className="ps-btn ps-btn--primary">
+                  <a
+                    href={CONTACT_HREF}
+                    onClick={(e) => openWhatsApp('multimedia', null, e)}
+                    className="ps-btn ps-btn--primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <span>Book a shoot</span>
                     <ArrowRight size={18} strokeWidth={2.4} aria-hidden="true" />
                   </a>
@@ -1329,7 +1336,7 @@ export default function PhotoshootPage() {
                       <span className="ps-asym-price">From ₹1,999/ product</span>
                     </div>
                     <div className="ps-asym-action-row">
-                      <a href={CONTACT_HREF} className="ps-asym-arrow-btn" aria-label="Book Product Photography">
+                      <a href={CONTACT_HREF} className="ps-asym-arrow-btn" aria-label="Book Product Photography" target="_blank" rel="noopener noreferrer">
                         <ArrowRight size={17} strokeWidth={2.4} />
                       </a>
                     </div>
@@ -1371,7 +1378,7 @@ export default function PhotoshootPage() {
                         <span className="ps-asym-price">From ₹2,999/ look</span>
                       </div>
                       <div className="ps-asym-action-row">
-                        <a href={CONTACT_HREF} className="ps-asym-arrow-btn" aria-label="Book Model & Fashion Shoot">
+                        <a href={CONTACT_HREF} className="ps-asym-arrow-btn" aria-label="Book Model & Fashion Shoot" target="_blank" rel="noopener noreferrer">
                           <ArrowRight size={17} strokeWidth={2.4} />
                         </a>
                       </div>
@@ -1422,7 +1429,7 @@ export default function PhotoshootPage() {
                         <span className="ps-asym-price">From ₹1,499/ image</span>
                       </div>
                       <div className="ps-asym-action-row">
-                        <a href={CONTACT_HREF} className="ps-asym-arrow-btn" aria-label="Book E-commerce Listings Shoot">
+                        <a href={CONTACT_HREF} className="ps-asym-arrow-btn" aria-label="Book E-commerce Listings Shoot" target="_blank" rel="noopener noreferrer">
                           <ArrowRight size={17} strokeWidth={2.4} />
                         </a>
                       </div>
@@ -1473,7 +1480,7 @@ export default function PhotoshootPage() {
                         <span className="ps-asym-price">Custom quote</span>
                       </div>
                       <div className="ps-asym-action-row">
-                        <a href={CONTACT_HREF} className="ps-asym-arrow-btn" aria-label="Inquire about Campaigns & Reels">
+                        <a href={CONTACT_HREF} className="ps-asym-arrow-btn" aria-label="Inquire about Campaigns & Reels" target="_blank" rel="noopener noreferrer">
                           <ArrowRight size={17} strokeWidth={2.4} />
                         </a>
                       </div>
@@ -1510,7 +1517,7 @@ export default function PhotoshootPage() {
               <div className="ps-services-cta-flair ps-services-cta-flair--left" aria-hidden="true" />
               
               <div className="ps-services-cta-center">
-                <a href={CONTACT_HREF} className="ps-services-cta-button">
+                <a href={CONTACT_HREF} className="ps-services-cta-button" target="_blank" rel="noopener noreferrer">
                   <span>Get a free quote</span>
                   <ArrowRight size={18} strokeWidth={2.4} className="ps-cta-arrow" aria-hidden="true" />
                 </a>
@@ -1732,6 +1739,8 @@ export default function PhotoshootPage() {
                         {/* Bottom Right Circular Arrow Button */}
                         <a
                           href={CONTACT_HREF}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="ps-pf-card-arrow"
                           aria-label={`View details for ${project.title}`}
                         >
@@ -1752,7 +1761,7 @@ export default function PhotoshootPage() {
               viewport={{ once: true }}
               transition={{ duration: reduce ? 0.2 : 0.6, delay: 0.2, ease: EASE }}
             >
-              <a href={CONTACT_HREF} className="ps-pf-cta-button">
+              <a href={CONTACT_HREF} className="ps-pf-cta-button" target="_blank" rel="noopener noreferrer">
                 <span>View All Work</span>
                 <ArrowRight size={18} strokeWidth={2.4} className="ps-pf-cta-arrow" aria-hidden="true" />
               </a>
@@ -1875,7 +1884,7 @@ export default function PhotoshootPage() {
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: reduce ? 0.2 : 0.55, delay: 0.25, ease: EASE }}
                 >
-                  <a href={CONTACT_HREF} className="ps-adv-cta-btn">
+                  <a href={CONTACT_HREF} className="ps-adv-cta-btn" target="_blank" rel="noopener noreferrer">
                     <span className="ps-adv-cta-text">Talk to Our Art Director</span>
                     <span className="ps-adv-cta-arrow-pill" aria-hidden="true">
                       <motion.span
@@ -2215,7 +2224,7 @@ export default function PhotoshootPage() {
 
             {/* Centered Primary CTA Button */}
             <div className="ps-vc-cta-wrapper">
-              <a href={CONTACT_HREF} className="ps-vc-cta-button">
+              <a href={CONTACT_HREF} className="ps-vc-cta-button" target="_blank" rel="noopener noreferrer">
                 <span>Book a video shoot</span>
                 <ArrowRight size={18} className="ps-vc-cta-arrow" />
               </a>
@@ -2590,7 +2599,13 @@ export default function PhotoshootPage() {
                 Book a shoot date at our Chennai studio or request a customized quotation for your upcoming catalogue, lookbook, or commercial video ad campaign.
               </p>
               <div className="ps-cta-buttons">
-                <a href={CONTACT_HREF} className="ps-btn ps-btn--primary ps-btn--lg">
+                <a
+                  href={CONTACT_HREF}
+                  onClick={(e) => openWhatsApp('multimedia', null, e)}
+                  className="ps-btn ps-btn--primary ps-btn--lg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <span>Book Your Studio Shoot</span>
                   <ArrowRight size={20} strokeWidth={2.4} aria-hidden="true" />
                 </a>

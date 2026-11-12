@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Mail, Plus } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './faq-section.css';
 
 const EASE = [0.22, 1, 0.36, 1];
@@ -295,8 +295,11 @@ export default function FaqSection() {
           </motion.div>
 
           <motion.a
-            href={ROUTES.contact}
+            href={getWhatsAppUrl('web')}
+            onClick={(e) => openWhatsApp('web', null, e)}
             className="faq-link"
+            target="_blank"
+            rel="noopener noreferrer"
             variants={rise}
             custom={0.4}
             initial="hidden"
@@ -369,7 +372,13 @@ export default function FaqSection() {
               </p>
             </div>
             <div className="faq-cta-actions">
-              <a href={ROUTES.contact} className="faq-btn">
+              <a
+                href={getWhatsAppUrl('web')}
+                onClick={(e) => openWhatsApp('web', null, e)}
+                className="faq-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span>Let&apos;s Talk About Your Project</span>
                 <ArrowRight size={18} strokeWidth={2.4} aria-hidden="true" />
               </a>

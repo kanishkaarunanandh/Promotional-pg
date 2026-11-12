@@ -1,8 +1,7 @@
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, Building2, Receipt, Code2, Users } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import customImg from '../assets/custom software.jpg';
 import billingImg from '../assets/billing sw.jpg';
 import hrmsImg from '../assets/hrms.webp';
@@ -12,68 +11,68 @@ import tuition from '../assets/tuition.png';
 import './software-services-orbit.css';
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('software');
 const AUTO_MS = 3000;
 const RESUME_MS = 7000;
 
 
 const SERVICES = [
-  { id: 'custom', icon: Code2, title: 'Custom Software Development', short: 'Custom Software', description: 'Purpose-built applications tailored to your business workflows and requirements.', tags: ['Business Logic', 'Custom Apps'], image: customImg, imageKind: 'photo' },
-  
-{
-  id: 'billing',
-  icon: Receipt,
-  title: 'Billing Software Development',
-  short: 'Billing Software',
-  description: 'Smart billing and invoicing solutions with GST calculations, payment tracking, and sales management to streamline business operations.',
-  tags: ['GST Billing', 'Invoicing'],
-  image: billingImg,
-  imageKind: 'cutout' // transparent artwork: no card, no background
-},
-{
-  id: 'hrms',
-  icon: Users,
-  title: 'HRMS Software Development',
-  short: 'HRMS Software',
-  description: 'Comprehensive HR management solutions for employee records, attendance, leave management, payroll processing, and HR workflows.',
-  tags: ['HR Management', 'Payroll'],
-  image: hrmsImg,
-  imageKind: 'photo'
-},
+  { id: 'custom', icon: Code2, title: 'Custom Software Development', short: 'Custom Software ', description: 'Purpose-built applications tailored to your business workflows and requirements.', tags: ['Business Logic', 'Custom Apps'], image: customImg, imageKind: 'photo' },
 
-{
-  id: 'hms',
-  icon: Building2,
-  title: 'Hospital Management System Development',
-  short: 'Hospital Management',
-  description:
-    'Smart hospital management solutions that streamline patient records, doctor appointments, medical billing, and hospital operations through one integrated platform.',
-  tags: ['Patient Management', 'Appointments & Billing'],
-  image: hms,
-  imageKind: 'photo'
-},
- {
-  id: 'crm',
-  icon: Users,
-  title: 'CRM Software Development',
-  short: 'CRM Software',
-  description:
-    'Custom CRM solutions that help businesses manage customer relationships, track leads, automate sales workflows, and improve customer engagement through a centralized platform.',
-  tags: ['Lead Management', 'Sales Automation'],
-  image: crmImg,
-  imageKind: 'photo'
-},
-{
-  id: 'Tuition',
-  icon: Users,
-  title: 'Tuition Software Development',
-  short: 'Tuition Software',
-  description:
-    'Custom tuition management software that helps coaching centres and educational institutions manage student admissions, attendance, fee collection, class schedules, exams, and academic performance through a centralized platform.',
-  tags: ['Student Management', 'Fee Automation'],
-  image: tuition,
-  imageKind: 'photo'
-},
+  {
+    id: 'billing',
+    icon: Receipt,
+    title: 'Billing Software Development',
+    short: 'Billing Software',
+    description: 'Smart billing and invoicing solutions with GST calculations, payment tracking, and sales management to streamline business operations.',
+    tags: ['GST Billing', 'Invoicing'],
+    image: billingImg,
+    imageKind: 'cutout' // transparent artwork: no card, no background
+  },
+  {
+    id: 'hrms',
+    icon: Users,
+    title: 'HRMS Software Development',
+    short: 'HRMS Software',
+    description: 'Comprehensive HR management solutions for employee records, attendance, leave management, payroll processing, and HR workflows.',
+    tags: ['HR Management', 'Payroll'],
+    image: hrmsImg,
+    imageKind: 'photo'
+  },
+
+  {
+    id: 'hms',
+    icon: Building2,
+    title: 'Hospital Management System Development',
+    short: 'HM Software',
+    description:
+      'Smart hospital management solutions that streamline patient records, doctor appointments, medical billing, and hospital operations through one integrated platform.',
+    tags: ['Patient Management', 'Appointments & Billing'],
+    image: hms,
+    imageKind: 'photo'
+  },
+  {
+    id: 'crm',
+    icon: Users,
+    title: 'CRM Software Development',
+    short: 'CRM Software',
+    description:
+      'Custom CRM solutions that help businesses manage customer relationships, track leads, automate sales workflows, and improve customer engagement through a centralized platform.',
+    tags: ['Lead Management', 'Sales Automation'],
+    image: crmImg,
+    imageKind: 'photo'
+  },
+  {
+    id: 'Tuition',
+    icon: Users,
+    title: 'Tuition Software Development',
+    short: 'Tuition Software',
+    description:
+      'Custom tuition management software that helps coaching centres and educational institutions manage student admissions, attendance, fee collection, class schedules, exams, and academic performance through a centralized platform.',
+    tags: ['Student Management', 'Fee Automation'],
+    image: tuition,
+    imageKind: 'photo'
+  },
 ];
 
 /* ------------------------------------------------------------------ *
@@ -155,7 +154,6 @@ function useMatch(query) {
 }
 
 export default function SoftwareServicesShowcase() {
-  useEnquiryPopup();
   const reduce = useReducedMotion();
   const isMobile = useMatch('(max-width: 1023px)');
   const rootRef = useRef(null);
@@ -280,7 +278,13 @@ export default function SoftwareServicesShowcase() {
                               <li key={t}>{t}</li>
                             ))}
                           </ul>
-                          <a href={CONTACT_HREF} className="sdp-sv-link">
+                          <a
+                            href={CONTACT_HREF}
+                            onClick={(e) => openWhatsApp('software', null, e)}
+                            className="sdp-sv-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
                             <span>Discuss this service</span>
                             <ArrowUpRight size={17} strokeWidth={2.5} aria-hidden="true" />
                           </a>

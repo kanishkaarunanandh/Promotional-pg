@@ -264,6 +264,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.footer-contact-address-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  text-align: left;
+  border-radius: 6px;
+  transition: color 0.2s ease;
+}
+
+.footer-contact-address-link:hover .footer-contact-text,
+.footer-contact-address-link:focus-visible .footer-contact-text {
+  color: #06A3DA;
+}
+
+.footer-contact-address-link:hover .footer-contact-icon-box,
+.footer-contact-address-link:focus-visible .footer-contact-icon-box {
+  background-color: rgba(6, 163, 218, 0.22);
+}
+
+.footer-contact-address-link:focus-visible {
+  outline: 2px solid #06A3DA;
+  outline-offset: 2px;
 }
 
 .footer-contact-text,
@@ -427,6 +457,7 @@
   .footer-nav-link,
   .footer-nav-chevron,
   .footer-contact-link,
+  .footer-contact-address-link,
   .footer-legal-link {
     transition: none !important;
     transform: none !important;

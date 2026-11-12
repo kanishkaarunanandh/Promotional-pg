@@ -1,4 +1,3 @@
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useInView } from 'framer-motion';
 import WebDevHero from '../components/WebDevHero';
@@ -16,7 +15,7 @@ import {
   LifeBuoy
 } from 'lucide-react';
 import Footer from '../components/Footer';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './WebDevelopmentPage.css';
 import '../components/capabilities-orbit.css';
 import '../components/why-choose-cta.css';
@@ -202,7 +201,6 @@ function BenefitCard({ item, variants }) {
 }
 
 export default function WebDevelopmentPage() {
-  useEnquiryPopup();
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -460,7 +458,13 @@ export default function WebDevelopmentPage() {
                 </motion.p>
 
                 <motion.div className="webdev-cta-button-group" variants={fadeIn}>
-                  <a href={ROUTES.contact} className="webdev-cta-main-btn">
+                  <a
+                    href={getWhatsAppUrl('web')}
+                    onClick={(e) => openWhatsApp('web', null, e)}
+                    className="webdev-cta-main-btn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <span>Let's Talk About Your Project</span>
                     <ArrowRight size={18} strokeWidth={2.4} className="cta-arrow" />
                   </a>

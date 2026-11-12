@@ -1,4 +1,3 @@
-import { useEnquiryPopup } from '../context/EnquiryPopupContext';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import {
@@ -22,11 +21,11 @@ import TechnologyStack from '../components/TechnologyStack';
 import WhyChooseAtriowings from '../components/Whychooseatriowings';
 import SoftwareFAQ from '../components/Softwarefaq';
 import heroImg from '../assets/software-dev-hero.png';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './SoftwareDevelopmentPage.css';
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('software');
 
 const WHAT_WE_BUILD = [
   {
@@ -75,7 +74,6 @@ function useMediaQuery(query) {
 }
 
 export default function SoftwareDevelopmentPage() {
-  useEnquiryPopup();
   const reduce = useReducedMotion();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const heroRef = useRef(null);
@@ -129,10 +127,13 @@ export default function SoftwareDevelopmentPage() {
             </a>
 
             <motion.a
-              href={ROUTES.contact}
+              href={CONTACT_HREF}
+              onClick={(e) => openWhatsApp('software', null, e)}
               className="sdp-contact-btn inline-flex items-center justify-center rounded-full font-semibold"
               aria-label="Contact Us"
               title="Contact Us"
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={reduce ? {} : { scale: 1.04, y: -2 }}
               whileTap={reduce ? {} : { scale: 0.97 }}
               transition={{ duration: 0.2, ease: EASE }}
@@ -181,7 +182,13 @@ export default function SoftwareDevelopmentPage() {
 
 
               <motion.div className="sdp-actions" variants={rise}>
-                <a href={CONTACT_HREF} className="sdp-btn sdp-btn--primary">
+                <a
+                  href={CONTACT_HREF}
+                  onClick={(e) => openWhatsApp('software', null, e)}
+                  className="sdp-btn sdp-btn--primary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <span>Contact Us</span>
                   <ArrowUpRight className="sdp-btn-arrow" size={19} strokeWidth={2.5} aria-hidden="true" />
                 </a>
@@ -241,7 +248,13 @@ export default function SoftwareDevelopmentPage() {
                 </motion.p>
 
                 <motion.div className="webdev-cta-button-group" variants={rise}>
-                  <a href={CONTACT_HREF} className="webdev-cta-main-btn">
+                  <a
+                    href={CONTACT_HREF}
+                    onClick={(e) => openWhatsApp('software', null, e)}
+                    className="webdev-cta-main-btn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <span>Let's Talk About Your Project</span>
                     <ArrowRight size={18} strokeWidth={2.4} className="cta-arrow" />
                   </a>

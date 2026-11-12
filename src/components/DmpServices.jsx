@@ -22,7 +22,7 @@ import {
   Sparkles,
   SlidersHorizontal,
 } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 
 // Visual assets for all 14 services
 import socialImg from '../assets/Social Media Marketing.jpg';
@@ -575,7 +575,10 @@ export default function DmpServices() {
                       </button>
 
                       <a
-                        href={`${ROUTES.contact}?service=${encodeURIComponent(sv.title)}`}
+                        href={getWhatsAppUrl('marketing')}
+                        onClick={(e) => openWhatsApp('marketing', null, e)}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="dmps-cta-link"
                         title={`Discuss ${sv.title} with our experts`}
                       >
@@ -631,7 +634,10 @@ export default function DmpServices() {
 
                         <div className="dmps-drawer-footer">
                           <a
-                            href={`${ROUTES.contact}?service=${encodeURIComponent(sv.title)}`}
+                            href={getWhatsAppUrl('marketing')}
+                            onClick={(e) => openWhatsApp('marketing', null, e)}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="dmps-drawer-action"
                           >
                             <span>Discuss {sv.title}</span>

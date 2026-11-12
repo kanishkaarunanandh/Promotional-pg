@@ -7,7 +7,7 @@ import {
   useTransform,
 } from 'framer-motion';
 import { Compass, Layers, Zap, ArrowRight } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './approach-section.css';
 
 const AP_EASE = [0.22, 1, 0.36, 1];
@@ -569,8 +569,11 @@ function ApproachSection() {
             </motion.p>
 
             <motion.a
-              href={ROUTES.contact}
+              href={getWhatsAppUrl('web')}
+              onClick={(e) => openWhatsApp('web', null, e)}
               className="webdev-btn-inline ap-cta ap-blink-cta"
+              target="_blank"
+              rel="noopener noreferrer"
               variants={ctaVariants}
               whileHover="hover"
               whileFocus="hover"

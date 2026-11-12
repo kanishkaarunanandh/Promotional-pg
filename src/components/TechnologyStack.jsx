@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight, Webhook } from 'lucide-react';
-import { ROUTES } from '../utils/sectionNav';
+import { ROUTES, getWhatsAppUrl, openWhatsApp } from '../utils/sectionNav';
 import './technology-stack.css';
 
 const EASE = [0.22, 1, 0.36, 1];
-const CONTACT_HREF = ROUTES.contact;
+const CONTACT_HREF = getWhatsAppUrl('software');
 
 // Official brand marks (Simple Icons / Font Awesome brand paths) drawn as inline SVG in each brand colour:
 // no images and no network requests. "REST APIs" is an architectural style with no brand mark, so it uses a
@@ -172,7 +172,10 @@ export default function TechnologyStack() {
         <div className="tsk-cta">
           <motion.a
             href={CONTACT_HREF}
+            onClick={(e) => openWhatsApp('software', null, e)}
             className="tsk-cta-btn"
+            target="_blank"
+            rel="noopener noreferrer"
             initial={{ opacity: 0, scale: reduce ? 1 : 0.4, y: reduce ? 0 : 24 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: true, amount: 0.8 }}

@@ -55,14 +55,15 @@
   display: flex;
   flex-direction: column;
   flex: 1 1 0;
-  min-width: 0;
+  min-width: 90px;
   overflow: hidden;
   border-left: 1px solid rgba(14, 42, 78, 0.1);
   transition: flex-grow 0.7s cubic-bezier(0.22, 1, 0.36, 1), background 0.5s ease;
 }
 .sdp-sv-panel:last-child { border-right: 1px solid rgba(14, 42, 78, 0.1); }
 .sdp-sv-panel.is-on {
-  flex-grow: 7.2;
+  flex-grow: 5.6;
+  min-width: 0;
   background: linear-gradient(180deg, #ffffff 0%, #eef6fd 100%);
   box-shadow: 0 30px 60px -40px rgba(14, 42, 78, 0.45);
 }
@@ -82,9 +83,10 @@
   flex: 1 1 auto;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: flex-start;
+  gap: 14px;
   width: 100%;
-  padding: 26px 0 26px;
+  padding: 28px 8px 24px;
   font: inherit;
   color: #7b8da4;
   background: none;
@@ -109,20 +111,28 @@
 }
 .sdp-sv-panel:not(.is-on) .sdp-sv-head-btn:hover .sdp-sv-icon { color: var(--sv-cyan); border-color: var(--sv-cyan); }
 .sdp-sv-short {
-  margin-top: auto;
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0 4px;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
+  color: inherit;
+  transition: color 0.3s ease;
 }
 .sdp-sv-panel.is-on .sdp-sv-head-btn { flex: 0 0 auto; flex-direction: row; justify-content: flex-start; padding: 24px 28px 0; cursor: default; color: var(--sv-cyan); }
 .sdp-sv-panel.is-on .sdp-sv-icon { color: #fff; background: linear-gradient(135deg, var(--sv-blue), var(--sv-cyan)); border-color: #fff; box-shadow: 0 0 0 5px rgba(6, 163, 218, 0.14), 0 10px 22px -10px rgba(6, 163, 218, 0.7); }
 .sdp-sv-panel.is-on .sdp-sv-short { display: none; }
 
 /* open panel content: fixed width so text never reflows while the panel grows */
-.sdp-sv-body { flex: 1 1 auto; min-width: 600px; }
+.sdp-sv-body { flex: 1 1 auto; min-width: 480px; }
 .sdp-sv-body-inner { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); align-items: center; gap: 26px; height: 100%; padding: 6px 28px 40px; }
 .sdp-sv-name { margin: 0 0 10px; font-size: 24px; line-height: 1.2; font-weight: 800; }
 .sdp-sv-copy { margin: 0 0 16px; font-size: 15.5px; line-height: 1.7; color: var(--sv-slate); }
@@ -160,19 +170,20 @@
 /* ---------------- tablet ---------------- */
 @media (max-width: 1199px) {
   .sdp-sv-panels { height: 640px; }
-  .sdp-sv-panel.is-on { flex-grow: 5.6; }
-  .sdp-sv-body { min-width: 440px; }
+  .sdp-sv-panel.is-on { flex-grow: 4.8; }
+  .sdp-sv-body { min-width: 400px; }
   .sdp-sv-body-inner { grid-template-columns: 1fr; align-content: start; align-items: start; gap: 18px; padding: 10px 24px 40px; }
   .sdp-sv-art { max-width: 100%; justify-content: flex-start; }
   .sdp-sv-img { max-height: 250px; }
   .sdp-sv-name { font-size: 21px; }
   .sdp-sv-copy { font-size: 15px; }
+  .sdp-sv-short { font-size: 12.5px; }
 }
 
 /* ---------------- tablet + phones: vertical accordion ---------------- */
 @media (max-width: 1023px) {
   .sdp-sv-panels { display: block; height: auto; }
-  .sdp-sv-panel { display: block; border-left: 0; border-right: 0 !important; border-bottom: 1px solid rgba(14, 42, 78, 0.1); transition: background 0.4s ease; }
+  .sdp-sv-panel { display: block; min-width: 0; border-left: 0; border-right: 0 !important; border-bottom: 1px solid rgba(14, 42, 78, 0.1); transition: background 0.4s ease; }
   .sdp-sv-panel:last-child { border-bottom: 0; }
   .sdp-sv-panel.is-on { box-shadow: none; }
   .sdp-sv-head-btn, .sdp-sv-panel.is-on .sdp-sv-head-btn { flex-direction: row; justify-content: flex-start; gap: 14px; padding: 16px 4px; }
