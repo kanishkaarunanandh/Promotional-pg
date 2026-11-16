@@ -70,7 +70,7 @@ const CONTACT_DETAILS = {
   address: 'No: 45, A Block, 3rd Avenue, Kumaran Nagar, Anna Nagar East, Chennai',
   mapsUrl: GOOGLE_MAPS_URL,
   email: 'info@atriowings.in',
-  phone: '+91 8825948859',
+  phone: '+91 9092635527',
   hours: 'Mon – Fri: 9:30 AM – 6:00 PM',
 };
 

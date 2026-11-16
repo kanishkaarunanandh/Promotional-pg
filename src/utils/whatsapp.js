@@ -3,7 +3,7 @@
  * Provides context-aware click-to-chat WhatsApp URLs and handlers for all service pages.
  */
 
-export const WHATSAPP_PHONE = '918825948859';
+export const WHATSAPP_PHONE = '919092635527';
 
 export const WHATSAPP_MESSAGES = {
   general: "Hi, I visited your website and I'm interested in your services. I would like to know more about your solutions.",
@@ -69,7 +69,7 @@ export function getWhatsAppMessage(serviceOrPath) {
  * 
  * @param {string} [serviceOrPath] - Service key, service name, or route pathname
  * @param {string} [customMessage] - Optional custom message override
- * @returns {string} The complete https://wa.me/918825948859?text=... URL
+ * @returns {string} The complete https://wa.me/919092635527?text=... URL
  */
 export function getWhatsAppUrl(serviceOrPath, customMessage = null) {
   const message = customMessage || getWhatsAppMessage(serviceOrPath);
